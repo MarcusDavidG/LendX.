@@ -1,0 +1,715 @@
+/* Global resets */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: #f7fafc;
+  color: #1a202c;
+  line-height: 1.5;
+}
+
+/* Container styles */
+.wallet-container,
+.loan-container,
+.collateral-container,
+.treasury-container,
+.dashboard-container,
+.swap-container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .wallet-container,
+  .loan-container,
+  .collateral-container,
+  .treasury-container,
+  .dashboard-container,
+  .swap-container {
+    padding: 2rem;
+  }
+}
+
+/* Card styles */
+.wallet-card,
+.loan-card,
+.collateral-card,
+.treasury-card,
+.dashboard-card,
+.swap-card {
+  background: #ffffff;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+}
+
+@media (max-width: 320px) {
+  .wallet-card,
+  .loan-card,
+  .collateral-card,
+  .treasury-card,
+  .dashboard-card,
+  .swap-card {
+    padding: 1rem;
+  }
+}
+
+/* Typography */
+h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a202c;
+  margin-bottom: 1.5rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1a202c;
+  margin-bottom: 1rem;
+}
+
+h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a202c;
+  margin-bottom: 0.75rem;
+}
+
+p {
+  font-size: 0.875rem;
+  color: #4a5568;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+}
+
+.text-3xl {
+  font-size: 1.875rem;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-gray-500 {
+  color: #6b7280;
+}
+
+.text-gray-600 {
+  color: #4a5568;
+}
+
+.text-gray-700 {
+  color: #374151;
+}
+
+.text-gray-800 {
+  color: #1f2937;
+}
+
+.text-blue-500 {
+  color: #3b82f6;
+}
+
+.text-blue-600 {
+  color: #2563eb;
+}
+
+.text-blue-700 {
+  color: #1d4ed8;
+}
+
+.text-blue-800 {
+  color: #1e40af;
+}
+
+.text-blue-900 {
+  color: #1e3a8a;
+}
+
+.text-green-500 {
+  color: #10b981;
+}
+
+.text-green-600 {
+  color: #059669;
+}
+
+.text-green-700 {
+  color: #047857;
+}
+
+.text-green-800 {
+  color: #065f46;
+}
+
+.text-red-500 {
+  color: #ef4444;
+}
+
+.text-red-600 {
+  color: #dc2626;
+}
+
+.text-red-700 {
+  color: #b91c1c;
+}
+
+.text-purple-500 {
+  color: #8b5cf6;
+}
+
+.text-purple-600 {
+  color: #7c3aed;
+}
+
+.text-orange-500 {
+  color: #f59e0b;
+}
+
+.text-orange-600 {
+  color: #d97706;
+}
+
+.text-yellow-500 {
+  color: #eab308;
+}
+
+.text-yellow-600 {
+  color: #ca8a04;
+}
+
+/* Buttons */
+button,
+.form-button {
+  border: none;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+  cursor: pointer;
+}
+
+button:disabled,
+.form-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.bg-blue-500 {
+  background-color: #3b82f6;
+}
+
+.bg-blue-500:hover:not(:disabled) {
+  background-color: #2563eb;
+}
+
+.bg-blue-600 {
+  background-color: #2563eb;
+}
+
+.bg-blue-600:hover:not(:disabled) {
+  background-color: #1d4ed8;
+}
+
+.bg-green-500 {
+  background-color: #10b981;
+}
+
+.bg-green-500:hover:not(:disabled) {
+  background-color: #059669;
+}
+
+.bg-green-600 {
+  background-color: #059669;
+}
+
+.bg-green-600:hover:not(:disabled) {
+  background-color: #047857;
+}
+
+.bg-green-800 {
+  background-color: #065f46;
+}
+
+.bg-green-800:hover:not(:disabled) {
+  background-color: #064e3b;
+}
+
+.bg-red-500 {
+  background-color: #ef4444;
+}
+
+.bg-red-500:hover:not(:disabled) {
+  background-color: #dc2626;
+}
+
+.bg-red-600 {
+  background-color: #dc2626;
+}
+
+.bg-red-600:hover:not(:disabled) {
+  background-color: #b91c1c;
+}
+
+.bg-purple-500 {
+  background-color: #8b5cf6;
+}
+
+.bg-purple-500:hover:not(:disabled) {
+  background-color: #7c3aed;
+}
+
+.bg-purple-600 {
+  background-color: #7c3aed;
+}
+
+.bg-purple-600:hover:not(:disabled) {
+  background-color: #6d28d9;
+}
+
+.bg-orange-500 {
+  background-color: #f59e0b;
+}
+
+.bg-orange-500:hover:not(:disabled) {
+  background-color: #d97706;
+}
+
+.bg-orange-600 {
+  background-color: #d97706;
+}
+
+.bg-orange-600:hover:not(:disabled) {
+  background-color: #b45309;
+}
+
+.bg-yellow-500 {
+  background-color: #eab308;
+}
+
+.bg-yellow-500:hover:not(:disabled) {
+  background-color: #ca8a04;
+}
+
+.bg-yellow-600 {
+  background-color: #ca8a04;
+}
+
+.bg-yellow-600:hover:not(:disabled) {
+  background-color: #a16207;
+}
+
+.bg-gray-200 {
+  background-color: #e5e7eb;
+}
+
+.bg-gray-200:hover:not(:disabled) {
+  background-color: #d1d5db;
+}
+
+.bg-gray-300 {
+  background-color: #d1d5db;
+}
+
+.bg-gray-300:hover:not(:disabled) {
+  background-color: #9ca3af;
+}
+
+.bg-gray-400 {
+  background-color: #9ca3af;
+}
+
+.bg-gray-500 {
+  background-color: #6b7280;
+}
+
+.bg-gray-500:hover:not(:disabled) {
+  background-color: #4b5563;
+}
+
+.bg-gray-600 {
+  background-color: #4b5563;
+}
+
+.bg-gray-600:hover:not(:disabled) {
+  background-color: #374151;
+}
+
+.text-white {
+  color: #ffffff;
+}
+
+/* Form inputs */
+.form-input,
+.form-select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input:focus,
+.form-select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+.form-input:disabled,
+.form-select:disabled {
+  background-color: #f3f4f6;
+  cursor: not-allowed;
+}
+
+/* Grid layouts */
+.grid {
+  display: grid;
+}
+
+.grid-cols-1 {
+  grid-template-columns: 1fr;
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.gap-6 {
+  gap: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .md\:grid-cols-2,
+  .md\:grid-cols-3,
+  .lg\:grid-cols-3,
+  .lg\:grid-cols-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Background utilities */
+.bg-white {
+  background-color: #ffffff;
+}
+
+.bg-gray-50 {
+  background-color: #f9fafb;
+}
+
+.bg-blue-50 {
+  background-color: #eff6ff;
+}
+
+.bg-green-50 {
+  background-color: #ecfdf5;
+}
+
+.bg-red-50 {
+  background-color: #fef2f2;
+}
+
+.bg-yellow-50 {
+  background-color: #fefce8;
+}
+
+/* Border utilities */
+.border {
+  border-width: 1px;
+}
+
+.border-2 {
+  border-width: 2px;
+}
+
+.border-gray-300 {
+  border-color: #d1d5db;
+}
+
+.border-blue-500 {
+  border-color: #3b82f6;
+}
+
+.border-red-200 {
+  border-color: #fecaca;
+}
+
+.border-green-300 {
+  border-color: #6ee7b7;
+}
+
+/* Padding and margin utilities */
+.p-2 {
+  padding: 0.5rem;
+}
+
+.p-3 {
+  padding: 0.75rem;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.p-6 {
+  padding: 1.5rem;
+}
+
+.py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.py-3 {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.py-8 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.py-12 {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+
+.mb-8 {
+  margin-bottom: 2rem;
+}
+
+.mt-1 {
+  margin-top: 0.25rem;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.mt-6 {
+  margin-top: 1.5rem;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.space-y-2 > * + * {
+  margin-top: 0.5rem;
+}
+
+.space-y-3 > * + * {
+  margin-top: 0.75rem;
+}
+
+.space-y-4 > * + * {
+  margin-top: 1rem;
+}
+
+.space-x-2 > * + * {
+  margin-left: 0.5rem;
+}
+
+/* Flexbox utilities */
+.flex {
+  display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+/* Rounded utilities */
+.rounded {
+  border-radius: 0.375rem;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.rounded-full {
+  border-radius: 9999px;
+}
+
+/* Shadows */
+.shadow-md {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Transitions */
+.transition-colors {
+  transition: color 0.2s, background-color 0.2s, border-color 0.2s;
+}
+
+/* Overflow */
+.overflow-y-auto {
+  overflow-y: auto;
+}
+
+.max-h-40 {
+  max-height: 10rem;
+}
+
+/* Truncate */
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.max-w-32 {
+  max-width: 8rem;
+}
+
+.max-w-4xl {
+  max-width: 56rem;
+}
+
+/* Spinner */
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.border-b-2 {
+  border-bottom-width: 2px;
+}
+
+/* ConnectWalletButton specific */
+.connect-wallet-button {
+  display: inline-flex;
+  align-items: center;
+}
+
+.connect-wallet-button button {
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.connect-wallet-button span {
+  max-width: 100px;
+}
+
+@media (max-width: 320px) {
+  .connect-wallet-button button {
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+  }
+
+  .connect-wallet-button span {
+    max-width: 80px;
+    font-size: 0.65rem;
+  }
+}
+
+/* Font utilities */
+.font-mono {
+  font-family: 'Courier New', Courier, monospace;
+}
+
+/* Cursor utilities */
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.cursor-not-allowed {
+  cursor: not-allowed;
+}
+
+/* Underline */
+.underline {
+  text-decoration: underline;
+}
+
+/* Opacity */
+.opacity-50 {
+  opacity: 0.5;
+}
