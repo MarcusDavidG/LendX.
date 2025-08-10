@@ -44,9 +44,9 @@ export class UniswapV3Service {
       signer
     );
     
-    // Quoter contract for price estimation - Sonic testnet address
+    // Updated quoter contract address for Sonic testnet - Quoter V2
     this.quoter = new Contract(
-      "0xc5290058841028f1614f3a6f0f5816cd0a670afb", // Sonic testnet Quoter address with correct checksum
+      "0x0FBeB0140063940f2dC2975D221D1692E9fE3aE5", // Sonic testnet Quoter V2
       QUOTER_ABI,
       provider
     );
@@ -144,13 +144,6 @@ export class UniswapV3Service {
       
       throw new Error(`Failed to get price quote: ${error.message}`);
     }
-  }
-
-  private async estimateQuoteFallback(tokenIn: string, tokenOut: string, amountIn: string): Promise<string> {
-    // Simple fallback estimation based on 1:1 ratio
-    // In production, you might want to use a more sophisticated method
-    console.warn('Using fallback quote estimation');
-    return amountIn; // Simple 1:1 fallback
   }
 
   async executeSwap(
