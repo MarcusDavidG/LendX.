@@ -713,3 +713,18 @@ button:disabled,
 .opacity-50 {
   opacity: 0.5;
 }
+
+@keyframes dropdownFade {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-dropdownFade {
+  animation: dropdownFade 0.2s ease-out forwards;
+}

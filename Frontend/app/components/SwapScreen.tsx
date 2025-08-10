@@ -6,6 +6,11 @@ import { useWallet } from '../contexts/WalletContext';
 import { useTransactionTracker } from '../hooks/useTransactionTracker';
 import { getBalance, swapTokens, getGasFee, getConfirmationTime, TOKEN_ADDRESSES, TOKEN_DECIMALS, UniswapV3Service } from '../utils/web3';
 import ConnectWalletButton from './ConnectWalletButton';
+import { 
+  ArrowDownUp, ArrowRight, Clock, Copy, 
+  Loader2, RefreshCw, Shield, 
+  Wallet, Zap 
+} from 'lucide-react';
 import './components.css';
 
 interface Token {
@@ -13,6 +18,7 @@ interface Token {
   name: string;
   address: string;
   decimals: number;
+  icon?: string;
 }
 
 const EnhancedSwapScreen = () => {
@@ -22,13 +28,15 @@ const EnhancedSwapScreen = () => {
     symbol: 'S',
     name: 'S Token',
     address: TOKEN_ADDRESSES['S'],
-    decimals: TOKEN_DECIMALS['S']
+    decimals: TOKEN_DECIMALS['S'],
+    icon: '/s-token-icon.png'
   });
   const [toToken, setToToken] = useState<Token>({
     symbol: 'USDC',
     name: 'USDC',
     address: TOKEN_ADDRESSES['USDC'],
-    decimals: TOKEN_DECIMALS['USDC']
+    decimals: TOKEN_DECIMALS['USDC'],
+    icon: '/usdc-icon.png'
   });
   const [amount, setAmount] = useState('');
   const [estimatedOutput, setEstimatedOutput] = useState('');
@@ -41,10 +49,23 @@ const EnhancedSwapScreen = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [gasFee, setGasFee] = useState('~$0.001');
   const [confirmationTime, setConfirmationTime] = useState('~2s');
+  const [priceImpact, setPriceImpact] = useState('0.00');
 
   const tokens: Token[] = [
-    { symbol: 'S', name: 'S Token', address: TOKEN_ADDRESSES['S'], decimals: TOKEN_DECIMALS['S'] },
-    { symbol: 'USDC', name: 'USDC', address: TOKEN_ADDRESSES['USDC'], decimals: TOKEN_DECIMALS['USDC'] }
+    { 
+      symbol: 'S', 
+      name: 'S Token', 
+      address: TOKEN_ADDRESSES['S'], 
+      decimals: TOKEN_DECIMALS['S'],
+      icon: '/s-token-icon.png'
+    },
+    { 
+      symbol: 'USDC', 
+      name: 'USDC', 
+      address: TOKEN_ADDRESSES['USDC'], 
+      decimals: TOKEN_DECIMALS['USDC'],
+      icon: '/usdc-icon.png'
+    }
   ];
 
   const uniswapService = UniswapV3Service.getInstance();
@@ -87,12 +108,13 @@ const EnhancedSwapScreen = () => {
     if (amount && fromToken && toToken) {
       estimateOutput();
     }
-  }, [amount, fromToken, toToken]);
+  }, [amount, fromToken, toToken, slippageTolerance]);
 
   const estimateOutput = async () => {
     if (!amount || fromToken.address === toToken.address) {
       setEstimatedOutput('');
       setNeedsApproval(false);
+      setPriceImpact('0.00');
       return;
     }
 
@@ -100,6 +122,7 @@ const EnhancedSwapScreen = () => {
     if (isNaN(amountNum) || amountNum <= 0) {
       setEstimatedOutput('');
       setNeedsApproval(false);
+      setPriceImpact('0.00');
       return;
     }
 
@@ -111,11 +134,13 @@ const EnhancedSwapScreen = () => {
         slippageTolerance
       );
       setEstimatedOutput(output.amountOut);
-      setNeedsApproval(true); // Mock: always require approval
-      setGasEstimate('~21000 gas'); // Mock gas estimate
+      setNeedsApproval(true);
+      setGasEstimate('~21000 gas');
+      setPriceImpact((Math.random() * 0.5).toFixed(2));
       setErrorMessage('');
     } catch (error: any) {
       setEstimatedOutput('');
+      setPriceImpact('0.00');
       setErrorMessage('Error getting swap quote');
       toast.error('Error getting swap quote');
     }
@@ -125,7 +150,7 @@ const EnhancedSwapScreen = () => {
     setIsApproving(true);
     const toastId = toast.loading('Simulating token approval...');
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate 1s approval delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
       toast.success('Token approved successfully!', { id: toastId });
       setNeedsApproval(false);
     } catch (error: any) {
@@ -168,7 +193,7 @@ const EnhancedSwapScreen = () => {
         toast.success(`Swapped ${amount} ${fromToken.symbol} for ${swapDetails.amountOut} ${toToken.symbol}!`, { id: toastId });
         setAmount('');
         setEstimatedOutput('');
-        setNeedsApproval(true); // Reset for next swap
+        setNeedsApproval(true);
       } else {
         toast.error('Swap failed', { id: toastId });
       }
@@ -187,133 +212,222 @@ const EnhancedSwapScreen = () => {
     setNeedsApproval(false);
   };
 
+  const formatBalance = (balance: string | undefined) => {
+    if (!balance) return '0.00';
+    const num = parseFloat(balance);
+    return num.toFixed(num < 1 ? 4 : 2);
+  };
+
   return (
-    <div className="swap-container max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
-      <div className="flex items-center justify-center mb-4">
-        <img src="/sonic-logo.png" alt="SonicFi" className="h-8 mr-2" />
-        <h2 className="text-2xl font-bold text-gray-800">SonicFi Swap</h2>
+    <div className="swap-container max-w-md mx-auto p-6 bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl shadow-lg">
+      <div className="flex flex-col items-center mb-6">
+        <div className="flex items-center justify-center mb-2">
+          <img src="/sonic-logo.png" alt="SonicFi" className="h-10 mr-3" />
+          <h2 className="text-3xl font-bold text-gray-800 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            SonicFi Swap
+          </h2>
+        </div>
+        <div className="flex items-center space-x-4 text-sm text-gray-600">
+          <div className="flex items-center">
+            <Zap size={16} className="mr-1 text-yellow-500" />
+            <span>Powered by Sonic</span>
+          </div>
+          <div className="flex items-center">
+            <Clock size={16} className="mr-1 text-blue-500" />
+            <span>{confirmationTime} confirmations</span>
+          </div>
+          <div className="flex items-center">
+            <Shield size={16} className="mr-1 text-green-500" />
+            <span>{gasFee} fees</span>
+          </div>
+        </div>
       </div>
-      <p className="text-xs text-center text-gray-500 mb-4">
-        Powered by Sonic: {confirmationTime} confirmations, {gasFee} fees
-      </p>
 
       {errorMessage && (
-        <div className="bg-red-50 p-3 rounded mb-4">
-          <p className="text-sm text-red-700">{errorMessage}</p>
+        <div className="bg-red-50 border-l-4 border-red-500 rounded p-4 mb-6 flex items-center">
+          <Shield className="text-red-500 mr-2" />
+          <p className="text-red-600">{errorMessage}</p>
         </div>
       )}
 
       {!isConnected ? (
-        <div className="text-center py-12">
-          <p className="text-gray-600 mb-4">Connect your wallet to swap tokens</p>
-          <ConnectWalletButton size="large" variant="primary" />
+        <div className="text-center py-12 bg-white rounded-xl shadow-sm p-6">
+          <div className="max-w-md mx-auto">
+            <Wallet className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-gray-700 mb-2">Connect Your Wallet</h3>
+            <p className="text-gray-500 mb-6">Connect your wallet to swap tokens</p>
+            <ConnectWalletButton size="large" variant="primary" />
+          </div>
         </div>
       ) : (
-        <form onSubmit={handleSwap} className="bg-white rounded-lg shadow-md p-6 space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1 text-gray-700">From</label>
-            <div className="flex items-center space-x-2">
-              <select
-                value={fromToken.symbol}
-                onChange={(e) => {
-                  const selected = tokens.find(t => t.symbol === e.target.value)!;
-                  setFromToken(selected);
-                }}
-                className="form-select w-1/3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                {tokens.map(token => (
-                  <option key={token.symbol} value={token.symbol}>{token.name}</option>
-                ))}
-              </select>
-              <input
-                type="number"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                placeholder="0.0"
-                className="form-input w-2/3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-                min="0"
-                step="0.01"
-              />
+        <form onSubmit={handleSwap} className="bg-white rounded-xl shadow-sm p-6 space-y-4">
+          <div className="space-y-4">
+            <div className="bg-gray-50 rounded-xl p-4">
+              <div className="flex justify-between items-center mb-2">
+                <label className="block text-sm font-medium text-gray-700">From</label>
+                <div className="text-xs text-gray-500 flex items-center">
+                  <span>Balance: {formatBalance(balances[fromToken.symbol])}</span>
+                  <button 
+                    type="button" 
+                    onClick={() => setAmount(balances[fromToken.symbol] || '0')}
+                    className="ml-2 text-blue-500 hover:text-blue-700 text-xs"
+                  >
+                    Max
+                  </button>
+                </div>
+              </div>
+              <div className="flex items-center space-x-3">
+                <div className="flex-1">
+                  <input
+                    type="number"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    placeholder="0.0"
+                    className="w-full p-3 text-lg border-0 bg-transparent focus:ring-0 focus:outline-none"
+                    required
+                    min="0"
+                    step="0.0001"
+                  />
+                </div>
+                <div className="w-32">
+                  <select
+                    value={fromToken.symbol}
+                    onChange={(e) => {
+                      const selected = tokens.find(t => t.symbol === e.target.value)!;
+                      setFromToken(selected);
+                    }}
+                    className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    {tokens.map(token => (
+                      <option key={token.symbol} value={token.symbol}>
+                        {token.symbol}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
             </div>
-            <p className="text-xs text-gray-500 mt-1">
-              Balance: {balances[fromToken.symbol] || '0'} {fromToken.symbol}
-            </p>
+
+            <div className="flex justify-center -my-2">
+              <button
+                type="button"
+                onClick={switchTokens}
+                className="bg-gray-100 hover:bg-gray-200 text-gray-700 p-2 rounded-full border border-gray-200 shadow-sm"
+              >
+                <ArrowDownUp size={16} />
+              </button>
+            </div>
+
+            <div className="bg-gray-50 rounded-xl p-4">
+              <div className="flex justify-between items-center mb-2">
+                <label className="block text-sm font-medium text-gray-700">To</label>
+                <div className="text-xs text-gray-500">
+                  <span>Balance: {formatBalance(balances[toToken.symbol])}</span>
+                </div>
+              </div>
+              <div className="flex items-center space-x-3">
+                <div className="flex-1">
+                  <input
+                    type="text"
+                    value={estimatedOutput || '0.0'}
+                    readOnly
+                    className="w-full p-3 text-lg border-0 bg-transparent focus:ring-0 focus:outline-none text-gray-500"
+                  />
+                </div>
+                <div className="w-32">
+                  <select
+                    value={toToken.symbol}
+                    onChange={(e) => {
+                      const selected = tokens.find(t => t.symbol === e.target.value)!;
+                      setToToken(selected);
+                    }}
+                    className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    {tokens.map(token => (
+                      <option key={token.symbol} value={token.symbol}>
+                        {token.symbol}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="flex justify-center">
-            <button
-              type="button"
-              onClick={switchTokens}
-              className="bg-gray-200 hover:bg-gray-300 text-gray-700 p-2 rounded-full"
-            >
-              ↓↑
-            </button>
+          <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
+            <h4 className="text-sm font-semibold text-blue-800 mb-2 flex items-center">
+              <Shield className="mr-2 text-blue-500" size={16} />
+              Swap Details
+            </h4>
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div>
+                <span className="text-blue-600">Slippage Tolerance:</span>
+                <p>{slippageTolerance}%</p>
+              </div>
+              <div>
+                <span className="text-blue-600">Minimum Received:</span>
+                <p>{estimatedOutput ? (parseFloat(estimatedOutput) * (1 - slippageTolerance / 100)).toFixed(4) : '0'} {toToken.symbol}</p>
+              </div>
+              <div>
+                <span className="text-blue-600">Price Impact:</span>
+                <p>{priceImpact}%</p>
+              </div>
+              <div>
+                <span className="text-blue-600">Gas Estimate:</span>
+                <p>{gasEstimate}</p>
+              </div>
+            </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1 text-gray-700">To</label>
-            <select
-              value={toToken.symbol}
-              onChange={(e) => {
-                const selected = tokens.find(t => t.symbol === e.target.value)!;
-                setToToken(selected);
-              }}
-              className="form-select w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              {tokens.map(token => (
-                <option key={token.symbol} value={token.symbol}>{token.name}</option>
-              ))}
-            </select>
-            <p className="text-xs text-gray-500 mt-1">
-              Estimated Output: {estimatedOutput || '0'} {toToken.symbol}
-            </p>
-          </div>
+          <div className="space-y-2">
+            {needsApproval ? (
+              <button
+                type="button"
+                onClick={handleApprove}
+                disabled={isApproving || isSwapping}
+                className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all ${
+                  isApproving || isSwapping
+                    ? 'bg-gray-400 cursor-not-allowed'
+                    : 'bg-yellow-500 hover:bg-yellow-600 text-white shadow-md hover:shadow-lg'
+                }`}
+              >
+                {isApproving ? (
+                  <>
+                    <Loader2 className="animate-spin h-5 w-5" />
+                    <span>Approving...</span>
+                  </>
+                ) : (
+                  <>
+                    <Shield size={18} />
+                    <span>Approve {fromToken.symbol}</span>
+                  </>
+                )}
+              </button>
+            ) : null}
 
-          <div>
-            <label className="block text-sm font-medium mb-1 text-gray-700">Slippage Tolerance (%)</label>
-            <input
-              type="number"
-              value={slippageTolerance}
-              onChange={(e) => setSlippageTolerance(parseFloat(e.target.value))}
-              placeholder="0.5"
-              className="form-input w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              min="0.1"
-              max="5"
-              step="0.1"
-            />
-          </div>
-
-          <div className="bg-blue-50 rounded-lg p-4">
-            <h4 className="text-sm font-semibold text-blue-800 mb-2">Swap Details</h4>
-            <p className="text-xs text-blue-700">Gas Estimate: {gasEstimate}</p>
-            <p className="text-xs text-blue-700">Minimum Received: {estimatedOutput ? (parseFloat(estimatedOutput) * (1 - slippageTolerance / 100)).toFixed(2) : '0'} {toToken.symbol}</p>
-            <p className="text-xs text-blue-700">Price Impact: {estimatedOutput && amount ? (Math.random() * 0.5).toFixed(2) : '0'}%</p>
-          </div>
-
-          {needsApproval ? (
-            <button
-              type="button"
-              onClick={handleApprove}
-              disabled={isApproving || isSwapping}
-              className={`w-full font-bold py-2 px-4 rounded ${
-                isApproving || isSwapping ? 'bg-gray-400 cursor-not-allowed' : 'bg-yellow-500 hover:bg-yellow-600 text-white'
-              }`}
-            >
-              {isApproving ? 'Approving...' : 'Approve Token'}
-            </button>
-          ) : (
             <button
               type="submit"
-              disabled={isSwapping || isApproving}
-              className={`w-full font-bold py-2 px-4 rounded ${
-                isSwapping || isApproving ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-700 text-white'
+              disabled={isSwapping || isApproving || !amount || !estimatedOutput}
+              className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all ${
+                isSwapping || isApproving || !amount || !estimatedOutput
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-md hover:shadow-lg'
               }`}
             >
-              {isSwapping ? 'Swapping...' : 'Swap Tokens'}
+              {isSwapping ? (
+                <>
+                  <Loader2 className="animate-spin h-5 w-5" />
+                  <span>Swapping...</span>
+                </>
+              ) : (
+                <>
+                  <span>Swap {fromToken.symbol} to {toToken.symbol}</span>
+                </>
+              )}
             </button>
-          )}
-          <p className="text-xs text-gray-500 mt-2">
+          </div>
+
+          <p className="text-xs text-gray-500 text-center mt-4">
             Mock implementation. Real Uniswap V3 swaps would be used in production.
           </p>
         </form>

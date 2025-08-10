@@ -7,6 +7,11 @@ import { useTransactionTracker } from '../hooks/useTransactionTracker';
 import ConnectWalletButton from './ConnectWalletButton';
 import toast from 'react-hot-toast';
 import { ethers } from 'ethers';
+import { 
+  ArrowRight, Banknote, Clock, Copy, CreditCard, 
+  ExternalLink, Loader2, RefreshCw, Send, 
+  Shield, Smartphone, Wallet, Zap, Gem
+} from 'lucide-react';
 import './components.css';
 
 const WalletScreen = () => {
@@ -146,203 +151,317 @@ const WalletScreen = () => {
     return `${Math.floor(diff / 3600000)}h ago`;
   };
 
+  const copyAddress = () => {
+    if (userAddress) {
+      navigator.clipboard.writeText(userAddress);
+      toast.success('Address copied to clipboard');
+    }
+  };
+
   const getTransactionIcon = (type: string) => {
     switch (type) {
-      case 'send': return '➡️';
-      case 'deposit': return '💸';
-      case 'loan': return '🏦';
-      default: return '🔄';
+      case 'send': return <Send size={16} className="text-blue-500" />;
+      case 'deposit': return <ArrowRight size={16} className="text-green-500" />;
+      case 'loan': return <CreditCard size={16} className="text-purple-500" />;
+      default: return <RefreshCw size={16} className="text-gray-500" />;
     }
   };
 
   return (
-    <div className="wallet-container max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md">
-      <div className="flex items-center justify-center mb-4">
-        <img src="/sonic-logo.png" alt="SonicFi" className="h-8 mr-2" />
-        <h2 className="text-2xl font-bold text-gray-800">SonicFi Wallet</h2>
+    <div className="wallet-container max-w-lg mx-auto p-6 bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl shadow-lg">
+      <div className="flex flex-col items-center mb-6">
+        <div className="flex items-center justify-center mb-2">
+          <img src="/sonic-logo.png" alt="SonicFi" className="h-10 mr-3" />
+          <h2 className="text-3xl font-bold text-gray-800 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            SonicFi Wallet
+          </h2>
+        </div>
+        <div className="flex items-center space-x-4 text-sm text-gray-600">
+          <div className="flex items-center">
+            <Zap size={16} className="mr-1 text-yellow-500" />
+            <span>Powered by Sonic</span>
+          </div>
+          <div className="flex items-center">
+            <Clock size={16} className="mr-1 text-blue-500" />
+            <span>{confirmationTime} confirmations</span>
+          </div>
+          <div className="flex items-center">
+            <Banknote size={16} className="mr-1 text-green-500" />
+            <span>{gasFee} fees</span>
+          </div>
+        </div>
       </div>
-      <p className="text-xs text-center text-gray-500 mb-4">
-        Powered by Sonic: {confirmationTime} confirmations, {gasFee} fees
-      </p>
 
       {errorMessage && (
-        <div className="bg-red-50 p-3 rounded mb-4">
-          <p className="text-sm text-red-700">{errorMessage}</p>
+        <div className="bg-red-50 border-l-4 border-red-500 rounded p-4 mb-6 flex items-center">
+          <Shield className="text-red-500 mr-2" />
+          <p className="text-red-600">{errorMessage}</p>
         </div>
       )}
 
       {!isConnected ? (
-        <div className="text-center">
-          <ConnectWalletButton size="large" variant="primary" />
+        <div className="text-center py-12 bg-white rounded-xl shadow-sm p-6">
+          <div className="max-w-md mx-auto">
+            <Wallet className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-gray-700 mb-2">Connect Your Wallet</h3>
+            <p className="text-gray-500 mb-6">Connect your wallet to view balances and make transactions</p>
+            <ConnectWalletButton size="large" variant="primary" />
+          </div>
         </div>
       ) : (
-        <div className="wallet-card">
-          <div className="flex justify-between items-center mb-4">
-            <div>
-              <h3 className="text-lg font-semibold text-gray-800">Balances</h3>
-              <p className="text-xs text-gray-500 truncate w-32">{userAddress}</p>
+        <div className="space-y-6">
+          <div className="bg-white rounded-xl shadow-sm p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-semibold text-gray-800 flex items-center">
+                <Wallet className="mr-2 text-blue-500" />
+                Wallet Balances
+              </h3>
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={fetchBalances}
+                  disabled={loading}
+                  className={`flex items-center space-x-1 bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
+                    loading ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
+                >
+                  {loading ? (
+                    <Loader2 className="animate-spin h-4 w-4" />
+                  ) : (
+                    <RefreshCw size={16} />
+                  )}
+                  <span>Refresh</span>
+                </button>
+                <ConnectWalletButton size="small" variant="outline" />
+              </div>
             </div>
-            <div className="flex items-center space-x-2">
+
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl p-4 border border-gray-100">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Gem className="text-blue-500 mr-2" />
+                    <span className="font-medium">S Token</span>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-xl font-bold">{balance.S}</p>
+                    <p className="text-xs text-gray-500">S</p>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl p-4 border border-gray-100">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Banknote className="text-green-500 mr-2" />
+                    <span className="font-medium">USDC</span>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-xl font-bold">{balance.USDC}</p>
+                    <p className="text-xs text-gray-500">USDC</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-xs text-gray-500 flex items-center justify-between">
+              <span>Last updated: {formatLastUpdate()}</span>
               <button
-                onClick={fetchBalances}
-                disabled={loading}
-                className="text-sm bg-blue-500 hover:bg-blue-700 text-white px-2 py-1 rounded"
-                title="Refresh balances"
+                onClick={copyAddress}
+                className="flex items-center hover:text-blue-600"
               >
-                {loading ? '⟳' : '↻'}
+                <span>{userAddress?.substring(0, 6)}...{userAddress?.substring(38)}</span>
+                <Copy size={12} className="ml-1" />
               </button>
-              <ConnectWalletButton size="small" variant="outline" />
             </div>
           </div>
 
-          <div className="space-y-2 mb-6">
-            <div className="flex justify-between items-center p-3 bg-gray-100 rounded">
-              <span className="font-medium">S Token</span>
-              <div className="text-right">
-                <span className="font-mono text-lg">{balance.S}</span>
-                <p className="text-xs text-gray-500">S</p>
+          <div className="bg-white rounded-xl shadow-sm p-6">
+            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+              <Send className="mr-2 text-blue-500" />
+              Send Tokens
+            </h3>
+            
+            <form onSubmit={handleSendTokens} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2 text-gray-700 flex items-center">
+                  <ArrowRight className="mr-2 text-blue-500" size={16} />
+                  Token to Send
+                </label>
+                <select
+                  value={sendToken}
+                  onChange={(e) => setSendToken(e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                >
+                  <option value="S">S Token</option>
+                  <option value="USDC">USDC</option>
+                </select>
               </div>
-            </div>
-            <div className="flex justify-between items-center p-3 bg-gray-100 rounded">
-              <span className="font-medium">USDC</span>
-              <div className="text-right">
-                <span className="font-mono text-lg">{balance.USDC}</span>
-                <p className="text-xs text-gray-500">USDC</p>
+              
+              <div>
+                <label className="block text-sm font-medium mb-2 text-gray-700 flex items-center">
+                  <CreditCard className="mr-2 text-blue-500" size={16} />
+                  Amount
+                </label>
+                <input
+                  type="number"
+                  value={sendAmount}
+                  onChange={(e) => setSendAmount(e.target.value)}
+                  placeholder="0.0"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  required
+                  min="0"
+                  step="0.01"
+                />
               </div>
-            </div>
-          </div>
-
-          <div className="text-xs text-gray-500 mb-4">
-            Last updated: {formatLastUpdate()}
-          </div>
-
-          <form onSubmit={handleSendTokens} className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-800">Send Tokens</h3>
-            <div>
-              <label className="block text-sm font-medium mb-1 text-gray-700">Token</label>
-              <select
-                value={sendToken}
-                onChange={(e) => setSendToken(e.target.value)}
-                className="form-select w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              
+              <div>
+                <label className="block text-sm font-medium mb-2 text-gray-700 flex items-center">
+                  <Wallet className="mr-2 text-blue-500" size={16} />
+                  Recipient Address
+                </label>
+                <input
+                  type="text"
+                  value={recipient}
+                  onChange={(e) => setRecipient(e.target.value)}
+                  placeholder="0x..."
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  required
+                />
+              </div>
+              
+              <button
+                type="submit"
+                disabled={isSending || loading}
+                className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all ${
+                  isSending || loading
+                    ? 'bg-gray-400 cursor-not-allowed'
+                    : 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-md hover:shadow-lg'
+                }`}
               >
-                <option value="S">S Token</option>
-                <option value="USDC">USDC</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1 text-gray-700">Amount</label>
-              <input
-                type="number"
-                value={sendAmount}
-                onChange={(e) => setSendAmount(e.target.value)}
-                placeholder="0.0"
-                className="form-input w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-                min="0"
-                step="0.01"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1 text-gray-700">Recipient Address</label>
-              <input
-                type="text"
-                value={recipient}
-                onChange={(e) => setRecipient(e.target.value)}
-                placeholder="0x..."
-                className="form-input w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={isSending || loading}
-              className={`w-full font-bold py-2 px-4 rounded ${
-                isSending || loading
-                  ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-green-500 hover:bg-green-700 text-white'
-              }`}
-            >
-              {isSending || loading ? 'Processing...' : 'Send Tokens'}
-            </button>
-          </form>
+                {isSending || loading ? (
+                  <>
+                    <Loader2 className="animate-spin h-5 w-5" />
+                    <span>Processing...</span>
+                  </>
+                ) : (
+                  <>
+                    <Send size={18} />
+                    <span>Send Tokens</span>
+                  </>
+                )}
+              </button>
+            </form>
+          </div>
 
-          <div className="mt-8 p-4 bg-green-50 rounded-lg border border-green-200">
-            <h3 className="text-lg font-bold mb-2 text-green-800">M-Pesa Deposit (Mock)</h3>
-            <p className="text-sm text-green-700 mb-3">
+          <div className="bg-white rounded-xl shadow-sm p-6">
+            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+              <Smartphone className="mr-2 text-green-500" />
+              M-Pesa Deposit (Mock)
+            </h3>
+            <p className="text-sm text-gray-600 mb-4">
               Deposit KES to receive USDC (1 USDC = 130 KES). This is a mock integration.
             </p>
-            <form onSubmit={handleMpesaDeposit} className="grid grid-cols-2 gap-4">
+            
+            <form onSubmit={handleMpesaDeposit} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-green-700 mb-1">M-Pesa Number</label>
+                <label className="block text-sm font-medium mb-2 text-gray-700 flex items-center">
+                  <Smartphone className="mr-2 text-green-500" size={16} />
+                  M-Pesa Number
+                </label>
                 <input
                   type="text"
                   value={mpesaPhone}
                   onChange={(e) => setMpesaPhone(e.target.value)}
                   placeholder="2547XXXXXXXX"
-                  className="w-full p-2 border border-green-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
                 />
               </div>
+              
               <div>
-                <label className="block text-xs font-medium text-green-700 mb-1">Amount (KES)</label>
+                <label className="block text-sm font-medium mb-2 text-gray-700 flex items-center">
+                  <Banknote className="mr-2 text-green-500" size={16} />
+                  Amount (KES)
+                </label>
                 <input
                   type="number"
                   value={mpesaAmount}
                   onChange={(e) => setMpesaAmount(e.target.value)}
                   placeholder="1000"
-                  className="w-full p-2 border border-green-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
                 />
               </div>
+              
               <button
                 type="submit"
                 disabled={isMpesaProcessing}
-                className={`col-span-2 mt-3 w-full bg-green-600 hover:bg-green-800 text-white font-medium py-2 px-4 rounded text-sm ${
-                  isMpesaProcessing ? 'opacity-50 cursor-not-allowed' : ''
+                className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all ${
+                  isMpesaProcessing
+                    ? 'bg-gray-400 cursor-not-allowed'
+                    : 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-md hover:shadow-lg'
                 }`}
               >
-                {isMpesaProcessing ? 'Processing...' : 'Deposit via M-Pesa'}
+                {isMpesaProcessing ? (
+                  <>
+                    <Loader2 className="animate-spin h-5 w-5" />
+                    <span>Processing...</span>
+                  </>
+                ) : (
+                  <>
+                    <Smartphone size={18} />
+                    <span>Deposit via M-Pesa</span>
+                  </>
+                )}
               </button>
             </form>
-            <p className="text-xs text-green-600 mt-2">
+            
+            <p className="text-xs text-gray-500 mt-4">
               Mock implementation. Real M-Pesa API would be used in production.
             </p>
           </div>
 
           {transactions.length > 0 && (
-            <div className="mt-6">
-              <h4 className="text-md font-semibold mb-2 text-gray-800">Recent Transactions</h4>
-              <div className="space-y-2 max-h-40 overflow-y-auto">
+            <div className="bg-white rounded-xl shadow-sm p-6">
+              <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                <RefreshCw className="mr-2 text-blue-500" />
+                Recent Transactions
+              </h3>
+              <div className="space-y-3 max-h-64 overflow-y-auto pr-2">
                 {transactions.map(tx => (
-                  <div key={tx.hash} className="p-2 bg-gray-50 rounded text-xs flex items-center">
-                    <span className="mr-2">{getTransactionIcon(tx.type)}</span>
-                    <div className="flex-1">
-                      <div className="flex justify-between">
-                        <span className="capitalize">{tx.type}</span>
-                        <span
-                          className={`${
-                            tx.status === 'success'
-                              ? 'text-green-600'
-                              : tx.status === 'failed'
-                              ? 'text-red-600'
-                              : 'text-yellow-600'
-                          }`}
-                        >
-                          {tx.status}
-                        </span>
+                  <div key={tx.hash} className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                    <div className="flex items-start">
+                      <div className="mt-1 mr-3">
+                        {getTransactionIcon(tx.type)}
                       </div>
-                      {tx.amount && tx.token && (
-                        <div>
-                          {tx.amount} {tx.token}
+                      <div className="flex-1">
+                        <div className="flex justify-between items-start">
+                          <span className="capitalize font-medium text-gray-800">{tx.type}</span>
+                          <span
+                            className={`text-xs px-2 py-1 rounded-full ${
+                              tx.status === 'success'
+                                ? 'bg-green-100 text-green-800'
+                                : tx.status === 'failed'
+                                ? 'bg-red-100 text-red-800'
+                                : 'bg-yellow-100 text-yellow-800'
+                            }`}
+                          >
+                            {tx.status}
+                          </span>
                         </div>
-                      )}
-                      <div className="text-gray-500 truncate">
-                        <a
-                          href={`https://explorer.soniclabs.com/tx/${tx.hash}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="underline"
-                        >
-                          {tx.hash.substring(0, 10)}...{tx.hash.substring(38)}
-                        </a>
+                        {tx.amount && tx.token && (
+                          <div className="text-sm text-gray-600 mt-1">
+                            {tx.amount} {tx.token}
+                          </div>
+                        )}
+                        <div className="mt-2 flex items-center text-xs text-gray-500">
+                          <a
+                            href={`https://explorer.soniclabs.com/tx/${tx.hash}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center hover:text-blue-600"
+                          >
+                            {tx.hash.substring(0, 8)}...{tx.hash.substring(36)}
+                            <ExternalLink size={12} className="ml-1" />
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>

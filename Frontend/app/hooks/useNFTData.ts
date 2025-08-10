@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ethers } from 'ethers';
-import { getUserAddress } from '../utils/enhancedWeb3';
+import { getUserAddress } from '../utils/web3';
 
 interface NFTData {
   tokenId: string;

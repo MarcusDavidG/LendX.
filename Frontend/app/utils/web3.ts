@@ -210,6 +210,29 @@ export const UniswapV3Service = MockUniswapV3Service;
 export const mockRequestLoan = async (loanAmount: string, duration: string): Promise<{ success: boolean; transactionHash: string }> => {
   try {
     console.log(`Mock loan request for ${loanAmount} USDC for ${duration} days`);
+    
+    // Get current user address to store loan data
+    const userAddress = await getUserAddress();
+    if (!userAddress) {
+      throw new Error('User address not found');
+    }
+    
+    // Calculate interest (5% fixed rate)
+    const interest = (parseFloat(loanAmount) * 0.05).toFixed(2);
+    
+    // Calculate due date based on duration
+    const dueDate = new Date(Date.now() + parseInt(duration) * 24 * 60 * 60 * 1000).toLocaleDateString();
+    
+    // Store loan data in localStorage
+    const loanData = {
+      amount: loanAmount,
+      interest: interest,
+      dueDate: dueDate,
+      collateral: 'Mock NFT Collection #1234'
+    };
+    
+    localStorage.setItem(`loan_${userAddress}`, JSON.stringify(loanData));
+    
     await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate 2s delay
     return {
       success: true,
@@ -474,12 +497,19 @@ export const trackTransaction = async (txHash: string): Promise<string> => {
 export const getUserLoan = async (userAddress: string): Promise<LoanInfo | null> => {
   try {
     console.log(`Mock fetching loan for ${userAddress}`);
-    return {
-      amount: '0',
-      interest: '0',
-      dueDate: 'N/A',
-      collateral: 'Mock NFT Collection #1234'
-    };
+    // Simulate having an active loan for demo purposes
+    // In production, this would fetch from the actual lending contract
+    const hasActiveLoan = localStorage.getItem(`loan_${userAddress}`);
+    if (hasActiveLoan) {
+      const loanData = JSON.parse(hasActiveLoan);
+      return {
+        amount: loanData.amount || '1000',
+        interest: loanData.interest || '50',
+        dueDate: loanData.dueDate || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+        collateral: loanData.collateral || 'Mock NFT Collection #1234'
+      };
+    }
+    return null;
   } catch (error: any) {
     console.error(`Error simulating loan info for ${userAddress}:`, error.message);
     return null;
