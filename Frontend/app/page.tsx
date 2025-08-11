@@ -1,12 +1,26 @@
-import DashboardScreen from './components/DashboardScreen';
-import { WalletProvider } from './contexts/WalletContext';
+import {
+  FAQ,
+  Featured,
+  FinancialFuture,
+  HeroSection,
+  IntroSection,
+  JoinSection,
+  OffersSection,
+} from './landingPage/components';
+import Layout from './landingPage/components/Layout';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-100">
-      <WalletProvider>
-        <DashboardScreen />
-      </WalletProvider>
-    </div>
+    <Layout>
+      <main>
+        <HeroSection />
+        <Featured />
+        <OffersSection />
+        <FinancialFuture />
+        <IntroSection />
+        <JoinSection />
+        <FAQ />
+      </main>
+    </Layout>
   );
 }

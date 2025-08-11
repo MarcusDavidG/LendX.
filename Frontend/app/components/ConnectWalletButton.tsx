@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { useWallet } from '../contexts/WalletContext';
 import { 
@@ -20,6 +21,8 @@ interface ConnectWalletButtonProps {
   variant?: 'primary' | 'secondary' | 'outline';
   showAddress?: boolean;
   className?: string;
+  redirectOnConnect?: boolean;
+  redirectTo?: string;
 }
 
 const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
@@ -27,11 +30,14 @@ const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
   variant = 'primary',
   showAddress = false,
   className = '',
+  redirectOnConnect = true,
+  redirectTo = '/dashboard',
 }) => {
   const { isConnected, userAddress, isConnecting, connectWallet, disconnectWallet } = useWallet();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -79,6 +85,11 @@ const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
     try {
       await connectWallet();
       toast.success('Wallet connected successfully!', { id: toastId });
+      
+      // Redirect to dashboard after successful connection
+      if (redirectOnConnect) {
+        router.push(redirectTo);
+      }
     } catch (error: any) {
       toast.error(`Connection failed: ${error.message}`, { id: toastId });
     }
