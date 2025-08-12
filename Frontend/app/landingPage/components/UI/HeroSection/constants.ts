@@ -1,14 +1,15 @@
+
 // For desktop
-export const phrases = ['Empowering Financial', 'Inclusion in Africa'];
+export const phrases = ['Build Your Future', 'With LendX'];
 export const paragraphPhrases = [
-  'Experience decentralized micro-lending with LendX. We empower unbanked farmers and entrepreneurs on the Sonic network.',
-  'Seamless loans, NFT collateral, and M-Pesa integration for your financial journey.',
+  'LendX offers easy micro-loans for Africa’s farmers and entrepreneurs on Sonic’s fast network.',
+  'Use NFTs or tokens as collateral, swap cash to crypto with M-Pesa, and grow your dreams today!'
 ];
 
 // For mobile
-export const mobilePhrases = ['Empowering Financial', 'Inclusion'];
+export const mobilePhrases = ['Build Your', 'Future'];
 export const mobileParagraphPhrases = [
-  'Experience decentralized micro-lending with LendX. We',
-  'empower unbanked farmers and entrepreneurs on the Sonic',
-  'network with seamless loans and M-Pesa integration.',
+  'LendX gives easy loans to Africa’s farmers and entrepreneurs.',
+  'Use NFTs or tokens and M-Pesa on Sonic’s fast network.',
+  'Grow your dreams today!'
 ];

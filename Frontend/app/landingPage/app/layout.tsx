@@ -1,9 +1,9 @@
-import Layout from '@/components/Layout';
+import Layout from '../components/Layout';
 import './globals.css';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Raft',
+  title: 'LendX',
   description: 'Building the future of banking',
 };
 

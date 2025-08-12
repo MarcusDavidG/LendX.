@@ -18,7 +18,7 @@ const HeroSection = () => {
     <Wrapper>
       <Inner>
         <Pill>
-          <span>Introducing Raft cards</span>
+          <span>Introducing Africa's No.1 Lending dApp</span>
           <Image src={ic_chevron_right} alt="chevron-right" />
         </Pill>
         <HeroTextContainer>
