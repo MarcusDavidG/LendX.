@@ -13,45 +13,87 @@ export const Wrapper = styled.div`
   bottom: 0;
   right: 0;
   display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const Inner = styled.div`
   display: flex;
+  flex-direction: column;
   gap: 2em;
   align-items: center;
-  padding: 0 2em;
+  justify-content: center;
   overflow: hidden;
-  height: 20em;
+  height: 100vh;
+  width: 100%;
 
-  img {
-    width: 25em;
-    height: 25em;
+  .logo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    
+    svg {
+      width: 150px;
+      height: 150px;
+    }
+    
+    span {
+      font-weight: 700;
+      font-size: 4rem;
+      color: var(--text-color);
+      letter-spacing: -0.02em;
+    }
   }
 
-  div {
-    overflow: hidden;
+  .text-container {
     display: flex;
     align-items: center;
+    gap: 0.1em;
+    overflow: hidden;
 
-    div {
+    span {
       font-weight: 600;
-      font-size: 25em;
+      font-size: 8rem;
+      color: var(--text-color);
+      display: inline-block;
     }
   }
 
   @media (max-width: 768px) {
-    gap: 1rem;
-    height: 13rem;
-    img {
-      width: 7rem;
-      height: 100%;
+    .logo-container {
+      svg {
+        width: 100px;
+        height: 100px;
+      }
+      
+      span {
+        font-size: 2.5rem;
+      }
     }
 
-    div {
-      div {
-        font-size: 6rem;
+    .text-container {
+      span {
+        font-size: 4rem;
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    .logo-container {
+      svg {
+        width: 80px;
+        height: 80px;
+      }
+      
+      span {
+        font-size: 2rem;
+      }
+    }
+
+    .text-container {
+      span {
+        font-size: 3rem;
       }
     }
   }

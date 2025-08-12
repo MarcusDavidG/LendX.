@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import raft_footer_logo from '../../../../public/svgs/raft_footer_logo.svg';
+import { Coins } from 'lucide-react';
 import qr_code from '../../../../public/svgs/qr_code.svg';
 import ic_google_playstore from '../../../../public/svgs/ic_google_playstore.svg';
 import ic_baseline_apple from '../../../../public/svgs/ic_baseline_apple.svg';
@@ -44,7 +44,12 @@ const Footer = () => {
     <Wrapper>
       <Inner>
         <FooterLogo>
-          <Image src={raft_footer_logo} alt="raft_footer_logo" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <Coins size={48} color="#10b981" strokeWidth={2} />
+            <span style={{ fontSize: '3rem', fontWeight: '700', color: 'var(--text-color)', letterSpacing: '-0.02em' }}>
+              LendX
+            </span>
+          </div>
         </FooterLogo>
         <FooterMainContent>
           <FooterMiddle>

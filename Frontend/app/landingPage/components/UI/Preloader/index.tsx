@@ -1,31 +1,29 @@
 'use client';
-import Image from 'next/image';
-import ic_import from '../../../../public/svgs/ic_import.svg';
-
 import { Wrapper, Inner, SecondOverlay } from './styles';
 import { Dispatch, SetStateAction, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
+import { Coins } from 'lucide-react';
 
 const Preloader = ({
   setComplete,
 }: {
   setComplete: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const word = ['R', 'a', 'f', 't'];
+  const word = ['L', 'e', 'n', 'd', 'X'];
 
-  const spans = useRef<any>([]); // Create a ref to store the span elements
-  const imageRef = useRef(null);
+  const spans = useRef<(HTMLSpanElement | null)[]>([]); // Create a ref to store the span elements
+  const logoRef = useRef(null);
   const secondOverlayRef = useRef(null);
   const wrapperRef = useRef(null);
 
   useEffect(() => {
     const tl = gsap.timeline();
-    tl.to(imageRef.current, {
+    tl.to(logoRef.current, {
       rotate: '360deg',
       ease: 'back.out(1.7)', // Easing function
       duration: 1.4,
     });
-    tl.to(imageRef.current, {
+    tl.to(logoRef.current, {
       y: '-100%', // Move the spans up
       ease: 'back.out(1.7)', // Easing function
     });
@@ -62,15 +60,20 @@ const Preloader = ({
     <>
       <Wrapper ref={wrapperRef}>
         <Inner>
-          <Image ref={imageRef} src={ic_import} alt="import icon" />
-          <div>
+          <div ref={logoRef} className="logo-container">
+            <Coins size={120} color="#10b981" strokeWidth={2} />
+            <span>LendX</span>
+          </div>
+          <div className="text-container">
             {word.map((t, i) => (
-              <div
+              <span
                 key={i}
-                ref={(element) => (spans.current[i] = element)} // Assign ref to each span
+                ref={(element) => {
+                  spans.current[i] = element;
+                }} // Assign ref to each span
               >
                 {t}
-              </div>
+              </span>
             ))}
           </div>
         </Inner>

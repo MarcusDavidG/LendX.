@@ -56,9 +56,19 @@ export const HeroTextContainer = styled.div`
     margin: 0 auto;
   }
 
+  /* CSS-based responsive display */
+  .desktop-content {
+    display: block;
+  }
+
+  .mobile-content {
+    display: none;
+  }
+
   @media (max-width: 768px) {
     gap: 1rem;
     padding-bottom: 1.5rem;
+    
     h1 {
       font-size: 2.5rem;
       font-weight: 400;
@@ -67,6 +77,14 @@ export const HeroTextContainer = styled.div`
     p {
       font-size: 1rem;
       line-height: 1.5rem;
+    }
+
+    .desktop-content {
+      display: none;
+    }
+
+    .mobile-content {
+      display: block;
     }
   }
 `;

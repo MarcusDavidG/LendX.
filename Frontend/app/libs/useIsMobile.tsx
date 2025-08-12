@@ -2,26 +2,28 @@
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
-const isClient = typeof window === 'object';
-
 export const useIsMobile = () => {
   const pathname = usePathname();
-  const [isMobile, setIsMobile] = useState(isClient && window.innerWidth <= 768);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
+    const checkMobile = () => window.innerWidth <= 768;
+    setIsMobile(checkMobile());
+
     const handleResize = () => {
-      const newIsMobile = window.innerWidth <= 768;
-      setIsMobile(newIsMobile);
+      setIsMobile(checkMobile());
     };
 
-    if (isClient) {
-      window.addEventListener('resize', handleResize);
-
-      return () => {
-        window.removeEventListener('resize', handleResize);
-      };
-    }
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, [pathname]);
+
+  // Return false during SSR and initial hydration to prevent mismatch
+  if (!isMounted) {
+    return false;
+  }
 
   return isMobile;
 };
