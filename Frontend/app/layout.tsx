@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from 'react-hot-toast';
 import { WalletProvider } from './contexts/WalletContext';
 import "./globals.css";
+import GlobalHeader from './components/GlobalHeader';
+import GlobalFooter from './components/GlobalFooter';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "LendX",
-  description: "A micro-lending dApp on Sonic",
+  title: "LendX - Decentralized Lending Platform",
+  description: "Borrow and lend crypto assets with LendX",
 };
 
 export default function RootLayout({
@@ -30,8 +32,12 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <WalletProvider>
-          {children}
-          <Toaster position="bottom-right" />
+          <GlobalHeader />
+          <main style={{ minHeight: 'calc(100vh - 200px)' }}>
+            {children}
+          </main>
+          <GlobalFooter />
+          <Toaster position="top-right" />
         </WalletProvider>
       </body>
     </html>

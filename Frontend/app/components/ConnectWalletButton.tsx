@@ -168,7 +168,7 @@ const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
           </button>
 
           {isDropdownOpen && (
-            <div className="absolute right-0 mt-1 w-56 origin-top-right rounded-md rounded-t-none bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 animate-dropdownFade">
+            <div className="absolute left-0 mt-1 w-56 origin-top-left rounded-md rounded-t-none bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 animate-dropdownFade">
               <div className="py-1">
                 <div className="px-4 py-2 text-sm text-gray-700 border-b border-gray-100">
                   <p className="font-medium">Connected Wallet</p>
