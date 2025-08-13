@@ -12,17 +12,20 @@ import {
   Wallet,
   ChevronDown,
   Loader2,
-  Check
+  Check,
+  User
 } from 'lucide-react';
 import './components.css';
 
 interface ConnectWalletButtonProps {
   size?: 'small' | 'medium' | 'large';
-  variant?: 'primary' | 'secondary' | 'outline';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
   showAddress?: boolean;
   className?: string;
   redirectOnConnect?: boolean;
   redirectTo?: string;
+  showFullAddress?: boolean;
+  showWalletIcon?: boolean;
 }
 
 const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
@@ -32,10 +35,13 @@ const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
   className = '',
   redirectOnConnect = true,
   redirectTo = '/dashboard',
+  showFullAddress = false,
+  showWalletIcon = true,
 }) => {
   const { isConnected, userAddress, isConnecting, connectWallet, disconnectWallet } = useWallet();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
@@ -56,26 +62,29 @@ const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
   const getSizeClasses = () => {
     switch (size) {
       case 'small':
-        return 'py-1 px-3 text-sm';
+        return 'h-8 px-3 text-xs';
       case 'large':
-        return 'py-3 px-6 text-lg';
+        return 'h-12 px-6 text-base';
       default:
-        return 'py-2 px-4';
+        return 'h-10 px-4 text-sm';
     }
   };
 
   const getVariantClasses = () => {
     switch (variant) {
       case 'secondary':
-        return 'bg-gray-600 hover:bg-gray-700 text-white';
+        return 'bg-gray-100 hover:bg-gray-200 text-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white';
       case 'outline':
-        return 'border border-blue-500 text-blue-500 hover:bg-blue-50';
+        return 'border border-blue-500 text-blue-500 hover:bg-blue-50 dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-900/30';
+      case 'ghost':
+        return 'hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-700 dark:text-gray-200';
       default:
-        return 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white';
+        return 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-md hover:shadow-lg';
     }
   };
 
   const formatAddress = (address: string) => {
+    if (showFullAddress) return address;
     return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
   };
 
@@ -86,7 +95,6 @@ const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
       await connectWallet();
       toast.success('Wallet connected successfully!', { id: toastId });
       
-      // Redirect to dashboard after successful connection
       if (redirectOnConnect) {
         router.push(redirectTo);
       }
@@ -98,7 +106,7 @@ const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
   const handleDisconnect = async () => {
     const toastId = toast.loading('Disconnecting wallet...');
     try {
-      disconnectWallet();
+      await disconnectWallet();
       setIsDropdownOpen(false);
       toast.success('Wallet disconnected successfully!', { id: toastId });
     } catch (error: any) {
@@ -119,8 +127,43 @@ const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
     window.open(`https://explorer.soniclabs.com/address/${userAddress}`, '_blank');
   };
 
+  const getButtonContent = () => {
+    if (isConnecting) {
+      return (
+        <>
+          <Loader2 className="animate-spin mr-2 h-4 w-4" />
+          Connecting...
+        </>
+      );
+    }
+
+    if (isConnected) {
+      return (
+        <>
+          {showWalletIcon && <Wallet className="mr-2 h-4 w-4" />}
+          {formatAddress(userAddress || '')}
+          <ChevronDown 
+            className={`ml-2 h-4 w-4 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} 
+          />
+        </>
+      );
+    }
+
+    return (
+      <>
+        <Wallet className="mr-2 h-4 w-4" />
+        Connect Wallet
+      </>
+    );
+  };
+
   return (
-    <div className={`connect-wallet-button relative ${className}`} ref={dropdownRef}>
+    <div 
+      className={`relative inline-block ${className}`} 
+      ref={dropdownRef}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       {!isConnected ? (
         <button
           onClick={handleConnect}
@@ -132,75 +175,78 @@ const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
             transition-all duration-200 
             disabled:opacity-50 disabled:cursor-not-allowed
             flex items-center justify-center
-            shadow-md hover:shadow-lg
-            ${variant === 'outline' ? 'hover:shadow-blue-100' : 'hover:shadow-blue-200'}
+            ${variant === 'outline' ? 'hover:shadow-blue-100' : ''}
+            ${variant === 'ghost' ? 'shadow-none' : ''}
+            whitespace-nowrap
           `}
         >
-          {isConnecting ? (
-            <>
-              <Loader2 className="animate-spin mr-2 h-4 w-4" />
-              Connecting...
-            </>
-          ) : (
-            <>
-              <Wallet className="mr-2 h-4 w-4" />
-              Connect Wallet
-            </>
-          )}
+          {getButtonContent()}
         </button>
       ) : (
-        <div className="flex items-center">
+        <div className="relative">
           <button
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             className={`
               ${getSizeClasses()} 
-              bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700
-              text-white rounded-lg font-medium 
+              ${variant === 'ghost' ? getVariantClasses() : 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white'}
+              rounded-lg font-medium 
               transition-all duration-200
               flex items-center justify-center
-              shadow-md hover:shadow-lg hover:shadow-blue-200
-              ${isDropdownOpen ? 'rounded-b-none' : ''}
+              ${variant === 'ghost' ? '' : 'shadow-md hover:shadow-lg hover:shadow-blue-200'}
+              ${isDropdownOpen && variant !== 'ghost' ? 'rounded-b-none' : ''}
+              whitespace-nowrap
             `}
           >
-            <Wallet className="mr-2 h-4 w-4" />
-            {formatAddress(userAddress || '')}
-            <ChevronDown className={`ml-2 h-4 w-4 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
+            {getButtonContent()}
           </button>
 
           {isDropdownOpen && (
-            <div className="absolute left-0 mt-1 w-56 origin-top-left rounded-md rounded-t-none bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 animate-dropdownFade">
+            <div className="absolute left-0 mt-1 w-56 origin-top-left rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black/5 dark:ring-white/10 focus:outline-none z-50 animate-dropdownFade">
               <div className="py-1">
-                <div className="px-4 py-2 text-sm text-gray-700 border-b border-gray-100">
-                  <p className="font-medium">Connected Wallet</p>
-                  <p className="text-xs text-gray-500 truncate">{userAddress}</p>
+                <div className="px-4 py-3 text-sm border-b border-gray-100 dark:border-gray-700">
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400">
+                      <User className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-gray-900 dark:text-gray-100 truncate">
+                        Wallet
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                        {formatAddress(userAddress || '')}
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
                 <button
                   onClick={copyAddress}
-                  className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  className="flex w-full items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors"
                 >
                   {copied ? (
                     <Check className="mr-3 h-4 w-4 text-green-500" />
                   ) : (
-                    <Copy className="mr-3 h-4 w-4 text-gray-500" />
+                    <Copy className="mr-3 h-4 w-4 text-gray-500 dark:text-gray-400" />
                   )}
                   {copied ? 'Copied!' : 'Copy Address'}
                 </button>
 
                 <button
                   onClick={viewOnExplorer}
-                  className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  className="flex w-full items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors"
                 >
-                  <ExternalLink className="mr-3 h-4 w-4 text-gray-500" />
+                  <ExternalLink className="mr-3 h-4 w-4 text-gray-500 dark:text-gray-400" />
                   View on Explorer
                 </button>
 
+                <div className="border-t border-gray-100 dark:border-gray-700 my-1"></div>
+
                 <button
                   onClick={handleDisconnect}
-                  className="flex w-full items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                  className="flex w-full items-center px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors"
                 >
-                  <LogOut className="mr-3 h-4 w-4 text-red-500" />
-                  Disconnect
+                  <LogOut className="mr-3 h-4 w-4 text-red-500 dark:text-red-400" />
+                  Disconnect Wallet
                 </button>
               </div>
             </div>

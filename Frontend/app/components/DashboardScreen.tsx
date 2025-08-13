@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect, useCallback } from 'react';
@@ -12,7 +11,8 @@ import { ethers } from 'ethers';
 import { 
   ArrowRight, Banknote, Clock, Copy, CreditCard, ExternalLink, 
   Gem, Home, Loader2, RefreshCw, Send, Shield, Smartphone, 
-  Sparkles, TrendingUp, Wallet, Zap
+  Sparkles, TrendingUp, Wallet, Zap, ChevronRight, History, 
+  ArrowLeftRight, Plus, Minus, AlertCircle, CheckCircle
 } from 'lucide-react';
 
 interface TokenBalance {
@@ -41,6 +41,7 @@ const DashboardScreen = () => {
   const [mpesaAmount, setMpesaAmount] = useState('');
   const [isMpesaProcessing, setIsMpesaProcessing] = useState(false);
   const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
+  const [showAllTransactions, setShowAllTransactions] = useState(false);
 
   const tokens = [
     { symbol: 'S', address: TOKEN_ADDRESSES['S'], decimals: TOKEN_DECIMALS['S'] },
@@ -106,7 +107,7 @@ const DashboardScreen = () => {
       return;
     }
     if (parseFloat(mpesaAmount) <= 0 || isNaN(parseFloat(mpesaAmount))) {
-      toast.error('Invalid KES amount');
+      toast.error('Invalid NGN amount');
       return;
     }
 
@@ -116,7 +117,7 @@ const DashboardScreen = () => {
       await new Promise(resolve => setTimeout(resolve, 2000));
       toast.success('Enter PIN for M-Pesa deposit', { id: toastId, duration: 2000 });
       await new Promise(resolve => setTimeout(resolve, 2000));
-      const usdcAmount = (parseFloat(mpesaAmount) / 130).toFixed(2);
+      const usdcAmount = (parseFloat(mpesaAmount) / 1550).toFixed(2);
       setWalletBalance(prev => ({
         ...prev,
         USDC: (parseFloat(prev.USDC) + parseFloat(usdcAmount)).toFixed(2)
@@ -208,9 +209,19 @@ const DashboardScreen = () => {
   const getTransactionIcon = (type: string) => {
     switch (type) {
       case 'send': return <Send size={16} className="text-emerald-400" />;
-      case 'deposit': return <TrendingUp size={16} className="text-emerald-400" />;
+      case 'deposit': return <Plus size={16} className="text-emerald-400" />;
+      case 'withdraw': return <Minus size={16} className="text-amber-400" />;
+      case 'swap': return <ArrowLeftRight size={16} className="text-blue-400" />;
       case 'loan': return <Banknote size={16} className="text-purple-400" />;
-      default: return <RefreshCw size={16} className="text-white" />;
+      default: return <RefreshCw size={16} className="text-gray-400" />;
+    }
+  };
+
+  const getTransactionStatusIcon = (status: string) => {
+    switch (status) {
+      case 'success': return <CheckCircle size={14} className="text-emerald-400" />;
+      case 'failed': return <AlertCircle size={14} className="text-red-400" />;
+      default: return <Loader2 size={14} className="animate-spin text-yellow-400" />;
     }
   };
 
@@ -233,8 +244,8 @@ const DashboardScreen = () => {
 
   // Wallet View Component
   const WalletView = () => (
-    <div className="space-y-6">
-      <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+    <div className="space-y-6 ">
+      <div className="bg-gradient-to-br from-[var(--card-background)] to-[var(--card-background-dark)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-xl font-semibold text-[var(--foreground)] flex items-center">
             <Wallet className="mr-2 text-[var(--primary-color)]" />
@@ -244,7 +255,7 @@ const DashboardScreen = () => {
             <button
               onClick={fetchWalletBalances}
               disabled={loading}
-              className={`flex items-center space-x-1 bg-[var(--primary-color)] hover:bg-emerald-600 text-[var(--foreground)] px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200 ${
+              className={`flex items-center space-x-1 bg-[var(--primary-color)] hover:bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                 loading ? 'opacity-50 cursor-not-allowed' : ''
               }`}
             >
@@ -260,33 +271,43 @@ const DashboardScreen = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <div className="bg-[var(--input-background)] rounded-xl p-4 border border-[var(--border-color)] hover:border-emerald-500 transition-all">
+          <div className="bg-[var(--card-background)] rounded-xl p-4 border border-[var(--border-color)] hover:border-emerald-500 transition-all group">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
-                <Gem className="text-[var(--primary-color)] mr-2" />
-                <span className="font-medium text-[var(--foreground)]">S Token</span>
+                <div className="p-2 bg-emerald-500/10 rounded-lg mr-3 group-hover:bg-emerald-500/20 transition-colors">
+                  <Gem className="text-emerald-400" />
+                </div>
+                <div>
+                  <span className="font-medium text-[var(--foreground)]">S Token</span>
+                  <p className="text-xs text-[var(--text-secondary)]">Native Token</p>
+                </div>
               </div>
               <div className="text-right">
                 <p className="text-xl font-bold text-[var(--foreground)]">{walletBalance.S}</p>
-                <p className="text-xs text-[var(--primary-color)]">S</p>
+                <p className="text-xs text-[var(--primary-color)]">≈ ${(parseFloat(walletBalance.S) * 1.30).toFixed(2)}</p>
               </div>
             </div>
           </div>
-          <div className="bg-[var(--input-background)] rounded-xl p-4 border border-[var(--border-color)] hover:border-emerald-500 transition-all">
+          <div className="bg-[var(--card-background)] rounded-xl p-4 border border-[var(--border-color)] hover:border-emerald-500 transition-all group">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
-                <Banknote className="text-[var(--primary-color)] mr-2" />
-                <span className="font-medium text-[var(--foreground)]">USDC</span>
+                <div className="p-2 bg-blue-500/10 rounded-lg mr-3 group-hover:bg-blue-500/20 transition-colors">
+                  <Banknote className="text-blue-400" />
+                </div>
+                <div>
+                  <span className="font-medium text-[var(--foreground)]">USDC</span>
+                  <p className="text-xs text-[var(--text-secondary)]">Stablecoin</p>
+                </div>
               </div>
               <div className="text-right">
                 <p className="text-xl font-bold text-[var(--foreground)]">{walletBalance.USDC}</p>
-                <p className="text-xs text-[var(--primary-color)]">USDC</p>
+                <p className="text-xs text-[var(--primary-color)]">≈ ${walletBalance.USDC}</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="text-xs text-[var(--primary-color)] flex items-center justify-between">
+        <div className="text-xs text-[var(--text-secondary)] flex items-center justify-between">
           <span>Last updated: {formatLastUpdate()}</span>
           <button
             onClick={() => userAddress && copyAddress(userAddress)}
@@ -298,146 +319,156 @@ const DashboardScreen = () => {
         </div>
       </div>
 
-      <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
-        <h3 className="text-xl font-semibold text-[var(--foreground)] mb-4 flex items-center">
-          <Send className="mr-2 text-[var(--primary-color)]" />
-          Send Tokens
-        </h3>
-        
-        <form onSubmit={handleSendTokens} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
-              <ArrowRight className="mr-2 text-[var(--primary-color)]" size={16} />
-              Token to Send
-            </label>
-            <select
-              value={sendToken}
-              onChange={(e) => setSendToken(e.target.value)}
-              className="w-full p-3 bg-[var(--input-background)] border border-[var(--border-color)] rounded-lg text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all"
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="bg-gradient-to-br from-[var(--card-background)] to-[var(--card-background-dark)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+          <h3 className="text-xl font-semibold text-[var(--foreground)] mb-4 flex items-center">
+            <Send className="mr-2 text-[var(--primary-color)]" />
+            Send Tokens
+          </h3>
+          
+          <form onSubmit={handleSendTokens} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
+                <ArrowRight className="mr-2 text-[var(--primary-color)]" size={16} />
+                Token to Send
+              </label>
+              <select
+                value={sendToken}
+                onChange={(e) => setSendToken(e.target.value)}
+                className="w-full p-3 bg-[var(--input-background)] border border-[var(--border-color)] rounded-lg text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all"
+              >
+                <option value="S">S Token</option>
+                <option value="USDC">USDC</option>
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
+                <CreditCard className="mr-2 text-[var(--primary-color)]" size={16} />
+                Amount
+              </label>
+              <input
+                type="text"
+                value={sendAmount}
+                onChange={(e) => setSendAmount(e.target.value.replace(/[^0-9.]/g, ''))}
+                placeholder="0.0"
+                className="w-full p-3 bg-[var(--input-background)] border border-[var(--border-color)] rounded-lg text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all"
+                required
+              />
+              <div className="text-xs text-[var(--text-secondary)] mt-1">
+                Available: {walletBalance[sendToken as keyof typeof walletBalance]} {sendToken}
+              </div>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
+                <Wallet className="mr-2 text-[var(--primary-color)]" size={16} />
+                Recipient Address
+              </label>
+              <input
+                type="text"
+                value={recipient}
+                onChange={(e) => setRecipient(e.target.value)}
+                placeholder="0x..."
+                className="w-full p-3 bg-[var(--input-background)] border border-[var(--border-color)] rounded-lg text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all"
+                required
+              />
+            </div>
+            
+            <button
+              type="submit"
+              disabled={isSending || loading}
+              className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all duration-200 ${
+                isSending || loading
+                  ? 'bg-gray-600 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-[var(--primary-color)] to-emerald-900 hover:from-emerald-900 hover:to-emerald-700 text-white shadow-md hover:shadow-lg'
+              }`}
             >
-              <option value="S">S Token</option>
-              <option value="USDC">USDC</option>
-            </select>
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
-              <CreditCard className="mr-2 text-[var(--primary-color)]" size={16} />
-              Amount
-            </label>
-            <input
-              type="text"
-              value={sendAmount}
-              onChange={(e) => setSendAmount(e.target.value.replace(/[^0-9.]/g, ''))}
-              placeholder="0.0"
-              className="w-full p-3 bg-[var(--input-background)] border border-[var(--border-color)] rounded-lg text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all"
-              required
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
-              <Wallet className="mr-2 text-[var(--primary-color)]" size={16} />
-              Recipient Address
-            </label>
-            <input
-              type="text"
-              value={recipient}
-              onChange={(e) => setRecipient(e.target.value)}
-              placeholder="0x..."
-              className="w-full p-3 bg-[var(--input-background)] border border-[var(--border-color)] rounded-lg text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all"
-              required
-            />
-          </div>
-          
-          <button
-            type="submit"
-            disabled={isSending || loading}
-            className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all duration-200 ${
-              isSending || loading
-                ? 'bg-gray-600 cursor-not-allowed'
-                : 'bg-[var(--primary-color)] hover:bg-emerald-600 text-[var(--foreground)] shadow-md hover:shadow-lg'
-            }`}
-          >
-            {isSending || loading ? (
-              <>
-                <Loader2 className="animate-spin h-5 w-5" />
-                <span>Processing...</span>
-              </>
-            ) : (
-              <>
-                <Send size={18} />
-                <span>Send Tokens</span>
-              </>
-            )}
-          </button>
-        </form>
-      </div>
+              {isSending || loading ? (
+                <>
+                  <Loader2 className="animate-spin h-5 w-5" />
+                  <span>Processing...</span>
+                </>
+              ) : (
+                <>
+                  <Send size={18} />
+                  <span>Send Tokens</span>
+                </>
+              )}
+            </button>
+          </form>
+        </div>
 
-      <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
-        <h3 className="text-xl font-semibold text-[var(--foreground)] mb-4 flex items-center">
-          <Smartphone className="mr-2 text-[var(--primary-color)]" />
-          M-Pesa Deposit (Mock)
-        </h3>
-        <p className="text-sm text-white mb-4">
-          Deposit KES to receive USDC (1 USDC = 130 KES). This is a mock integration.
-        </p>
-        
-        <form onSubmit={handleMpesaDeposit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
-              <Smartphone className="mr-2 text-[var(--primary-color)]" size={16} />
-              M-Pesa Number
-            </label>
-            <input
-              type="text"
-              value={mpesaPhone}
-              onChange={(e) => setMpesaPhone(e.target.value)}
-              placeholder="2547XXXXXXXX"
-              className="w-full p-3 bg-[var(--input-background)] border border-[var(--border-color)] rounded-lg text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all"
-            />
-          </div>
+        <div className="bg-gradient-to-br from-[var(--card-background)] to-[var(--card-background-dark)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+          <h3 className="text-xl font-semibold text-[var(--foreground)] mb-4 flex items-center">
+            <Smartphone className="mr-2 text-[var(--primary-color)]" />
+            Fiat To Crypto Deposit (Mock)
+          </h3>
+          <p className="text-sm text-white mb-4">
+            Deposit NGN to receive USDC (1 USDC = 1550 NGN). This is a mock integration.
+          </p>
           
-          <div>
-            <label className="block text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
-              <Banknote className="mr-2 text-[var(--primary-color)]" size={16} />
-              Amount (KES)
-            </label>
-            <input
-              type="text"
-              value={mpesaAmount}
-              onChange={(e) => setMpesaAmount(e.target.value.replace(/[^0-9.]/g, ''))}
-              placeholder="1000"
-              className="w-full p-3 bg-[var(--input-background)] border border-[var(--border-color)] rounded-lg text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all"
-            />
-          </div>
+          <form onSubmit={handleMpesaDeposit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
+                <Smartphone className="mr-2 text-[var(--primary-color)]" size={16} />
+                M-Pesa Number
+              </label>
+              <input
+                type="text"
+                value={mpesaPhone}
+                onChange={(e) => setMpesaPhone(e.target.value)}
+                placeholder="2547XXXXXXXX"
+                className="w-full p-3 bg-[var(--input-background)] border border-[var(--border-color)] rounded-lg text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
+                <Banknote className="mr-2 text-[var(--primary-color)]" size={16} />
+                Amount (NGN)
+              </label>
+              <input
+                type="text"
+                value={mpesaAmount}
+                onChange={(e) => setMpesaAmount(e.target.value.replace(/[^0-9.]/g, ''))}
+                placeholder="1000"
+                className="w-full p-3 bg-[var(--input-background)] border border-[var(--border-color)] rounded-lg text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all"
+              />
+              {mpesaAmount && (
+                <div className="text-xs text-[var(--text-secondary)] mt-1">
+                  You'll receive: {(parseFloat(mpesaAmount) / 1550).toFixed(2)} USDC
+                </div>
+              )}
+            </div>
+            
+            <button
+              type="submit"
+              disabled={isMpesaProcessing}
+              className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all duration-200 ${
+                isMpesaProcessing
+                  ? 'bg-gray-600 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-[var(--primary-color)] to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-md hover:shadow-lg'
+              }`}
+            >
+              {isMpesaProcessing ? (
+                <>
+                  <Loader2 className="animate-spin h-5 w-5" />
+                  <span>Processing...</span>
+                </>
+              ) : (
+                <>
+                  <Smartphone size={18} />
+                  <span>Deposit via M-Pesa</span>
+                </>
+              )}
+            </button>
+          </form>
           
-          <button
-            type="submit"
-            disabled={isMpesaProcessing}
-            className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all duration-200 ${
-              isMpesaProcessing
-                ? 'bg-gray-600 cursor-not-allowed'
-                : 'bg-[var(--primary-color)] hover:bg-emerald-600 text-[var(--foreground)] shadow-md hover:shadow-lg'
-            }`}
-          >
-            {isMpesaProcessing ? (
-              <>
-                <Loader2 className="animate-spin h-5 w-5" />
-                <span>Processing...</span>
-              </>
-            ) : (
-              <>
-                <Smartphone size={18} />
-                <span>Deposit via M-Pesa</span>
-              </>
-            )}
-          </button>
-        </form>
-        
-        <p className="text-xs text-white mt-4">
-          Mock implementation. Real M-Pesa API would be used in production.
-        </p>
+          <p className="text-xs text-[var(--text-secondary)] mt-4">
+            Mock implementation. Real M-Pesa API would be used in production.
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -445,15 +476,15 @@ const DashboardScreen = () => {
   // Overview View Component
   const OverviewView = () => (
     <div className="space-y-6">
-      <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+      <div className="bg-gradient-to-br from-[var(--card-background)] to-[var(--card-background-dark)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-xl font-semibold text-[var(--foreground)] flex items-center">
             <Gem className="mr-2 text-[var(--primary-color)]" />
-            Your Balances
+            Your Assets
           </h3>
           <button
             onClick={handleRefresh}
-            className={`flex items-center space-x-1 bg-[var(--primary-color)] hover:bg-emerald-600 text-[var(--foreground)] px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
+            className={`flex items-center space-x-1 bg-[var(--primary-color)] hover:bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
               loading ? 'opacity-50 cursor-not-allowed' : ''
             }`}
             disabled={loading}
@@ -478,20 +509,28 @@ const DashboardScreen = () => {
             <p className="text-white mt-2">Loading balances...</p>
           </div>
         ) : (
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2 ">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
             {balances.map((token) => (
-              <div key={token.symbol} className="bg-[var(--input-background)] rounded-xl p-10 border border-[var(--border-color)] hover:border-emerald-500 transition-all">
+              <div key={token.symbol} className="bg-[var(--input-background)] rounded-xl p-6 border border-[var(--border-color)] hover:border-emerald-500 transition-all group">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h4 className="font-semibold text-lg text-[var(--foreground)]">{token.symbol}</h4>
+                    <div className="flex items-center mb-2">
+                      <div className="p-2 bg-emerald-500/10 rounded-lg mr-3 group-hover:bg-emerald-500/20 transition-colors">
+                        {token.symbol === 'S' ? (
+                          <Gem className="text-emerald-400" />
+                        ) : (
+                          <Banknote className="text-blue-400" />
+                        )}
+                      </div>
+                      <h4 className="font-semibold text-lg text-[var(--foreground)]">{token.symbol}</h4>
+                    </div>
                     <div className="flex items-center mt-1">
-                      <p className="text-xs text-[var(--primary-color)] mr-2">
+                      <p className="text-xs text-[var(--text-secondary)] mr-2">
                         {token.address.substring(0, 6)}...{token.address.substring(38)}
                       </p>
                       <button 
                         onClick={() => copyAddress(token.address)}
-                        className="text-[var(--primary-color)] hover:text-[var(--primary-color)]"
+                        className="text-[var(--text-secondary)] hover:text-[var(--primary-color)]"
                       >
                         <Copy size={14} />
                       </button>
@@ -499,7 +538,9 @@ const DashboardScreen = () => {
                   </div>
                   <div className="text-right">
                     <p className="text-2xl font-bold text-[var(--foreground)]">{token.formattedBalance}</p>
-                    <p className="text-sm text-[var(--primary-color)]">{token.symbol}</p>
+                    <p className="text-sm text-[var(--primary-color)]">
+                      ≈ ${(parseFloat(token.formattedBalance) * (token.symbol === 'S' ? 1.30 : 1)).toFixed(2)}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -509,7 +550,7 @@ const DashboardScreen = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+        <div className="bg-gradient-to-br from-[var(--card-background)] to-[var(--card-background-dark)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
           <h3 className="text-xl font-semibold text-[var(--foreground)] mb-5 flex items-center">
             <Zap className="mr-2 text-[var(--primary-color)]" />
             Quick Actions
@@ -517,69 +558,91 @@ const DashboardScreen = () => {
           <div className="space-y-3">
             <Link
               href="/swap"
-              className="w-full flex items-center justify-center space-x-2 bg-[var(--primary-color)] hover:bg-emerald-600 text-[var(--foreground)] py-3 px-4 rounded-lg text-center font-medium transition-all duration-200 shadow-md hover:shadow-lg"
+              className="w-full flex items-center justify-between bg-[var(--input-background)] hover:bg-[var(--input-background-hover)] text-[var(--foreground)] p-4 rounded-lg transition-all duration-200 group"
             >
-              <ArrowRight size={18} />
-              <span>Swap Tokens</span>
+              <div className="flex items-center">
+                <div className="p-2 bg-blue-500/10 rounded-lg mr-3 group-hover:bg-blue-500/20 transition-colors">
+                  <ArrowLeftRight className="text-blue-400" />
+                </div>
+                <span>Swap Tokens</span>
+              </div>
+              <ChevronRight className="text-[var(--text-secondary)] group-hover:text-[var(--primary-color)]" />
             </Link>
             <Link
               href="/treasury"
-              className="w-full flex items-center justify-center space-x-2 bg-purple-600 hover:bg-purple-700 text-[var(--foreground)] py-3 px-4 rounded-lg text-center font-medium transition-all duration-200 shadow-md hover:shadow-lg"
+              className="w-full flex items-center justify-between bg-[var(--input-background)] hover:bg-[var(--input-background-hover)] text-[var(--foreground)] p-4 rounded-lg transition-all duration-200 group"
             >
-              <Banknote size={18} />
-              <span>View Treasury</span>
+              <div className="flex items-center">
+                <div className="p-2 bg-purple-500/10 rounded-lg mr-3 group-hover:bg-purple-500/20 transition-colors">
+                  <Banknote className="text-purple-400" />
+                </div>
+                <span>View Treasury</span>
+              </div>
+              <ChevronRight className="text-[var(--text-secondary)] group-hover:text-[var(--primary-color)]" />
             </Link>
             <Link
               href="/loan"
-              className="w-full flex items-center justify-center space-x-2 bg-[var(--primary-color)] hover:bg-emerald-600 text-[var(--foreground)] py-3 px-4 rounded-lg text-center font-medium transition-all duration-200 shadow-md hover:shadow-lg"
+              className="w-full flex items-center justify-between bg-[var(--input-background)] hover:bg-[var(--input-background-hover)] text-[var(--foreground)] p-4 rounded-lg transition-all duration-200 group"
             >
-              <TrendingUp size={18} />
-              <span>Manage Loans</span>
+              <div className="flex items-center">
+                <div className="p-2 bg-emerald-500/10 rounded-lg mr-3 group-hover:bg-emerald-500/20 transition-colors">
+                  <TrendingUp className="text-emerald-400" />
+                </div>
+                <span>Manage Loans</span>
+              </div>
+              <ChevronRight className="text-[var(--text-secondary)] group-hover:text-[var(--primary-color)]" />
             </Link>
             <Link
               href="/collateral"
-              className="w-full flex items-center justify-center space-x-2 bg-purple-600 hover:bg-amber-700 text-[var(--foreground)] py-3 px-4 rounded-lg text-center font-medium transition-all duration-200 shadow-md hover:shadow-lg"
+              className="w-full flex items-center justify-between bg-[var(--input-background)] hover:bg-[var(--input-background-hover)] text-[var(--foreground)] p-4 rounded-lg transition-all duration-200 group"
             >
-              <Shield size={18} />
-              <span>Manage Collateral</span>
+              <div className="flex items-center">
+                <div className="p-2 bg-amber-500/10 rounded-lg mr-3 group-hover:bg-amber-500/20 transition-colors">
+                  <Shield className="text-amber-400" />
+                </div>
+                <span>Manage Collateral</span>
+              </div>
+              <ChevronRight className="text-[var(--text-secondary)] group-hover:text-[var(--primary-color)]" />
             </Link>
           </div>
         </div>
 
-        <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
-          <h3 className="text-xl font-semibold text-[var(--foreground)] mb-5 flex items-center">
-            <Clock className="mr-2 text-[var(--primary-color)]" />
-            Recent Activity
-          </h3>
+        <div className="bg-gradient-to-br from-[var(--card-background)] to-[var(--card-background-dark)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+          <div className="flex justify-between items-center mb-5">
+            <h3 className="text-xl font-semibold text-[var(--foreground)] flex items-center">
+              <History className="mr-2 text-[var(--primary-color)]" />
+              Recent Activity
+            </h3>
+            <button 
+              onClick={() => setShowAllTransactions(!showAllTransactions)}
+              className="text-sm text-[var(--primary-color)] hover:underline"
+            >
+              {showAllTransactions ? 'Show Less' : 'View All'}
+            </button>
+          </div>
           {transactions.length > 0 ? (
-            <div className="space-y-3 max-h-64 overflow-y-auto pr-2">
-              {transactions.slice(0, 5).map((tx) => (
-                <div key={tx.hash} className="p-3 bg-[var(--input-background)] rounded-lg hover:bg-gray-700 transition-colors">
+            <div className="space-y-3 max-h-96 overflow-y-auto pr-2">
+              {(showAllTransactions ? transactions : transactions.slice(0, 5)).map((tx) => (
+                <div key={tx.hash} className="p-3 bg-[var(--input-background)] rounded-lg hover:bg-[var(--input-background-hover)] transition-colors">
                   <div className="flex items-start">
                     <div className="mt-1 mr-3">
                       {getTransactionIcon(tx.type)}
                     </div>
                     <div className="flex-1">
                       <div className="flex justify-between items-start">
-                        <span className="capitalize font-medium text-[var(--foreground)]">{tx.type}</span>
-                        <span
-                          className={`text-xs px-2 py-1 rounded-full ${
-                            tx.status === 'success'
-                              ? 'bg-emerald-600 text-[var(--foreground)]'
-                              : tx.status === 'failed'
-                              ? 'bg-red-600 text-[var(--foreground)]'
-                              : 'bg-yellow-600 text-[var(--foreground)]'
-                          }`}
-                        >
-                          {tx.status}
-                        </span>
-                      </div>
-                      {tx.amount && tx.token && (
-                        <div className="text-sm text-white mt-1">
-                          {tx.amount} {tx.token}
+                        <div className="flex items-center">
+                          <span className="capitalize font-medium text-[var(--foreground)]">{tx.type}</span>
+                          <span className="ml-2">
+                            {getTransactionStatusIcon(tx.status)}
+                          </span>
                         </div>
-                      )}
-                      <div className="mt-2 flex items-center text-xs text-white">
+                        {tx.amount && tx.token && (
+                          <span className="text-sm font-medium text-[var(--foreground)]">
+                            {tx.amount} {tx.token}
+                          </span>
+                        )}
+                      </div>
+                      <div className="mt-1 flex items-center text-xs text-[var(--text-secondary)]">
                         <a
                           href={`https://explorer.soniclabs.com/tx/${tx.hash}`}
                           target="_blank"
@@ -607,9 +670,10 @@ const DashboardScreen = () => {
   );
 
   return (
-    <div className="max-w-6xl mx-auto p-6 bg-[var(--background)] rounded-2xl shadow-xl border border-[var(--border-color)]">
-      <div className="flex flex-col items-center mb-6">
-        <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-white">
+    <div className="max-w-6xl mx-auto ">
+      {/* Network Status Bar */}
+      <div className="flex flex-col items-center mb-6 ">
+        <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-white bg-[var(--card-background)] px-4 py-2 rounded-full border border-[var(--border-color)]">
           <div className="flex items-center">
             <Zap size={16} className="mr-2 text-[var(--primary-color)]" />
             <span>Powered by Sonic</span>
@@ -631,10 +695,10 @@ const DashboardScreen = () => {
           <nav className="-mb-px flex gap-8">
             <button
               onClick={() => setActiveTab('wallet')}
-              className={`whitespace-nowrap py-2 px-4 border-b-2 font-medium text-sm ${
+              className={`whitespace-nowrap py-2 px-4 border-b-2 font-medium text-sm flex items-center ${
                 activeTab === 'wallet'
                   ? 'border-[var(--primary-color)] text-[var(--primary-color)]'
-                  : 'border-transparent text-white hover:text-gray-200 hover:border-gray-500'
+                  : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--foreground)] hover:border-gray-500'
               }`}
             >
               <Wallet className="inline-block mr-2 h-4 w-4" />
@@ -642,10 +706,10 @@ const DashboardScreen = () => {
             </button>
             <button
               onClick={() => setActiveTab('overview')}
-              className={`whitespace-nowrap py-2 px-4 border-b-2 font-medium text-sm ${
+              className={`whitespace-nowrap py-2 px-4 border-b-2 font-medium text-sm flex items-center ${
                 activeTab === 'overview'
                   ? 'border-[var(--primary-color)] text-[var(--primary-color)]'
-                  : 'border-transparent text-white hover:text-gray-200 hover:border-gray-500'
+                  : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--foreground)] hover:border-gray-500'
               }`}
             >
               <Home className="inline-block mr-2 h-4 w-4" />
@@ -653,13 +717,13 @@ const DashboardScreen = () => {
             </button>
             <button
               onClick={() => setActiveTab('activity')}
-              className={`whitespace-nowrap py-2 px-4 border-b-2 font-medium text-sm ${
+              className={`whitespace-nowrap py-2 px-4 border-b-2 font-medium text-sm flex items-center ${
                 activeTab === 'activity'
                   ? 'border-[var(--primary-color)] text-[var(--primary-color)]'
-                  : 'border-transparent text-white hover:text-gray-200 hover:border-gray-500'
+                  : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--foreground)] hover:border-gray-500'
               }`}
             >
-              <CreditCard className="inline-block mr-2 h-4 w-4" />
+              <History className="inline-block mr-2 h-4 w-4" />
               Activity
             </button>
           </nav>
@@ -667,18 +731,18 @@ const DashboardScreen = () => {
       </div>
 
       {error && (
-        <div className="bg-red-800 border-l-4 border-red-500 rounded p-4 mb-6 flex items-center">
-          <Shield className="text-red-400 mr-2" />
+        <div className="bg-red-800/30 border-l-4 border-red-500 rounded p-4 mb-6 flex items-center">
+          <AlertCircle className="text-red-400 mr-2" />
           <p className="text-red-200">{error}</p>
         </div>
       )}
 
       {!isConnected ? (
-        <div className="text-center py-12 bg-[var(--card-background)] rounded-2xl shadow-lg p-6 border border-[var(--border-color)]">
+        <div className="text-center py-12 bg-gradient-to-br from-[var(--card-background)] to-[var(--card-background-dark)] rounded-2xl shadow-lg p-6 border border-[var(--border-color)]">
           <div className="max-w-md mx-auto">
-            <Wallet className="w-12 h-12 text-white mx-auto mb-4" />
+            <Wallet className="w-12 h-12 text-[var(--primary-color)] mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-[var(--foreground)] mb-2">Connect Your Wallet</h3>
-            <p className="text-white mb-6">Connect your wallet to access all features</p>
+            <p className="text-[var(--text-secondary)] mb-6">Connect your wallet to access all features</p>
             <ConnectWalletButton size="large" variant="primary" />
           </div>
         </div>
@@ -687,40 +751,35 @@ const DashboardScreen = () => {
           {activeTab === 'wallet' && <WalletView />}
           {activeTab === 'overview' && <OverviewView />}
           {activeTab === 'activity' && (
-            <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+            <div className="bg-gradient-to-br from-[var(--card-background)] to-[var(--card-background-dark)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
               <h3 className="text-xl font-semibold text-[var(--foreground)] mb-5 flex items-center">
-                <Clock className="mr-2 text-[var(--primary-color)]" />
-                All Activity
+                <History className="mr-2 text-[var(--primary-color)]" />
+                Transaction History
               </h3>
               {transactions.length > 0 ? (
-                <div className="space-y-3 max-h-96 overflow-y-auto pr-2">
+                <div className="space-y-3 max-h-[calc(100vh-300px)] overflow-y-auto pr-2">
                   {transactions.map((tx) => (
-                    <div key={tx.hash} className="p-3 bg-[var(--input-background)] rounded-lg hover:bg-gray-700 transition-colors">
+                    <div key={tx.hash} className="p-4 bg-[var(--input-background)] rounded-lg hover:bg-[var(--input-background-hover)] transition-colors">
                       <div className="flex items-start">
                         <div className="mt-1 mr-3">
                           {getTransactionIcon(tx.type)}
                         </div>
                         <div className="flex-1">
                           <div className="flex justify-between items-start">
-                            <span className="capitalize font-medium text-[var(--foreground)]">{tx.type}</span>
-                            <span
-                              className={`text-xs px-2 py-1 rounded-full ${
-                                tx.status === 'success'
-                                  ? 'bg-emerald-600 text-[var(--foreground)]'
-                                  : tx.status === 'failed'
-                                  ? 'bg-red-600 text-[var(--foreground)]'
-                                  : 'bg-yellow-600 text-[var(--foreground)]'
-                              }`}
-                            >
-                              {tx.status}
-                            </span>
-                          </div>
-                          {tx.amount && tx.token && (
-                            <div className="text-sm text-white mt-1">
-                              {tx.amount} {tx.token}
+                            <div>
+                              <span className="capitalize font-medium text-[var(--foreground)]">{tx.type}</span>
+                              <div className="flex items-center mt-1">
+                                {getTransactionStatusIcon(tx.status)}
+                                <span className="text-xs text-[var(--text-secondary)] ml-1 capitalize">{tx.status}</span>
+                              </div>
                             </div>
-                          )}
-                          <div className="mt-2 flex items-center text-xs text-white">
+                            {tx.amount && tx.token && (
+                              <span className="text-sm font-medium text-[var(--foreground)]">
+                                {tx.type === 'send' ? '-' : '+'}{tx.amount} {tx.token}
+                              </span>
+                            )}
+                          </div>
+                          <div className="mt-2 flex items-center text-xs text-[var(--text-secondary)]">
                             <a
                               href={`https://explorer.soniclabs.com/tx/${tx.hash}`}
                               target="_blank"

@@ -1,16 +1,12 @@
 import SwapScreen from '../components/SwapScreen';
-import { WalletProvider } from '../contexts/WalletContext';
-import Navigation from '../components/Navigation';
+import AppLayout from '../components/AppLayout';
 
 export default function SwapPage() {
   return (
-    <div className="min-h-screen bg-gray-100">
-      <WalletProvider>
-        <Navigation />
-        <main className="pt-16">
-          <SwapScreen />
-        </main>
-      </WalletProvider>
-    </div>
+    <AppLayout>
+      <div className="min-h-screen bg-gray-50">
+        <SwapScreen />
+      </div>
+    </AppLayout>
   );
 }

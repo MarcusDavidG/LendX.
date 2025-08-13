@@ -1,16 +1,12 @@
 import LoanScreen from '../components/LoanScreen';
-import { WalletProvider } from '../contexts/WalletContext';
-import Navigation from '../components/Navigation';
+import AppLayout from '../components/AppLayout';
 
 export default function LoanPage() {
   return (
-    <div className="min-h-screen bg-gray-100">
-      <WalletProvider>
-        <Navigation />
-        <main className="pt-16">
-          <LoanScreen />
-        </main>
-      </WalletProvider>
-    </div>
+    <AppLayout>
+      <div className="min-h-screen bg-gray-50">
+        <LoanScreen />
+      </div>
+    </AppLayout>
   );
 }

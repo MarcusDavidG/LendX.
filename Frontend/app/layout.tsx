@@ -32,11 +32,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <WalletProvider>
-          <GlobalHeader />
-          <main style={{ minHeight: 'calc(100vh - 200px)' }}>
-            {children}
-          </main>
-          <GlobalFooter />
+          {children}
           <Toaster position="top-right" />
         </WalletProvider>
       </body>

@@ -1,18 +1,19 @@
 'use client';
 
-import Image from 'next/image';
-import { Coins } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { motion } from 'framer-motion';
-import styled from 'styled-components';
+import { Coins, Menu, X } from 'lucide-react';
+import styled, { css } from 'styled-components';
+import ConnectWalletButton from './ConnectWalletButton';
 
 const HeaderContainer = styled.header`
-  background: var(--background);
+  background: var(--card-background);
   border-bottom: 1px solid var(--border-color);
-  padding: 1rem 0;
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 100;
+  transition: all 0.3s ease;
 `;
 
 const HeaderContent = styled.div`
@@ -22,95 +23,208 @@ const HeaderContent = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: 80px;
 `;
 
-const LogoSection = styled.div`
+const LogoSection = styled(Link)`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-`;
-
-const Logo = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 1.5rem;
-  font-weight: 700;
+  gap: 0.75rem;
+  text-decoration: none;
   color: var(--text-color);
+  font-weight: 700;
+  font-size: 1.5rem;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
 `;
 
-const NavSection = styled.nav`
+const LogoIcon = styled(Coins)`
+  color: var(--primary-color);
+  transition: transform 0.3s ease;
+
+  ${LogoSection}:hover & {
+    transform: rotate(-15deg);
+  }
+`;
+
+const Navigation = styled.nav`
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 1.5rem;
 
   @media (max-width: 768px) {
     display: none;
   }
 `;
 
-const NavLink = styled.a`
+const activeLinkStyles = css`
+  color: var(--primary-color);
+  border-bottom: 2px solid var(--primary-color);
+  transform: translateY(-1px);
+`;
+
+const NavLink = styled(Link)<{ $isActive: boolean }>`
   color: var(--text-color);
   text-decoration: none;
-  font-size: 0.875rem;
   font-weight: 500;
-  transition: color 0.2s;
-
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  padding: 0.5rem 0;
+  border-bottom: 2px solid transparent;
+  position: relative;
+  
   &:hover {
     color: var(--primary-color);
+    transform: translateY(-1px);
+  }
+
+  ${props => props.$isActive && activeLinkStyles}
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--primary-color);
+    transition: width 0.3s ease;
+  }
+
+  &:hover::after {
+    width: 100%;
   }
 `;
 
-const WalletSection = styled.div`
+const ActionButtons = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.25rem;
 `;
 
-const ConnectButton = styled.button`
-  background: var(--primary-color);
-  color: white;
+const MobileMenuButton = styled.button`
+  display: none;
+  background: none;
   border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
-  font-weight: 500;
+  color: var(--text-color);
   cursor: pointer;
-  transition: opacity 0.2s;
+  padding: 0.5rem;
+  transition: transform 0.2s ease;
+  z-index: 101;
 
   &:hover {
-    opacity: 0.9;
+    transform: scale(1.1);
+  }
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+`;
+
+const MobileMenu = styled.div<{ $isOpen: boolean }>`
+  display: none;
+  position: fixed;
+  top: 80px;
+  left: 0;
+  right: 0;
+  background: var(--card-background);
+  border-top: 1px solid var(--border-color);
+  padding: 1rem 2rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transform: ${props => props.$isOpen ? 'translateY(0)' : 'translateY(-100%)'};
+  opacity: ${props => props.$isOpen ? '1' : '0'};
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 99;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+`;
+
+const MobileNavLink = styled(Link)<{ $isActive: boolean }>`
+  display: block;
+  color: ${props => props.$isActive ? 'var(--primary-color)' : 'var(--text-color)'};
+  text-decoration: none;
+  padding: 1rem 0;
+  font-size: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+  
+  &:hover {
+    color: var(--primary-color);
+    padding-left: 0.5rem;
+  }
+  
+  &:last-child {
+    border-bottom: none;
   }
 `;
 
 const GlobalHeader = () => {
-  const [isConnected, setIsConnected] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+
+  const navigationItems = [
+    { name: 'Dashboard', href: '/dashboard' },
+    { name: 'Loans', href: '/loan' },
+    { name: 'Treasury', href: '/treasury' },
+    { name: 'Collateral', href: '/collateral' },
+    { name: 'Repay', href: '/repay' },
+    { name: 'Swap', href: '/swap' },
+  ];
 
   return (
     <HeaderContainer>
       <HeaderContent>
-        <LogoSection>
-          <Logo>
-            <Coins size={28} color="#10b981" strokeWidth={2} />
-            <span>LendX</span>
-          </Logo>
+        <LogoSection href="/">
+          <LogoIcon size={28} />
+          <span>LendX</span>
         </LogoSection>
 
-        <NavSection>
-          <NavLink href="/dashboard">Dashboard</NavLink>
-          <NavLink href="/loan">Loans</NavLink>
-          <NavLink href="/treasury">Treasury</NavLink>
-          <NavLink href="/collateral">Collateral</NavLink>
-          <NavLink href="/repay">Repay</NavLink>
-          <NavLink href="/swap">Swap</NavLink>
-        </NavSection>
+        <Navigation>
+          {navigationItems.map((item) => (
+            <NavLink
+              key={item.name}
+              href={item.href}
+              $isActive={pathname === item.href}
+            >
+              {item.name}
+            </NavLink>
+          ))}
+        </Navigation>
 
-        <WalletSection>
-          <ConnectButton onClick={() => setIsConnected(!isConnected)}>
-            {isConnected ? '0x1234...5678' : 'Connect Wallet'}
-          </ConnectButton>
-        </WalletSection>
+        <ActionButtons>
+          <ConnectWalletButton 
+            size="medium" 
+            variant="primary"
+            redirectOnConnect={true}
+            redirectTo="/dashboard"
+          />
+          
+          <MobileMenuButton
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle mobile menu"
+          >
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </MobileMenuButton>
+        </ActionButtons>
       </HeaderContent>
+
+      <MobileMenu $isOpen={isMobileMenuOpen}>
+        {navigationItems.map((item) => (
+          <MobileNavLink
+            key={item.name}
+            href={item.href}
+            $isActive={pathname === item.href}
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            {item.name}
+          </MobileNavLink>
+        ))}
+      </MobileMenu>
     </HeaderContainer>
   );
 };
