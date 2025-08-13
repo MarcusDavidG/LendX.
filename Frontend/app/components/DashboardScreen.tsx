@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect, useCallback } from 'react';
@@ -13,7 +14,6 @@ import {
   Gem, Home, Loader2, RefreshCw, Send, Shield, Smartphone, 
   Sparkles, TrendingUp, Wallet, Zap
 } from 'lucide-react';
-import './components.css';
 
 interface TokenBalance {
   symbol: string;
@@ -207,10 +207,10 @@ const DashboardScreen = () => {
 
   const getTransactionIcon = (type: string) => {
     switch (type) {
-      case 'send': return <Send size={16} className="text-blue-500" />;
-      case 'deposit': return <TrendingUp size={16} className="text-green-500" />;
-      case 'loan': return <Banknote size={16} className="text-purple-500" />;
-      default: return <RefreshCw size={16} className="text-gray-500" />;
+      case 'send': return <Send size={16} className="text-emerald-400" />;
+      case 'deposit': return <TrendingUp size={16} className="text-emerald-400" />;
+      case 'loan': return <Banknote size={16} className="text-purple-400" />;
+      default: return <RefreshCw size={16} className="text-white" />;
     }
   };
 
@@ -234,17 +234,17 @@ const DashboardScreen = () => {
   // Wallet View Component
   const WalletView = () => (
     <div className="space-y-6">
-      <div className="bg-white rounded-xl shadow-sm p-6">
+      <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-semibold text-gray-800 flex items-center">
-            <Wallet className="mr-2 text-blue-500" />
+          <h3 className="text-xl font-semibold text-[var(--foreground)] flex items-center">
+            <Wallet className="mr-2 text-[var(--primary-color)]" />
             Wallet Balances
           </h3>
           <div className="flex items-center space-x-2">
             <button
               onClick={fetchWalletBalances}
               disabled={loading}
-              className={`flex items-center space-x-1 bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
+              className={`flex items-center space-x-1 bg-[var(--primary-color)] hover:bg-emerald-600 text-[var(--foreground)] px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200 ${
                 loading ? 'opacity-50 cursor-not-allowed' : ''
               }`}
             >
@@ -259,38 +259,38 @@ const DashboardScreen = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl p-4 border border-gray-100">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div className="bg-[var(--input-background)] rounded-xl p-4 border border-[var(--border-color)] hover:border-emerald-500 transition-all">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
-                <Gem className="text-blue-500 mr-2" />
-                <span className="font-medium">S Token</span>
+                <Gem className="text-[var(--primary-color)] mr-2" />
+                <span className="font-medium text-[var(--foreground)]">S Token</span>
               </div>
               <div className="text-right">
-                <p className="text-xl font-bold">{walletBalance.S}</p>
-                <p className="text-xs text-gray-500">S</p>
+                <p className="text-xl font-bold text-[var(--foreground)]">{walletBalance.S}</p>
+                <p className="text-xs text-[var(--primary-color)]">S</p>
               </div>
             </div>
           </div>
-          <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl p-4 border border-gray-100">
+          <div className="bg-[var(--input-background)] rounded-xl p-4 border border-[var(--border-color)] hover:border-emerald-500 transition-all">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
-                <Banknote className="text-green-500 mr-2" />
-                <span className="font-medium">USDC</span>
+                <Banknote className="text-[var(--primary-color)] mr-2" />
+                <span className="font-medium text-[var(--foreground)]">USDC</span>
               </div>
               <div className="text-right">
-                <p className="text-xl font-bold">{walletBalance.USDC}</p>
-                <p className="text-xs text-gray-500">USDC</p>
+                <p className="text-xl font-bold text-[var(--foreground)]">{walletBalance.USDC}</p>
+                <p className="text-xs text-[var(--primary-color)]">USDC</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="text-xs text-gray-500 flex items-center justify-between">
+        <div className="text-xs text-[var(--primary-color)] flex items-center justify-between">
           <span>Last updated: {formatLastUpdate()}</span>
           <button
             onClick={() => userAddress && copyAddress(userAddress)}
-            className="flex items-center hover:text-blue-600"
+            className="flex items-center hover:text-[var(--primary-color)] transition-colors"
           >
             <span>{userAddress?.substring(0, 6)}...{userAddress?.substring(38)}</span>
             <Copy size={12} className="ml-1" />
@@ -298,22 +298,22 @@ const DashboardScreen = () => {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm p-6">
-        <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-          <Send className="mr-2 text-blue-500" />
+      <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+        <h3 className="text-xl font-semibold text-[var(--foreground)] mb-4 flex items-center">
+          <Send className="mr-2 text-[var(--primary-color)]" />
           Send Tokens
         </h3>
         
         <form onSubmit={handleSendTokens} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-2 text-gray-700 flex items-center">
-              <ArrowRight className="mr-2 text-blue-500" size={16} />
+            <label className="block text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
+              <ArrowRight className="mr-2 text-[var(--primary-color)]" size={16} />
               Token to Send
             </label>
             <select
               value={sendToken}
               onChange={(e) => setSendToken(e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+              className="w-full p-3 bg-[var(--input-background)] border border-[var(--border-color)] rounded-lg text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all"
             >
               <option value="S">S Token</option>
               <option value="USDC">USDC</option>
@@ -321,25 +321,23 @@ const DashboardScreen = () => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium mb-2 text-gray-700 flex items-center">
-              <CreditCard className="mr-2 text-blue-500" size={16} />
+            <label className="block text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
+              <CreditCard className="mr-2 text-[var(--primary-color)]" size={16} />
               Amount
             </label>
             <input
-              type="number"
+              type="text"
               value={sendAmount}
-              onChange={(e) => setSendAmount(e.target.value)}
+              onChange={(e) => setSendAmount(e.target.value.replace(/[^0-9.]/g, ''))}
               placeholder="0.0"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+              className="w-full p-3 bg-[var(--input-background)] border border-[var(--border-color)] rounded-lg text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all"
               required
-              min="0"
-              step="0.01"
             />
           </div>
           
           <div>
-            <label className="block text-sm font-medium mb-2 text-gray-700 flex items-center">
-              <Wallet className="mr-2 text-blue-500" size={16} />
+            <label className="block text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
+              <Wallet className="mr-2 text-[var(--primary-color)]" size={16} />
               Recipient Address
             </label>
             <input
@@ -347,7 +345,7 @@ const DashboardScreen = () => {
               value={recipient}
               onChange={(e) => setRecipient(e.target.value)}
               placeholder="0x..."
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+              className="w-full p-3 bg-[var(--input-background)] border border-[var(--border-color)] rounded-lg text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all"
               required
             />
           </div>
@@ -355,10 +353,10 @@ const DashboardScreen = () => {
           <button
             type="submit"
             disabled={isSending || loading}
-            className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all ${
+            className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all duration-200 ${
               isSending || loading
-                ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-md hover:shadow-lg'
+                ? 'bg-gray-600 cursor-not-allowed'
+                : 'bg-[var(--primary-color)] hover:bg-emerald-600 text-[var(--foreground)] shadow-md hover:shadow-lg'
             }`}
           >
             {isSending || loading ? (
@@ -376,19 +374,19 @@ const DashboardScreen = () => {
         </form>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm p-6">
-        <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-          <Smartphone className="mr-2 text-green-500" />
+      <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+        <h3 className="text-xl font-semibold text-[var(--foreground)] mb-4 flex items-center">
+          <Smartphone className="mr-2 text-[var(--primary-color)]" />
           M-Pesa Deposit (Mock)
         </h3>
-        <p className="text-sm text-gray-600 mb-4">
+        <p className="text-sm text-white mb-4">
           Deposit KES to receive USDC (1 USDC = 130 KES). This is a mock integration.
         </p>
         
         <form onSubmit={handleMpesaDeposit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-2 text-gray-700 flex items-center">
-              <Smartphone className="mr-2 text-green-500" size={16} />
+            <label className="block text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
+              <Smartphone className="mr-2 text-[var(--primary-color)]" size={16} />
               M-Pesa Number
             </label>
             <input
@@ -396,31 +394,31 @@ const DashboardScreen = () => {
               value={mpesaPhone}
               onChange={(e) => setMpesaPhone(e.target.value)}
               placeholder="2547XXXXXXXX"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
+              className="w-full p-3 bg-[var(--input-background)] border border-[var(--border-color)] rounded-lg text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all"
             />
           </div>
           
           <div>
-            <label className="block text-sm font-medium mb-2 text-gray-700 flex items-center">
-              <Banknote className="mr-2 text-green-500" size={16} />
+            <label className="block text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
+              <Banknote className="mr-2 text-[var(--primary-color)]" size={16} />
               Amount (KES)
             </label>
             <input
-              type="number"
+              type="text"
               value={mpesaAmount}
-              onChange={(e) => setMpesaAmount(e.target.value)}
+              onChange={(e) => setMpesaAmount(e.target.value.replace(/[^0-9.]/g, ''))}
               placeholder="1000"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
+              className="w-full p-3 bg-[var(--input-background)] border border-[var(--border-color)] rounded-lg text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all"
             />
           </div>
           
           <button
             type="submit"
             disabled={isMpesaProcessing}
-            className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all ${
+            className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all duration-200 ${
               isMpesaProcessing
-                ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-md hover:shadow-lg'
+                ? 'bg-gray-600 cursor-not-allowed'
+                : 'bg-[var(--primary-color)] hover:bg-emerald-600 text-[var(--foreground)] shadow-md hover:shadow-lg'
             }`}
           >
             {isMpesaProcessing ? (
@@ -437,25 +435,25 @@ const DashboardScreen = () => {
           </button>
         </form>
         
-        <p className="text-xs text-gray-500 mt-4">
+        <p className="text-xs text-white mt-4">
           Mock implementation. Real M-Pesa API would be used in production.
         </p>
       </div>
     </div>
   );
 
-  // Overview View Component (Previous Dashboard Content)
+  // Overview View Component
   const OverviewView = () => (
     <div className="space-y-6">
-      <div className="bg-white rounded-xl shadow-sm p-6">
+      <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
         <div className="flex justify-between items-center mb-6">
-          <h3 className="text-xl font-semibold text-gray-800 flex items-center">
-            <Gem className="mr-2 text-blue-500" />
+          <h3 className="text-xl font-semibold text-[var(--foreground)] flex items-center">
+            <Gem className="mr-2 text-[var(--primary-color)]" />
             Your Balances
           </h3>
           <button
             onClick={handleRefresh}
-            className={`flex items-center space-x-1 bg-blue-50 hover:bg-blue-100 text-blue-600 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            className={`flex items-center space-x-1 bg-[var(--primary-color)] hover:bg-emerald-600 text-[var(--foreground)] px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
               loading ? 'opacity-50 cursor-not-allowed' : ''
             }`}
             disabled={loading}
@@ -476,31 +474,32 @@ const DashboardScreen = () => {
 
         {loading ? (
           <div className="text-center py-8">
-            <Loader2 className="animate-spin rounded-full h-8 w-8 text-blue-500 mx-auto" />
-            <p className="text-gray-600 mt-2">Loading balances...</p>
+            <Loader2 className="animate-spin rounded-full h-8 w-8 text-[var(--primary-color)] mx-auto" />
+            <p className="text-white mt-2">Loading balances...</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2 ">
             {balances.map((token) => (
-              <div key={token.symbol} className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl p-5 border border-gray-100 hover:border-blue-100 transition-all">
+              <div key={token.symbol} className="bg-[var(--input-background)] rounded-xl p-10 border border-[var(--border-color)] hover:border-emerald-500 transition-all">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h4 className="font-semibold text-lg text-gray-800">{token.symbol}</h4>
+                    <h4 className="font-semibold text-lg text-[var(--foreground)]">{token.symbol}</h4>
                     <div className="flex items-center mt-1">
-                      <p className="text-xs text-gray-500 mr-2">
+                      <p className="text-xs text-[var(--primary-color)] mr-2">
                         {token.address.substring(0, 6)}...{token.address.substring(38)}
                       </p>
                       <button 
                         onClick={() => copyAddress(token.address)}
-                        className="text-gray-400 hover:text-gray-600"
+                        className="text-[var(--primary-color)] hover:text-[var(--primary-color)]"
                       >
                         <Copy size={14} />
                       </button>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-2xl font-bold text-gray-800">{token.formattedBalance}</p>
-                    <p className="text-sm text-gray-500">{token.symbol}</p>
+                    <p className="text-2xl font-bold text-[var(--foreground)]">{token.formattedBalance}</p>
+                    <p className="text-sm text-[var(--primary-color)]">{token.symbol}</p>
                   </div>
                 </div>
               </div>
@@ -510,36 +509,36 @@ const DashboardScreen = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h3 className="text-xl font-semibold mb-5 flex items-center">
-            <Zap className="mr-2 text-blue-500" />
+        <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+          <h3 className="text-xl font-semibold text-[var(--foreground)] mb-5 flex items-center">
+            <Zap className="mr-2 text-[var(--primary-color)]" />
             Quick Actions
           </h3>
           <div className="space-y-3">
             <Link
               href="/swap"
-              className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-3 px-4 rounded-lg text-center font-medium transition-all shadow-sm hover:shadow-md"
+              className="w-full flex items-center justify-center space-x-2 bg-[var(--primary-color)] hover:bg-emerald-600 text-[var(--foreground)] py-3 px-4 rounded-lg text-center font-medium transition-all duration-200 shadow-md hover:shadow-lg"
             >
               <ArrowRight size={18} />
               <span>Swap Tokens</span>
             </Link>
             <Link
               href="/treasury"
-              className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white py-3 px-4 rounded-lg text-center font-medium transition-all shadow-sm hover:shadow-md"
+              className="w-full flex items-center justify-center space-x-2 bg-purple-600 hover:bg-purple-700 text-[var(--foreground)] py-3 px-4 rounded-lg text-center font-medium transition-all duration-200 shadow-md hover:shadow-lg"
             >
               <Banknote size={18} />
               <span>View Treasury</span>
             </Link>
             <Link
               href="/loan"
-              className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white py-3 px-4 rounded-lg text-center font-medium transition-all shadow-sm hover:shadow-md"
+              className="w-full flex items-center justify-center space-x-2 bg-[var(--primary-color)] hover:bg-emerald-600 text-[var(--foreground)] py-3 px-4 rounded-lg text-center font-medium transition-all duration-200 shadow-md hover:shadow-lg"
             >
               <TrendingUp size={18} />
               <span>Manage Loans</span>
             </Link>
             <Link
               href="/collateral"
-              className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white py-3 px-4 rounded-lg text-center font-medium transition-all shadow-sm hover:shadow-md"
+              className="w-full flex items-center justify-center space-x-2 bg-purple-600 hover:bg-amber-700 text-[var(--foreground)] py-3 px-4 rounded-lg text-center font-medium transition-all duration-200 shadow-md hover:shadow-lg"
             >
               <Shield size={18} />
               <span>Manage Collateral</span>
@@ -547,45 +546,45 @@ const DashboardScreen = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h3 className="text-xl font-semibold mb-5 flex items-center">
-            <Clock className="mr-2 text-blue-500" />
+        <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+          <h3 className="text-xl font-semibold text-[var(--foreground)] mb-5 flex items-center">
+            <Clock className="mr-2 text-[var(--primary-color)]" />
             Recent Activity
           </h3>
           {transactions.length > 0 ? (
             <div className="space-y-3 max-h-64 overflow-y-auto pr-2">
               {transactions.slice(0, 5).map((tx) => (
-                <div key={tx.hash} className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                <div key={tx.hash} className="p-3 bg-[var(--input-background)] rounded-lg hover:bg-gray-700 transition-colors">
                   <div className="flex items-start">
                     <div className="mt-1 mr-3">
                       {getTransactionIcon(tx.type)}
                     </div>
                     <div className="flex-1">
                       <div className="flex justify-between items-start">
-                        <span className="capitalize font-medium text-gray-800">{tx.type}</span>
+                        <span className="capitalize font-medium text-[var(--foreground)]">{tx.type}</span>
                         <span
                           className={`text-xs px-2 py-1 rounded-full ${
                             tx.status === 'success'
-                              ? 'bg-green-100 text-green-800'
+                              ? 'bg-emerald-600 text-[var(--foreground)]'
                               : tx.status === 'failed'
-                              ? 'bg-red-100 text-red-800'
-                              : 'bg-yellow-100 text-yellow-800'
+                              ? 'bg-red-600 text-[var(--foreground)]'
+                              : 'bg-yellow-600 text-[var(--foreground)]'
                           }`}
                         >
                           {tx.status}
                         </span>
                       </div>
                       {tx.amount && tx.token && (
-                        <div className="text-sm text-gray-600 mt-1">
+                        <div className="text-sm text-white mt-1">
                           {tx.amount} {tx.token}
                         </div>
                       )}
-                      <div className="mt-2 flex items-center text-xs text-gray-500">
+                      <div className="mt-2 flex items-center text-xs text-white">
                         <a
                           href={`https://explorer.soniclabs.com/tx/${tx.hash}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center hover:text-blue-600"
+                          className="flex items-center hover:text-[var(--primary-color)]"
                         >
                           {tx.hash.substring(0, 8)}...{tx.hash.substring(36)}
                           <ExternalLink size={12} className="ml-1" />
@@ -597,9 +596,9 @@ const DashboardScreen = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center py-8 bg-gray-50 rounded-lg">
-              <Home className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-              <p className="text-gray-500">No recent transactions</p>
+            <div className="text-center py-8 bg-[var(--input-background)] rounded-lg">
+              <Home className="w-10 h-10 text-white mx-auto mb-3" />
+              <p className="text-white">No recent transactions</p>
             </div>
           )}
         </div>
@@ -608,78 +607,78 @@ const DashboardScreen = () => {
   );
 
   return (
-    <div className="dashboard-container max-w-6xl mx-auto p-6 bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl shadow-lg">
-<div className="flex flex-col items-center mb-6">
-  <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-gray-600">
-    <div className="flex items-center">
-      <Zap size={16} className="mr-2 text-yellow-500" />
-      <span>Powered by Sonic</span>
-    </div>
-    <div className="flex items-center">
-      <Clock size={16} className="mr-2 text-blue-500" />
-      <span>{confirmationTime} confirmations</span>
-    </div>
-    <div className="flex items-center">
-      <Sparkles size={16} className="mr-2 text-green-500" />
-      <span>{gasFee} fees</span>
-    </div>
-  </div>
-</div>
+    <div className="max-w-6xl mx-auto p-6 bg-[var(--background)] rounded-2xl shadow-xl border border-[var(--border-color)]">
+      <div className="flex flex-col items-center mb-6">
+        <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-white">
+          <div className="flex items-center">
+            <Zap size={16} className="mr-2 text-[var(--primary-color)]" />
+            <span>Powered by Sonic</span>
+          </div>
+          <div className="flex items-center">
+            <Clock size={16} className="mr-2 text-[var(--primary-color)]" />
+            <span>{confirmationTime} confirmations</span>
+          </div>
+          <div className="flex items-center">
+            <Sparkles size={16} className="mr-2 text-[var(--primary-color)]" />
+            <span>{gasFee} fees</span>
+          </div>
+        </div>
+      </div>
 
       {/* Tab Navigation */}
       <div className="mb-6">
-  <div className="border-b border-gray-200">
-    <nav className="-mb-px flex gap-8"> {/* Changed space-x-8 to gap-8 */}
-      <button
-        onClick={() => setActiveTab('wallet')}
-        className={`whitespace-nowrap py-2 px-4 border-b-2 font-medium text-sm ${
-          activeTab === 'wallet'
-            ? 'border-blue-500 text-blue-600'
-            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-        }`}
-      >
-        <Wallet className="inline-block mr-2 h-4 w-4" />
-        Wallet
-      </button>
-      <button
-        onClick={() => setActiveTab('overview')}
-        className={`whitespace-nowrap py-2 px-4 border-b-2 font-medium text-sm ${
-          activeTab === 'overview'
-            ? 'border-blue-500 text-blue-600'
-            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-        }`}
-      >
-        <Home className="inline-block mr-2 h-4 w-4" />
-        Overview
-      </button>
-      <button
-        onClick={() => setActiveTab('activity')}
-        className={`whitespace-nowrap py-2 px-4 border-b-2 font-medium text-sm ${
-          activeTab === 'activity'
-            ? 'border-blue-500 text-blue-600'
-            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-        }`}
-      >
-        <CreditCard className="inline-block mr-2 h-4 w-4" />
-        Activity
-      </button>
-    </nav>
-  </div>
-</div>
+        <div className="border-b border-[var(--border-color)]">
+          <nav className="-mb-px flex gap-8">
+            <button
+              onClick={() => setActiveTab('wallet')}
+              className={`whitespace-nowrap py-2 px-4 border-b-2 font-medium text-sm ${
+                activeTab === 'wallet'
+                  ? 'border-[var(--primary-color)] text-[var(--primary-color)]'
+                  : 'border-transparent text-white hover:text-gray-200 hover:border-gray-500'
+              }`}
+            >
+              <Wallet className="inline-block mr-2 h-4 w-4" />
+              Wallet
+            </button>
+            <button
+              onClick={() => setActiveTab('overview')}
+              className={`whitespace-nowrap py-2 px-4 border-b-2 font-medium text-sm ${
+                activeTab === 'overview'
+                  ? 'border-[var(--primary-color)] text-[var(--primary-color)]'
+                  : 'border-transparent text-white hover:text-gray-200 hover:border-gray-500'
+              }`}
+            >
+              <Home className="inline-block mr-2 h-4 w-4" />
+              Overview
+            </button>
+            <button
+              onClick={() => setActiveTab('activity')}
+              className={`whitespace-nowrap py-2 px-4 border-b-2 font-medium text-sm ${
+                activeTab === 'activity'
+                  ? 'border-[var(--primary-color)] text-[var(--primary-color)]'
+                  : 'border-transparent text-white hover:text-gray-200 hover:border-gray-500'
+              }`}
+            >
+              <CreditCard className="inline-block mr-2 h-4 w-4" />
+              Activity
+            </button>
+          </nav>
+        </div>
+      </div>
 
       {error && (
-        <div className="bg-red-50 border-l-4 border-red-500 rounded p-4 mb-6 flex items-center">
-          <Shield className="text-red-500 mr-2" />
-          <p className="text-red-600">{error}</p>
+        <div className="bg-red-800 border-l-4 border-red-500 rounded p-4 mb-6 flex items-center">
+          <Shield className="text-red-400 mr-2" />
+          <p className="text-red-200">{error}</p>
         </div>
       )}
 
       {!isConnected ? (
-        <div className="text-center py-12 bg-white rounded-xl shadow-sm p-6">
+        <div className="text-center py-12 bg-[var(--card-background)] rounded-2xl shadow-lg p-6 border border-[var(--border-color)]">
           <div className="max-w-md mx-auto">
-            <Wallet className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-700 mb-2">Connect Your Wallet</h3>
-            <p className="text-gray-500 mb-6">Connect your wallet to access all features</p>
+            <Wallet className="w-12 h-12 text-white mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-[var(--foreground)] mb-2">Connect Your Wallet</h3>
+            <p className="text-white mb-6">Connect your wallet to access all features</p>
             <ConnectWalletButton size="large" variant="primary" />
           </div>
         </div>
@@ -688,45 +687,45 @@ const DashboardScreen = () => {
           {activeTab === 'wallet' && <WalletView />}
           {activeTab === 'overview' && <OverviewView />}
           {activeTab === 'activity' && (
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <h3 className="text-xl font-semibold mb-5 flex items-center">
-                <Clock className="mr-2 text-blue-500" />
+            <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+              <h3 className="text-xl font-semibold text-[var(--foreground)] mb-5 flex items-center">
+                <Clock className="mr-2 text-[var(--primary-color)]" />
                 All Activity
               </h3>
               {transactions.length > 0 ? (
                 <div className="space-y-3 max-h-96 overflow-y-auto pr-2">
                   {transactions.map((tx) => (
-                    <div key={tx.hash} className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                    <div key={tx.hash} className="p-3 bg-[var(--input-background)] rounded-lg hover:bg-gray-700 transition-colors">
                       <div className="flex items-start">
                         <div className="mt-1 mr-3">
                           {getTransactionIcon(tx.type)}
                         </div>
                         <div className="flex-1">
                           <div className="flex justify-between items-start">
-                            <span className="capitalize font-medium text-gray-800">{tx.type}</span>
+                            <span className="capitalize font-medium text-[var(--foreground)]">{tx.type}</span>
                             <span
                               className={`text-xs px-2 py-1 rounded-full ${
                                 tx.status === 'success'
-                                  ? 'bg-green-100 text-green-800'
+                                  ? 'bg-emerald-600 text-[var(--foreground)]'
                                   : tx.status === 'failed'
-                                  ? 'bg-red-100 text-red-800'
-                                  : 'bg-yellow-100 text-yellow-800'
+                                  ? 'bg-red-600 text-[var(--foreground)]'
+                                  : 'bg-yellow-600 text-[var(--foreground)]'
                               }`}
                             >
                               {tx.status}
                             </span>
                           </div>
                           {tx.amount && tx.token && (
-                            <div className="text-sm text-gray-600 mt-1">
+                            <div className="text-sm text-white mt-1">
                               {tx.amount} {tx.token}
                             </div>
                           )}
-                          <div className="mt-2 flex items-center text-xs text-gray-500">
+                          <div className="mt-2 flex items-center text-xs text-white">
                             <a
                               href={`https://explorer.soniclabs.com/tx/${tx.hash}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="flex items-center hover:text-blue-600"
+                              className="flex items-center hover:text-[var(--primary-color)]"
                             >
                               {tx.hash.substring(0, 8)}...{tx.hash.substring(36)}
                               <ExternalLink size={12} className="ml-1" />
@@ -738,9 +737,9 @@ const DashboardScreen = () => {
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-8 bg-gray-50 rounded-lg">
-                  <Home className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-                  <p className="text-gray-500">No transactions yet</p>
+                <div className="text-center py-8 bg-[var(--input-background)] rounded-lg">
+                  <Home className="w-10 h-10 text-white mx-auto mb-3" />
+                  <p className="text-white">No transactions yet</p>
                 </div>
               )}
             </div>

@@ -12,7 +12,6 @@ import {
   Gem, HandCoins, Loader2, Lock, Shield, 
   Unlock, Wallet, Zap, RefreshCw 
 } from 'lucide-react';
-import './components.css';
 
 const EnhancedLoanScreen = () => {
   const { isConnected, userAddress } = useWallet();
@@ -37,7 +36,6 @@ const EnhancedLoanScreen = () => {
       setSBalance(sBal);
       const collateral = await getCollateralInfo(userAddress);
       setCollateralInfo(collateral);
-      // Loan info is now handled by usePersistentLoan hook
       refreshLoan();
     } catch (error: any) {
       setErrorMessage(`Error fetching loan details: ${error.message}`);
@@ -50,13 +48,12 @@ const EnhancedLoanScreen = () => {
     }
   }, [isConnected, userAddress, fetchLoanDetails]);
 
-  // Add refresh interval to check for collateral changes
   useEffect(() => {
     if (!isConnected || !userAddress) return;
     
     const interval = setInterval(() => {
       fetchLoanDetails();
-    }, 3000); // Refresh every 3 seconds
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [isConnected, userAddress, fetchLoanDetails]);
@@ -82,7 +79,6 @@ const EnhancedLoanScreen = () => {
       const { success, transactionHash } = await mockRequestLoan(loanAmount, duration);
       if (success && transactionHash) {
         trackTransaction(transactionHash, 'loan', loanAmount, 'USDC');
-        // The loan info will be updated by the persistent loan hook
         refreshLoan();
         toast.success(`Loan of ${loanAmount} USDC approved!`, { id: toastId });
         setLoanAmount('');
@@ -105,57 +101,58 @@ const EnhancedLoanScreen = () => {
   };
 
   return (
-    <div className="loan-container max-w-lg mx-auto p-6 bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl shadow-lg">
+    <div className="max-w-lg mx-auto p-6 bg-[var(--background)] rounded-2xl shadow-xl border border-[var(--border-color)]">
       <div className="flex flex-col items-center mb-6">
-        <div className="flex items-center justify-center mb-2">
-          <img src="/sonic-logo.png" alt="SonicFi" className="h-10 mr-3" />
-          <h2 className="text-3xl font-bold text-gray-800 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            SonicFi Loans
+        <div className="flex items-center justify-center">
+          <h2 className="text-3xl font-bold text-[var(--primary-color)]">
+            Request A Loan
           </h2>
         </div>
-        <div className="flex items-center space-x-4 text-sm text-gray-600">
+        <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm text-white">
           <div className="flex items-center">
-            <Zap size={16} className="mr-1 text-yellow-500" />
-            <span>Powered by Sonic</span>
+            <Zap size={16} className="mr-1 text-[var(--primary-color)]" />
+            <span>Powered by Sonic</span> 
           </div>
           <div className="flex items-center">
-            <Clock size={16} className="mr-1 text-blue-500" />
+            <Clock size={16} className="mr-1 text-[var(--primary-color)]" />
             <span>~2s confirmations</span>
           </div>
           <div className="flex items-center">
-            <Gem size={16} className="mr-1 text-green-500" />
+            <Gem size={16} className="mr-1 text-[var(--primary-color)]" />
             <span>~$0.001 fees</span>
           </div>
         </div>
       </div>
 
       {errorMessage && (
-        <div className="bg-red-50 border-l-4 border-red-500 rounded p-4 mb-6 flex items-center">
-          <Shield className="text-red-500 mr-2" />
-          <p className="text-red-600">{errorMessage}</p>
+        <div className="bg-red-800 border-l-4 border-red-500 rounded p-4 mb-6 flex items-center">
+          <Shield className="text-red-400 mr-2" />
+          <p className="text-red-200">{errorMessage}</p>
         </div>
       )}
 
       {!isConnected ? (
-        <div className="text-center py-12 bg-white rounded-xl shadow-sm p-6">
+        <div className="text-center py-12 bg-[var(--card-background)] rounded-2xl shadow-lg p-6 border border-[var(--border-color)]">
           <div className="max-w-md mx-auto">
             <Wallet className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-700 mb-2">Connect Your Wallet</h3>
-            <p className="text-gray-500 mb-6">Connect your wallet to access loan services</p>
+            <h3 className="text-xl font-semibold text-[var(--foreground)] mb-2">Connect Your Wallet</h3>
+            <p className="text-gray-400 mb-6">Connect your wallet to access loan services</p>
             <ConnectWalletButton size="large" variant="primary" />
           </div>
         </div>
       ) : (
         <div className="space-y-6">
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-semibold text-gray-800 flex items-center">
-                <CreditCard className="mr-2 text-blue-500" />
+              <h3 className="text-xl font-semibold text-[var(--foreground)] flex items-center">
+                <CreditCard className="mr-2 text-[var(--primary-color)]" />
                 Loan Overview
               </h3>
               <button
                 onClick={refreshLoan}
-                className="flex items-center space-x-1 bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1 rounded-lg text-sm font-medium transition-colors"
+                className={`flex items-center space-x-1 bg-[var(--primary-color)] hover:bg-emerald-600 text-[var(--foreground)] px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200 ${
+                  isLoading ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
               >
                 <RefreshCw size={16} />
                 <span>Refresh</span>
@@ -163,45 +160,45 @@ const EnhancedLoanScreen = () => {
             </div>
 
             <div className="space-y-4">
-              <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl p-4 border border-gray-100">
+              <div className="bg-[var(--input-background)] rounded-xl p-4 border border-[var(--border-color)] hover:border-emerald-500 transition-all">
                 <div className="flex justify-between items-center">
                   <div className="flex items-center">
-                    <Gem className="text-blue-500 mr-2" />
-                    <span className="font-medium">S Token Balance</span>
+                    <Gem className="text-[var(--primary-color)] mr-2" />
+                    <span className="font-medium text-[var(--foreground)]">S Token Balance</span>
                   </div>
-                  <span className="font-mono text-lg font-bold">{sBalance} S</span>
+                  <span className="font-mono text-lg font-bold text-[var(--foreground)]">{sBalance} S</span>
                 </div>
               </div>
 
               {loanInfo && (
-                <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl p-4 border border-gray-100">
-                  <h4 className="font-semibold text-gray-800 mb-2 flex items-center">
-                    <Banknote className="mr-2 text-green-500" />
+                <div className="bg-[var(--input-background)] rounded-xl p-4 border border-[var(--border-color)] hover:border-emerald-500 transition-all">
+                  <h4 className="font-semibold text-[var(--foreground)] mb-2 flex items-center">
+                    <Banknote className="mr-2 text-[var(--primary-color)]" />
                     Current Loan
                   </h4>
                   <div className="grid grid-cols-2 gap-2 text-sm">
                     <div>
-                      <span className="text-gray-500">Amount:</span>
-                      <p className="font-medium">{loanInfo.amount} USDC</p>
+                      <span className="text-[var(--primary-color)]">Amount:</span>
+                      <p className="font-medium text-[var(--foreground)]">{loanInfo.amount} USDC</p>
                     </div>
                     <div>
-                      <span className="text-gray-500">Interest:</span>
-                      <p className="font-medium">{loanInfo.interest} USDC</p>
+                      <span className="text-[var(--primary-color)]">Interest:</span>
+                      <p className="font-medium text-[var(--foreground)]">{loanInfo.interest} USDC</p>
                     </div>
                     <div>
-                      <span className="text-gray-500">Due Date:</span>
-                      <p className="font-medium">{loanInfo.dueDate}</p>
+                      <span className="text-[var(--primary-color)]">Due Date:</span>
+                      <p className="font-medium text-[var(--foreground)]">{loanInfo.dueDate}</p>
                     </div>
                     <div>
-                      <span className="text-gray-500">Total Due:</span>
-                      <p className="font-medium">
+                      <span className="text-[var(--primary-color)]">Total Due:</span>
+                      <p className="font-medium text-[var(--foreground)]">
                         {(parseFloat(loanInfo.amount) + parseFloat(loanInfo.interest)).toFixed(2)} USDC
                       </p>
                     </div>
                   </div>
                   <button
                     onClick={() => window.location.href = '/repay'}
-                    className="mt-4 w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center whitespace-nowrap"
+                    className="mt-4 w-full bg-orange-600 hover:bg-orange-700 text-[var(--foreground)] font-medium py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center shadow-md hover:shadow-lg"
                   >
                     <span className="mr-2">💰</span>
                     Repay Loan
@@ -210,40 +207,40 @@ const EnhancedLoanScreen = () => {
               )}
 
               {collateralInfo && (
-                <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl p-4 border border-gray-100">
-                  <h4 className="font-semibold text-gray-800 mb-2 flex items-center">
+                <div className="bg-[var(--input-background)] rounded-xl p-4 border border-[var(--border-color)] hover:border-emerald-500 transition-all">
+                  <h4 className="font-semibold text-[var(--foreground)] mb-2 flex items-center">
                     {collateralInfo.isLocked ? (
-                      <Lock className="mr-2 text-purple-500" />
+                      <Lock className="mr-2 text-purple-400" />
                     ) : (
-                      <Unlock className="mr-2 text-yellow-500" />
+                      <Unlock className="mr-2 text-green-50 " />
                     )}
                     Collateral
                   </h4>
                   <div className="grid grid-cols-2 gap-2 text-sm">
                     <div>
-                      <span className="text-gray-500">Status:</span>
-                      <p className="font-medium">
+                      <span className="text-[var(--primary-color)]">Status:</span>
+                      <p className="font-medium text-[var(--foreground)]">
                         {collateralInfo.isLocked ? (
-                          <span className="text-green-600">Locked</span>
+                          <span className="text-emerald-400">Locked</span>
                         ) : (
-                          <span className="text-yellow-600">Unlocked</span>
+                          <span className="text-green-50 ">Unlocked</span>
                         )}
                       </p>
                     </div>
                     <div>
-                      <span className="text-gray-500">Asset:</span>
-                      <p className="font-medium">
+                      <span className="text-[var(--primary-color)]">Asset:</span>
+                      <p className="font-medium text-[var(--foreground)]">
                         {collateralInfo.asset} #{collateralInfo.tokenId}
                       </p>
                     </div>
                     <div>
-                      <span className="text-gray-500">Value:</span>
-                      <p className="font-medium">{collateralInfo.value} USDC</p>
+                      <span className="text-[var(--primary-color)]">Value:</span>
+                      <p className="font-medium text-[var(--foreground)]">{collateralInfo.value} USDC</p>
                     </div>
                   </div>
                   <button
                     onClick={() => window.location.href = '/collateral'}
-                    className="mt-3 w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center whitespace-nowrap"
+                    className="mt-3 w-full bg-[var(--primary-color)] hover:bg-emerald-600 text-[var(--foreground)] font-medium py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center shadow-md hover:shadow-lg"
                   >
                     <span className="mr-2">🔗</span>
                     Lock Collateral
@@ -253,39 +250,37 @@ const EnhancedLoanScreen = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-              <HandCoins className="mr-2 text-blue-500" />
+          <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+            <h3 className="text-xl font-semibold text-[var(--foreground)] mb-4 flex items-center">
+              <HandCoins className="mr-2 text-[var(--primary-color)]" />
               Request Loan
             </h3>
             
             <form onSubmit={handleRequestLoan} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-2 text-gray-700 flex items-center">
-                  <ArrowRight className="mr-1 text-blue-500" size={16} />
+                <label className="block text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
+                  <ArrowRight className="mr-1 text-[var(--primary-color)]" size={16} />
                   Loan Amount (USDC)
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   value={loanAmount}
-                  onChange={(e) => setLoanAmount(e.target.value)}
+                  onChange={(e) => setLoanAmount(e.target.value.replace(/[^0-9.]/g, ''))}
                   placeholder="100"
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  className="w-full p-3 bg-[var(--input-background)] border border-[var(--border-color)] rounded-lg text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all"
                   required
-                  min="0"
-                  step="0.01"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium mb-2 text-gray-700 flex items-center">
-                  <Clock className="mr-1 text-blue-500" size={16} />
+                <label className="block text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
+                  <Clock className="mr-1 text-[var(--primary-color)]" size={16} />
                   Duration (days)
                 </label>
                 <select
                   value={duration}
                   onChange={(e) => setDuration(e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  className="w-full p-3 bg-[var(--input-background)] border border-[var(--border-color)] rounded-lg text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all"
                 >
                   <option value="30">30 days</option>
                   <option value="60">60 days</option>
@@ -293,27 +288,27 @@ const EnhancedLoanScreen = () => {
                 </select>
               </div>
 
-              <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
-                <h4 className="font-medium text-blue-800 mb-2 flex items-center">
-                  <Shield className="mr-2 text-blue-500" />
+              <div className="bg-[var(--input-background)] rounded-xl p-4 border border-[var(--border-color)] hover:border-emerald-500 transition-all">
+                <h4 className="font-medium text-[var(--foreground)] mb-2 flex items-center">
+                  <Shield className="mr-2 text-[var(--primary-color)]" />
                   Loan Terms
                 </h4>
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div>
-                    <span className="text-blue-600">Interest Rate:</span>
-                    <p>5% (fixed)</p>
+                    <span className="text-[var(--primary-color)]">Interest Rate:</span>
+                    <p className="text-[var(--foreground)]">5% (fixed)</p>
                   </div>
                   <div>
-                    <span className="text-blue-600">Repayment:</span>
-                    <p>{loanAmount ? (parseFloat(loanAmount) * 1.05).toFixed(2) : '0'} USDC</p>
+                    <span className="text-[var(--primary-color)]">Repayment:</span>
+                    <p className="text-[var(--foreground)]">{loanAmount ? (parseFloat(loanAmount) * 1.05).toFixed(2) : '0'} USDC</p>
                   </div>
                   <div>
-                    <span className="text-blue-600">Collateral:</span>
-                    <p>Mock NFT</p>
+                    <span className="text-[var(--primary-color)]">Collateral:</span>
+                    <p className="text-[var(--foreground)]">Mock NFT</p>
                   </div>
                   <div>
-                    <span className="text-blue-600">Status:</span>
-                    <p>{collateralInfo?.isLocked ? 'Locked' : 'Unlocked'}</p>
+                    <span className="text-[var(--primary-color)]">Status:</span>
+                    <p className="text-[var(--foreground)]">{collateralInfo?.isLocked ? 'Locked' : 'Unlocked'}</p>
                   </div>
                 </div>
               </div>
@@ -321,10 +316,10 @@ const EnhancedLoanScreen = () => {
               <button
                 type="submit"
                 disabled={isLoading || !collateralInfo?.isLocked || !loanAmount || !duration || parseFloat(loanAmount) <= 0 || isNaN(parseFloat(loanAmount))}
-                className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all ${
+                className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all duration-200 ${
                   isLoading || !collateralInfo?.isLocked || !loanAmount || !duration || parseFloat(loanAmount) <= 0 || isNaN(parseFloat(loanAmount))
-                    ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-md hover:shadow-lg'
+                    ? 'bg-gray-600 cursor-not-allowed'
+                    : 'bg-[var(--primary-color)] hover:bg-emerald-600 text-[var(--foreground)] shadow-md hover:shadow-lg'
                 }`}
               >
                 {isLoading ? (
@@ -351,7 +346,6 @@ const EnhancedLoanScreen = () => {
               </button>
             </form>
           </div>
-
         </div>
       )}
     </div>

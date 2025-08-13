@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { NextRequest } from 'next/server';
 import { useWallet } from '../contexts/WalletContext';
 import { getTreasuryBalance, depositFunds, getGasFee, getConfirmationTime } from '../utils/web3';
 import { useTransactionTracker } from '../hooks/useTransactionTracker';
@@ -12,7 +13,10 @@ import {
   ExternalLink, Loader2, PieChart, 
   RefreshCw, Shield, TrendingUp, Wallet, Zap 
 } from 'lucide-react';
-import './components.css';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Pie } from 'react-chartjs-2';
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface TreasuryData {
   totalDeposits: string;
@@ -128,159 +132,222 @@ const TreasuryScreen = () => {
 
   const getTransactionIcon = (type: string) => {
     switch (type) {
-      case 'deposit': return <TrendingUp size={16} className="text-green-500" />;
-      case 'loan': return <Banknote size={16} className="text-blue-500" />;
-      case 'send': return <ArrowRight size={16} className="text-purple-500" />;
-      default: return <RefreshCw size={16} className="text-gray-500" />;
+      case 'deposit': return <TrendingUp size={16} className="text-[var(--primary-color)]" />;
+      case 'loan': return <Banknote size={16} className="text-[var(--primary-color)]" />;
+      case 'send': return <ArrowRight size={16} className="text-purple-400" />;
+      default: return <RefreshCw size={16} className="text-white" />;
+    }
+  };
+
+  const chartData = {
+    labels: ['Total Deposits', 'Total Loans', 'Available Liquidity'],
+    datasets: [
+      {
+        data: [
+          parseFloat(treasuryData.totalDeposits),
+          parseFloat(treasuryData.totalLoans),
+          parseFloat(treasuryData.availableLiquidity)
+        ],
+        backgroundColor: [
+          'rgba(34, 197, 94, 0.8)',  // emerald-500
+          'rgba(59, 130, 246, 0.8)', // blue-500
+          'rgba(147, 51, 234, 0.8)'  // purple-500
+        ],
+        borderColor: [
+          'rgba(34, 197, 94, 1)',
+          'rgba(59, 130, 246, 1)',
+          'rgba(147, 51, 234, 1)'
+        ],
+        borderWidth: 2
+      }
+    ]
+  };
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom' as const,
+        labels: {
+          color: 'rgb(156, 163, 175)',
+          font: {
+            size: 12
+          }
+        }
+      },
+      tooltip: {
+        callbacks: {
+          label: function(context: any) {
+            return `${context.label}: $${context.parsed}`;
+          }
+        }
+      }
     }
   };
 
   return (
-    <div className="treasury-container max-w-4xl mx-auto p-6 bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl shadow-lg">
+    <div className="max-w-full mx-auto p-6 bg-[var(--background)] rounded-2xl shadow-xl border border-[var(--border-color)]">
       <div className="flex flex-col items-center mb-6">
-        <div className="flex items-center justify-center mb-2">
-          <img src="/sonic-logo.png" alt="SonicFi" className="h-10 mr-3" />
-          <h2 className="text-3xl font-bold text-gray-800 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            SonicFi Treasury
-          </h2>
-        </div>
-        <div className="flex items-center space-x-4 text-sm text-gray-600">
+
+        <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm text-white">
           <div className="flex items-center">
-            <Zap size={16} className="mr-1 text-yellow-500" />
+            <Zap size={16} className="mr-1 text-[var(--primary-color)]" />
             <span>Powered by Sonic</span>
           </div>
           <div className="flex items-center">
-            <Clock size={16} className="mr-1 text-blue-500" />
+            <Clock size={16} className="mr-1 text-[var(--primary-color)]" />
             <span>{confirmationTime} confirmations</span>
           </div>
           <div className="flex items-center">
-            <Shield size={16} className="mr-1 text-green-500" />
+            <Shield size={16} className="mr-1 text-[var(--primary-color)]" />
             <span>{gasFee} fees</span>
           </div>
         </div>
       </div>
 
       {errorMessage && (
-        <div className="bg-red-50 border-l-4 border-red-500 rounded p-4 mb-6 flex items-center">
-          <Shield className="text-red-500 mr-2" />
-          <p className="text-red-600">{errorMessage}</p>
+        <div className="bg-red-800 border-l-4 border-red-500 rounded p-4 mb-6 flex items-center">
+          <Shield className="text-[var(--primary-color)] mr-2" />
+          <p className="text-red-200">{errorMessage}</p>
         </div>
       )}
 
       {!isConnected ? (
-        <div className="text-center py-12 bg-white rounded-xl shadow-sm p-6">
+        <div className="text-center py-12 bg-[var(--card-background)] rounded-2xl shadow-lg p-6 border border-[var(--border-color)]">
           <div className="max-w-md mx-auto">
-            <Wallet className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-700 mb-2">Connect Your Wallet</h3>
-            <p className="text-gray-500 mb-6">Connect your wallet to view treasury data</p>
+            <Wallet className="w-12 h-12 text-white mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-[var(--foreground)] mb-2">Connect Your Wallet</h3>
+            <p className="text-white mb-6">Connect your wallet to view treasury data</p>
             <ConnectWalletButton size="large" variant="primary" />
           </div>
         </div>
       ) : (
         <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <div className="flex items-center mb-2">
-                <TrendingUp className="text-green-500 mr-2" />
-                <h3 className="text-sm font-medium text-gray-500">Total Deposits</h3>
+          <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+            <h3 className="text-xl font-semibold text-[var(--foreground)] mb-4 flex items-center">
+              <PieChart className="mr-2 text-[var(--primary-color)]" />
+              Treasury Overview
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="bg-[var(--input-background)] rounded-xl p-6 border border-[var(--border-color)] hover:border-emerald-500 transition-all">
+                <div className="flex items-center mb-2">
+                  <TrendingUp className="text-[var(--primary-color)] mr-2" />
+                  <h3 className="text-sm font-medium text-white">Total Deposits</h3>
+                </div>
+                <p className="text-2xl font-bold text-[var(--foreground)]">
+                  ${loading ? '...' : treasuryData.totalDeposits}
+                </p>
               </div>
-              <p className="text-2xl font-bold text-green-600">
-                ${loading ? '...' : treasuryData.totalDeposits}
-              </p>
-            </div>
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <div className="flex items-center mb-2">
-                <Banknote className="text-blue-500 mr-2" />
-                <h3 className="text-sm font-medium text-gray-500">Total Loans</h3>
+              <div className="bg-[var(--input-background)] rounded-xl p-6 border border-[var(--border-color)] hover:border-emerald-500 transition-all">
+                <div className="flex items-center mb-2">
+                  <Banknote className="text-[var(--primary-color)] mr-2" />
+                  <h3 className="text-sm font-medium text-white">Total Loans</h3>
+                </div>
+                <p className="text-2xl font-bold text-[var(--foreground)]">
+                  ${loading ? '...' : treasuryData.totalLoans}
+                </p>
               </div>
-              <p className="text-2xl font-bold text-blue-600">
-                ${loading ? '...' : treasuryData.totalLoans}
-              </p>
-            </div>
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <div className="flex items-center mb-2">
-                <PieChart className="text-purple-500 mr-2" />
-                <h3 className="text-sm font-medium text-gray-500">Available Liquidity</h3>
+              <div className="bg-[var(--input-background)] rounded-xl p-6 border border-[var(--border-color)] hover:border-emerald-500 transition-all">
+                <div className="flex items-center mb-2">
+                  <PieChart className="text-[var(--primary-color)] mr-2" />
+                  <h3 className="text-sm font-medium text-white">Available Liquidity</h3>
+                </div>
+                <p className="text-2xl font-bold text-[var(--foreground)]">
+                  ${loading ? '...' : treasuryData.availableLiquidity}
+                </p>
               </div>
-              <p className="text-2xl font-bold text-purple-600">
-                ${loading ? '...' : treasuryData.availableLiquidity}
-              </p>
-            </div>
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <div className="flex items-center mb-2">
-                <Shield className="text-orange-500 mr-2" />
-                <h3 className="text-sm font-medium text-gray-500">Utilization Rate</h3>
+              <div className="bg-[var(--input-background)] rounded-xl p-6 border border-[var(--border-color)] hover:border-emerald-500 transition-all">
+                <div className="flex items-center mb-2">
+                  <Shield className="text-[var(--primary-color)] mr-2" />
+                  <h3 className="text-sm font-medium text-white">Utilization Rate</h3>
+                </div>
+                <p className="text-2xl font-bold text-[var(--foreground)]">
+                  {loading ? '...' : treasuryData.utilizationRate}%
+                </p>
               </div>
-              <p className="text-2xl font-bold text-orange-600">
-                {loading ? '...' : treasuryData.utilizationRate}%
-              </p>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h3 className="text-xl font-semibold mb-4 flex items-center">
-              <Banknote className="mr-2 text-blue-500" />
+          <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+            <h3 className="text-xl font-semibold text-[var(--foreground)] mb-4 flex items-center">
+              <PieChart className="mr-2 text-[var(--primary-color)]" />
+              Treasury Distribution
+            </h3>
+            {loading ? (
+              <div className="text-center py-8">
+                <Loader2 className="animate-spin rounded-full h-8 w-8 text-[var(--primary-color)] mx-auto" />
+                <p className="text-white mt-2">Loading treasury data...</p>
+              </div>
+            ) : (
+              <div className="h-64">
+                <Pie data={chartData} options={chartOptions} />
+              </div>
+            )}
+          </div>
+
+          <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+            <h3 className="text-xl font-semibold text-[var(--foreground)] mb-4 flex items-center">
+              <Banknote className="mr-2 text-[var(--primary-color)]" />
               Treasury Contract
             </h3>
             <div className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-gray-600">Contract Address:</span>
+                <span className="text-white">Contract Address:</span>
                 <div className="flex items-center">
-                  <span className="font-mono text-sm">
+                  <span className="font-mono text-sm text-[var(--foreground)]">
                     {TREASURY_CONTRACT_ADDRESS.substring(0, 6)}...
                     {TREASURY_CONTRACT_ADDRESS.substring(38)}
                   </span>
                   <button 
                     onClick={copyAddress}
-                    className="ml-2 text-gray-400 hover:text-gray-600"
+                    className="ml-2 text-white hover:text-[var(--primary-color)]"
                   >
                     <Copy size={14} />
                   </button>
                 </div>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Network:</span>
-                <span className="font-medium">Sonic Testnet</span>
+                <span className="text-white">Network:</span>
+                <span className="font-medium text-[var(--foreground)]">Sonic Testnet</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Status:</span>
-                <span className="text-green-600 font-medium flex items-center">
-                  <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                <span className="text-white">Status:</span>
+                <span className="text-[var(--primary-color)] font-medium flex items-center">
+                  <div className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>
                   Active
                 </span>
               </div>
             </div>
           </div>
 
-          <div className="bg-green-50 rounded-xl shadow-sm p-6 border border-green-100">
-            <h3 className="text-xl font-semibold mb-4 flex items-center">
-              <TrendingUp className="mr-2 text-green-500" />
+          <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+            <h3 className="text-xl font-semibold text-[var(--foreground)] mb-4 flex items-center">
+              <TrendingUp className="mr-2 text-[var(--primary-color)]" />
               Deposit to Treasury
             </h3>
             <form onSubmit={handleDeposit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-2 text-green-700 flex items-center">
-                  <Banknote className="mr-2 text-green-500" size={16} />
+                <label className="block text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
+                  <Banknote className="mr-2 text-[var(--primary-color)]" size={16} />
                   Amount (USDC)
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   value={depositAmount}
-                  onChange={(e) => setDepositAmount(e.target.value)}
+                  onChange={(e) => setDepositAmount(e.target.value.replace(/[^0-9.]/g, ''))}
                   placeholder="100"
-                  className="w-full p-3 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                  className="w-full p-3 bg-[var(--input-background)] border border-[var(--border-color)] rounded-lg text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all"
                   required
-                  min="0"
-                  step="0.01"
                 />
               </div>
               <button
                 type="submit"
                 disabled={isDepositing || loading}
-                className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all ${
+                className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all duration-200 ${
                   isDepositing || loading
-                    ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-md hover:shadow-lg'
+                    ? 'bg-gray-600 cursor-not-allowed'
+                    : 'bg-[var(--primary-color)] hover:bg-emerald-600 text-[var(--foreground)] shadow-md hover:shadow-lg'
                 }`}
               >
                 {isDepositing || loading ? (
@@ -295,53 +362,53 @@ const TreasuryScreen = () => {
                   </>
                 )}
               </button>
-              <p className="text-xs text-green-600 mt-2">
+              <p className="text-xs text-white mt-2">
                 Mock implementation. Real treasury deposits would be used in production.
               </p>
             </form>
           </div>
 
           {transactions.filter(tx => tx.type === 'deposit').length > 0 && (
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <h3 className="text-xl font-semibold mb-4 flex items-center">
-                <RefreshCw className="mr-2 text-blue-500" />
+            <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+              <h3 className="text-xl font-semibold text-[var(--foreground)] mb-4 flex items-center">
+                <RefreshCw className="mr-2 text-[var(--primary-color)]" />
                 Recent Treasury Transactions
               </h3>
               <div className="space-y-3 max-h-64 overflow-y-auto pr-2">
                 {transactions
                   .filter(tx => tx.type === 'deposit')
                   .map(tx => (
-                    <div key={tx.hash} className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                    <div key={tx.hash} className="p-3 bg-[var(--input-background)] rounded-lg hover:bg-gray-700 transition-colors">
                       <div className="flex items-start">
                         <div className="mt-1 mr-3">
                           {getTransactionIcon(tx.type)}
                         </div>
                         <div className="flex-1">
                           <div className="flex justify-between items-start">
-                            <span className="capitalize font-medium text-gray-800">{tx.type}</span>
+                            <span className="capitalize font-medium text-[var(--foreground)]">{tx.type}</span>
                             <span
                               className={`text-xs px-2 py-1 rounded-full ${
                                 tx.status === 'success'
-                                  ? 'bg-green-100 text-green-800'
+                                  ? 'bg-emerald-600 text-[var(--foreground)]'
                                   : tx.status === 'failed'
-                                  ? 'bg-red-100 text-red-800'
-                                  : 'bg-yellow-100 text-yellow-800'
+                                  ? 'bg-red-600 text-[var(--foreground)]'
+                                  : 'bg-yellow-600 text-[var(--foreground)]'
                               }`}
                             >
                               {tx.status}
                             </span>
                           </div>
                           {tx.amount && tx.token && (
-                            <div className="text-sm text-gray-600 mt-1">
+                            <div className="text-sm text-white mt-1">
                               {tx.amount} {tx.token}
                             </div>
                           )}
-                          <div className="mt-2 flex items-center text-xs text-gray-500">
+                          <div className="mt-2 flex items-center text-xs text-white">
                             <a
                               href={`https://explorer.soniclabs.com/tx/${tx.hash}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="flex items-center hover:text-blue-600"
+                              className="flex items-center hover:text-[var(--primary-color)]"
                             >
                               {tx.hash.substring(0, 8)}...{tx.hash.substring(36)}
                               <ExternalLink size={12} className="ml-1" />
@@ -355,12 +422,12 @@ const TreasuryScreen = () => {
             </div>
           )}
 
-          <div className="bg-blue-50 rounded-xl p-6 border border-blue-100">
-            <h4 className="font-semibold text-blue-900 mb-2 flex items-center">
-              <Shield className="mr-2 text-blue-500" />
+          <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+            <h4 className="font-semibold text-[var(--foreground)] mb-2 flex items-center">
+              <Shield className="mr-2 text-[var(--primary-color)]" />
               Treasury Management
             </h4>
-            <p className="text-sm text-blue-700">
+            <p className="text-sm text-white">
               The SonicFi treasury manages all deposits and loans, enabling micro-lending for unbanked users. Powered by Sonic's fast transactions and low fees.
             </p>
           </div>

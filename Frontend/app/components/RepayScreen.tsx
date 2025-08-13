@@ -7,7 +7,7 @@ import { useTransactionTracker } from '../hooks/useTransactionTracker';
 import { getUserLoan, repayLoan, getBalance, getGasFee, getConfirmationTime, TOKEN_ADDRESSES, TOKEN_DECIMALS } from '../utils/web3';
 import ConnectWalletButton from './ConnectWalletButton';
 import { ethers } from 'ethers';
-import './components.css';
+import { Clock, Loader2, Shield, Wallet, Zap } from 'lucide-react';
 
 interface LoanInfo {
   amount: string;
@@ -16,7 +16,7 @@ interface LoanInfo {
   collateral: string;
 }
 
-const RepayScreen = () => {
+const EnhancedRepayScreen = () => {
   const { isConnected, userAddress } = useWallet();
   const { trackTransaction } = useTransactionTracker();
   const [loanInfo, setLoanInfo] = useState<LoanInfo | null>(null);
@@ -122,92 +122,128 @@ const RepayScreen = () => {
   };
 
   return (
-    <div className="repay-container max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
-      <div className="flex items-center justify-center mb-4">
-        <img src="/sonic-logo.png" alt="SonicFi" className="h-8 mr-2" />
-        <h2 className="text-2xl font-bold text-gray-800">SonicFi Loan Repayment</h2>
+    <div className="max-w-md mx-auto p-6 bg-[var(--background)] rounded-2xl shadow-xl border border-[var(--border-color)]">
+      <div className="flex flex-col items-center mb-6">
+        <div className="flex items-center justify-center mb-2">
+          <img src="/sonic-logo.png" alt="SonicFi" className="h-10 mr-3" />
+          <h2 className="text-3xl font-bold text-[var(--primary-color)]">
+            SonicFi Loan Repayment
+          </h2>
+        </div>
+        <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm text-gray-300">
+          <div className="flex items-center">
+            <Zap size={16} className="mr-1 text-yellow-400" />
+            <span>Powered by Sonic</span>
+          </div>
+          <div className="flex items-center">
+            <Clock size={16} className="mr-1 text-[var(--primary-color)]" />
+            <span>{confirmationTime}</span>
+          </div>
+          <div className="flex items-center">
+            <Shield size={16} className="mr-1 text-[var(--primary-color)]" />
+            <span>{gasFee}</span>
+          </div>
+        </div>
       </div>
-      <p className="text-xs text-center text-gray-500 mb-4">
-        Powered by Sonic: {confirmationTime} confirmations, {gasFee} fees
-      </p>
 
       {errorMessage && (
-        <div className="bg-red-50 p-3 rounded mb-4">
-          <p className="text-sm text-red-700">{errorMessage}</p>
+        <div className="bg-red-800 border-l-4 border-red-500 rounded p-4 mb-6 flex items-center">
+          <Shield className="text-red-400 mr-2" />
+          <p className="text-red-200">{errorMessage}</p>
         </div>
       )}
 
       {!isConnected ? (
-        <div className="text-center py-12">
-          <p className="text-gray-600 mb-4">Connect your wallet to repay loans</p>
-          <ConnectWalletButton size="large" variant="primary" />
+        <div className="text-center py-12 bg-[var(--card-background)] rounded-2xl shadow-lg p-6 border border-[var(--border-color)]">
+          <div className="max-w-md mx-auto">
+            <Wallet className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-[var(--foreground)] mb-2">Connect Your Wallet</h3>
+            <p className="text-gray-400 mb-6">Connect your wallet to repay loans</p>
+            <ConnectWalletButton size="large" variant="primary" />
+          </div>
         </div>
       ) : (
-        <div className="repay-card">
-          <form onSubmit={handleRepay} className="bg-white rounded-lg shadow-md p-6 space-y-4">
+        <div className="space-y-6">
+          <form onSubmit={handleRepay} className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)] space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-1 text-gray-700">Loan Amount</label>
+              <label className="block text-sm font-medium mb-1 text-[var(--foreground)] flex items-center">
+                <Shield className="mr-2 text-[var(--primary-color)]" size={16} />
+                Loan Amount
+              </label>
               <input
                 type="text"
                 value={loanInfo ? `${loanInfo.amount} ${selectedToken}` : 'Loading...'}
-                className="form-input w-full bg-gray-50"
+                className="w-full p-3 bg-[var(--input-background)] border border-[var(--border-color)] rounded-lg text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all"
                 readOnly
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1 text-gray-700">Interest</label>
+              <label className="block text-sm font-medium mb-1 text-[var(--foreground)] flex items-center">
+                <Shield className="mr-2 text-[var(--primary-color)]" size={16} />
+                Interest
+              </label>
               <input
                 type="text"
                 value={loanInfo ? `${loanInfo.interest} ${selectedToken}` : 'Loading...'}
-                className="form-input w-full bg-gray-50"
+                className="w-full p-3 bg-[var(--input-background)] border border-[var(--border-color)] rounded-lg text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all"
                 readOnly
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1 text-gray-700">Due Date</label>
+              <label className="block text-sm font-medium mb-1 text-[var(--foreground)] flex items-center">
+                <Clock className="mr-2 text-[var(--primary-color)]" size={16} />
+                Due Date
+              </label>
               <input
                 type="text"
                 value={loanInfo ? loanInfo.dueDate : 'Loading...'}
-                className="form-input w-full bg-gray-50"
+                className="w-full p-3 bg-[var(--input-background)] border border-[var(--border-color)] rounded-lg text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all"
                 readOnly
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1 text-gray-700">Collateral</label>
+              <label className="block text-sm font-medium mb-1 text-[var(--foreground)] flex items-center">
+                <Shield className="mr-2 text-[var(--primary-color)]" size={16} />
+                Collateral
+              </label>
               <input
                 type="text"
                 value={loanInfo ? loanInfo.collateral : 'Loading...'}
-                className="form-input w-full bg-gray-50"
+                className="w-full p-3 bg-[var(--input-background)] border border-[var(--border-color)] rounded-lg text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all"
                 readOnly
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1 text-gray-700">Repay Amount</label>
+              <label className="block text-sm font-medium mb-1 text-[var(--foreground)] flex items-center">
+                <Shield className="mr-2 text-[var(--primary-color)]" size={16} />
+                Repay Amount
+              </label>
               <input
-                type="number"
+                type="text"
                 value={repayAmount}
-                onChange={(e) => setRepayAmount(e.target.value)}
+                onChange={(e) => setRepayAmount(e.target.value.replace(/[^0-9.]/g, ''))}
                 placeholder="0.0"
-                className="form-input w-full"
+                className="w-full p-3 bg-[var(--input-background)] border border-[var(--border-color)] rounded-lg text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all"
                 required
-                min="0"
-                step="0.01"
               />
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-gray-400 mt-1">
                 Balance: {balances[selectedToken] || '0'} {selectedToken}
               </p>
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1 text-gray-700">Token</label>
+              <label className="block text-sm font-medium mb-1 text-[var(--foreground)] flex items-center">
+                <Shield className="mr-2 text-[var(--primary-color)]" size={16} />
+                Token
+              </label>
               <select
                 value={selectedToken}
                 onChange={(e) => setSelectedToken(e.target.value)}
-                className="form-select w-full"
+                className="w-full p-3 bg-[var(--input-background)] border border-[var(--border-color)] rounded-lg text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all"
               >
                 {tokens.map(token => (
                   <option key={token} value={token}>{token}</option>
@@ -218,15 +254,25 @@ const RepayScreen = () => {
             <button
               type="submit"
               disabled={isProcessing || !repayAmount || !loanInfo}
-              className={`w-full font-bold py-2 px-4 rounded ${
+              className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all duration-200 ${
                 isProcessing || !repayAmount || !loanInfo
-                  ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-orange-500 hover:bg-orange-600 text-white'
+                  ? 'bg-gray-600 cursor-not-allowed'
+                  : 'bg-[var(--primary-color)] hover:bg-emerald-600 text-[var(--foreground)] shadow-md hover:shadow-lg'
               }`}
             >
-              {isProcessing ? 'Processing...' : 'Repay Loan'}
+              {isProcessing ? (
+                <>
+                  <Loader2 className="animate-spin h-5 w-5" />
+                  <span>Processing...</span>
+                </>
+              ) : (
+                <>
+                  <Shield size={18} />
+                  <span>Repay Loan</span>
+                </>
+              )}
             </button>
-            <p className="text-xs text-gray-500 mt-2">
+            <p className="text-xs text-gray-400 mt-2 text-center">
               Mock implementation. Real loan repayments would be used in production.
             </p>
           </form>
@@ -236,4 +282,4 @@ const RepayScreen = () => {
   );
 };
 
-export default RepayScreen;
+export default EnhancedRepayScreen;

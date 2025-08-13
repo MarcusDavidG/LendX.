@@ -17,12 +17,8 @@ import AnimatedLink from '../../../components/Common/AnimatedLink';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { links, menu } from './constants';
-import { Sun, Moon } from 'lucide-react';
-import { useTheme } from '../../../../../app/contexts/ThemeContext';
-
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { isDarkMode, toggleTheme } = useTheme();
 
   return (
     <Wrapper>
@@ -49,17 +45,6 @@ const Header = () => {
           ))}
         </Nav>
         <CallToActions className={isOpen ? 'active' : ''}>
-          <button
-            onClick={toggleTheme}
-            className="p-2 rounded-full bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
-            aria-label="Toggle theme"
-          >
-            {isDarkMode ? (
-              <Sun className="w-5 h-5 text-yellow-500" />
-            ) : (
-              <Moon className="w-5 h-5 text-gray-700" />
-            )}
-          </button>
           <GetStartedButton />
         </CallToActions>
       </Inner>
