@@ -15,7 +15,6 @@ export default function AppLayout({ children }: AppLayoutProps) {
         display: 'flex', 
         flexDirection: 'column', 
         minHeight: '100vh',
-        paddingTop: '80px' // Account for sticky header height
       }}>
         <main style={{ flex: 1 }}>
           {children}

@@ -9,7 +9,7 @@ const FooterContainer = styled.footer`
   color: var(--text-color);
   padding: 4rem 0 1.5rem;
   position: relative;
-  margin-top: auto;
+  margin-top: 0;
 `;
 
 const FooterContent = styled.div`

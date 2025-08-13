@@ -101,7 +101,7 @@ const EnhancedLoanScreen = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-[var(--background)] rounded-2xl shadow-xl border border-[var(--border-color)]">
+    <div className="max-w-lg  max-h-full bg-[var(--background)] rounded-2xl shadow-xl border border-[var(--border-color)]">
       <div className="flex flex-col items-center mb-6">
         <div className="flex items-center justify-center">
           <h2 className="text-3xl font-bold text-[var(--primary-color)]">
