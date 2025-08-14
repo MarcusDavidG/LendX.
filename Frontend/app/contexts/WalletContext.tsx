@@ -10,7 +10,7 @@ interface WalletContextType {
   isConnecting: boolean;
   error: string | null;
   connectWallet: () => Promise<void>;
-  disconnectWallet: () => void;
+  disconnectWallet: () => Promise<void>;
   refreshBalance: () => Promise<void>;
 }
 
@@ -116,7 +116,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
       }
     } catch (error) {
       setError('Connection verification failed');
-      disconnectWallet();
+      await disconnectWallet();
     }
   };
 
@@ -150,15 +150,44 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     } catch (error: any) {
       console.error('Failed to connect wallet:', error);
       setError(error.message || 'Failed to connect wallet');
-      disconnectWallet();
+      await disconnectWallet();
     } finally {
       setIsConnecting(false);
     }
   };
 
-  const disconnectWallet = () => {
-    clearWalletState();
-    setError(null);
+  const disconnectWallet = async () => {
+    try {
+      // Check if MetaMask is installed and connected
+      if (window.ethereum) {
+        try {
+          // Attempt to disconnect from MetaMask by revoking permissions
+          await window.ethereum.request({
+            method: 'wallet_revokePermissions',
+            params: [
+              {
+                eth_accounts: {},
+              },
+            ],
+          });
+        } catch (err) {
+          console.warn('MetaMask revoke permissions not supported:', err);
+        }
+
+        // Remove MetaMask event listeners
+        if (window.ethereum.isMetaMask) {
+          window.ethereum.removeAllListeners(['accountsChanged', 'chainChanged']);
+        }
+      }
+
+      // Clear app state
+      clearWalletState();
+      setError(null);
+    } catch (error: any) {
+      console.error('Disconnection error:', error);
+      setError(error.message || 'Failed to disconnect wallet');
+      throw error; // Propagate error to the caller
+    }
   };
 
   const refreshBalance = async () => {
