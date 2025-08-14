@@ -245,17 +245,17 @@ const DashboardScreen = () => {
   // Wallet View Component
   const WalletView = () => (
     <div className="space-y-6 ">
-      <div className="bg-gradient-to-br from-[var(--card-background)] to-[var(--card-background-dark)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+      <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-xl font-semibold text-[var(--foreground)] flex items-center">
             <Wallet className="mr-2 text-[var(--primary-color)]" />
-            Wallet Balances
+            Balances
           </h3>
           <div className="flex items-center space-x-2">
             <button
               onClick={fetchWalletBalances}
               disabled={loading}
-              className={`flex items-center space-x-1 bg-[var(--primary-color)] hover:bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+              className={`text-sm font-medium transition-all duration-200 ${
                 loading ? 'opacity-50 cursor-not-allowed' : ''
               }`}
             >
@@ -264,7 +264,6 @@ const DashboardScreen = () => {
               ) : (
                 <RefreshCw size={16} />
               )}
-              <span>Refresh</span>
             </button>
             <ConnectWalletButton size="small" variant="outline" />
           </div>
@@ -275,11 +274,11 @@ const DashboardScreen = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <div className="p-2 bg-emerald-500/10 rounded-lg mr-3 group-hover:bg-emerald-500/20 transition-colors">
-                  <Gem className="text-emerald-400" />
+                  <Gem className="text-[var(--primary-color)]" />
                 </div>
                 <div>
                   <span className="font-medium text-[var(--foreground)]">S Token</span>
-                  <p className="text-xs text-[var(--text-secondary)]">Native Token</p>
+                  <p className="text-xs text-[var(--primary-color)]">Native Token</p>
                 </div>
               </div>
               <div className="text-right">
@@ -292,11 +291,11 @@ const DashboardScreen = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <div className="p-2 bg-blue-500/10 rounded-lg mr-3 group-hover:bg-blue-500/20 transition-colors">
-                  <Banknote className="text-blue-400" />
+                  <Banknote className="text-[var(--primary-color)]" />
                 </div>
                 <div>
                   <span className="font-medium text-[var(--foreground)]">USDC</span>
-                  <p className="text-xs text-[var(--text-secondary)]">Stablecoin</p>
+                  <p className="text-xs text-[var(--primary-color)]">Stablecoin</p>
                 </div>
               </div>
               <div className="text-right">
@@ -307,7 +306,7 @@ const DashboardScreen = () => {
           </div>
         </div>
 
-        <div className="text-xs text-[var(--text-secondary)] flex items-center justify-between">
+        <div className="text-xs text-[var(--primary-color)] flex items-center justify-between">
           <span>Last updated: {formatLastUpdate()}</span>
           <button
             onClick={() => userAddress && copyAddress(userAddress)}
@@ -320,7 +319,7 @@ const DashboardScreen = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-gradient-to-br from-[var(--card-background)] to-[var(--card-background-dark)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+        <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
           <h3 className="text-xl font-semibold text-[var(--foreground)] mb-4 flex items-center">
             <Send className="mr-2 text-[var(--primary-color)]" />
             Send Tokens
@@ -355,7 +354,7 @@ const DashboardScreen = () => {
                 className="w-full p-3 bg-[var(--input-background)] border border-[var(--border-color)] rounded-lg text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all"
                 required
               />
-              <div className="text-xs text-[var(--text-secondary)] mt-1">
+              <div className="text-xs text-[var(--primary-color)] mt-1">
                 Available: {walletBalance[sendToken as keyof typeof walletBalance]} {sendToken}
               </div>
             </div>
@@ -381,7 +380,7 @@ const DashboardScreen = () => {
               className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all duration-200 ${
                 isSending || loading
                   ? 'bg-gray-600 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-[var(--primary-color)] to-emerald-900 hover:from-emerald-900 hover:to-emerald-700 text-white shadow-md hover:shadow-lg'
+                  : 'bg-[var(--primary-color)] hover:from-emerald-900 hover:to-emerald-700 text-white shadow-md hover:shadow-lg'
               }`}
             >
               {isSending || loading ? (
@@ -399,7 +398,7 @@ const DashboardScreen = () => {
           </form>
         </div>
 
-        <div className="bg-gradient-to-br from-[var(--card-background)] to-[var(--card-background-dark)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+        <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
           <h3 className="text-xl font-semibold text-[var(--foreground)] mb-4 flex items-center">
             <Smartphone className="mr-2 text-[var(--primary-color)]" />
             Fiat To Crypto Deposit (Mock)
@@ -448,7 +447,7 @@ const DashboardScreen = () => {
               className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all duration-200 ${
                 isMpesaProcessing
                   ? 'bg-gray-600 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-[var(--primary-color)] to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-md hover:shadow-lg'
+                  : 'bg-[var(--primary-color)] hover:from-emerald-600 hover:to-emerald-700 text-white shadow-md hover:shadow-lg'
               }`}
             >
               {isMpesaProcessing ? (
@@ -465,7 +464,7 @@ const DashboardScreen = () => {
             </button>
           </form>
           
-          <p className="text-xs text-[var(--text-secondary)] mt-4">
+          <p className="text-xs text-[var(--primary-color)] mt-4">
             Mock implementation. Real M-Pesa API would be used in production.
           </p>
         </div>
@@ -476,7 +475,7 @@ const DashboardScreen = () => {
   // Overview View Component
   const OverviewView = () => (
     <div className="space-y-6">
-      <div className="bg-gradient-to-br from-[var(--card-background)] to-[var(--card-background-dark)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+      <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-xl font-semibold text-[var(--foreground)] flex items-center">
             <Gem className="mr-2 text-[var(--primary-color)]" />
@@ -550,7 +549,7 @@ const DashboardScreen = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-gradient-to-br from-[var(--card-background)] to-[var(--card-background-dark)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+        <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
           <h3 className="text-xl font-semibold text-[var(--foreground)] mb-5 flex items-center">
             <Zap className="mr-2 text-[var(--primary-color)]" />
             Quick Actions
@@ -607,7 +606,7 @@ const DashboardScreen = () => {
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-[var(--card-background)] to-[var(--card-background-dark)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+        <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
           <div className="flex justify-between items-center mb-5">
             <h3 className="text-xl font-semibold text-[var(--foreground)] flex items-center">
               <History className="mr-2 text-[var(--primary-color)]" />
@@ -671,26 +670,10 @@ const DashboardScreen = () => {
 
   return (
     <div className="max-w-6xl mx-auto ">
-      {/* Network Status Bar */}
-      <div className="flex flex-col items-center mb-6 ">
-        <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-white bg-[var(--card-background)] px-4 py-2 rounded-full border border-[var(--border-color)]">
-          <div className="flex items-center">
-            <Zap size={16} className="mr-2 text-[var(--primary-color)]" />
-            <span>Powered by Sonic</span>
-          </div>
-          <div className="flex items-center">
-            <Clock size={16} className="mr-2 text-[var(--primary-color)]" />
-            <span>{confirmationTime} confirmations</span>
-          </div>
-          <div className="flex items-center">
-            <Sparkles size={16} className="mr-2 text-[var(--primary-color)]" />
-            <span>{gasFee} fees</span>
-          </div>
-        </div>
-      </div>
+
 
       {/* Tab Navigation */}
-      <div className="mb-6">
+      <div className="">
         <div className="border-b border-[var(--border-color)]">
           <nav className="-mb-px flex gap-8">
             <button
@@ -698,7 +681,7 @@ const DashboardScreen = () => {
               className={`whitespace-nowrap py-2 px-4 border-b-2 font-medium text-sm flex items-center ${
                 activeTab === 'wallet'
                   ? 'border-[var(--primary-color)] text-[var(--primary-color)]'
-                  : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--foreground)] hover:border-gray-500'
+                  : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--primary-color)] hover:border-gray-500'
               }`}
             >
               <Wallet className="inline-block mr-2 h-4 w-4" />
@@ -709,7 +692,7 @@ const DashboardScreen = () => {
               className={`whitespace-nowrap py-2 px-4 border-b-2 font-medium text-sm flex items-center ${
                 activeTab === 'overview'
                   ? 'border-[var(--primary-color)] text-[var(--primary-color)]'
-                  : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--foreground)] hover:border-gray-500'
+                  : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--primary-color)] hover:border-gray-500'
               }`}
             >
               <Home className="inline-block mr-2 h-4 w-4" />
@@ -720,7 +703,7 @@ const DashboardScreen = () => {
               className={`whitespace-nowrap py-2 px-4 border-b-2 font-medium text-sm flex items-center ${
                 activeTab === 'activity'
                   ? 'border-[var(--primary-color)] text-[var(--primary-color)]'
-                  : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--foreground)] hover:border-gray-500'
+                  : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--primary-color)] hover:border-gray-500'
               }`}
             >
               <History className="inline-block mr-2 h-4 w-4" />
@@ -738,7 +721,7 @@ const DashboardScreen = () => {
       )}
 
       {!isConnected ? (
-        <div className="text-center py-12 bg-gradient-to-br from-[var(--card-background)] to-[var(--card-background-dark)] rounded-2xl shadow-lg p-6 border border-[var(--border-color)]">
+        <div className="text-center py-12 bg-[var(--card-background)] rounded-2xl shadow-lg p-6 border border-[var(--border-color)]">
           <div className="max-w-md mx-auto">
             <Wallet className="w-12 h-12 text-[var(--primary-color)] mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-[var(--foreground)] mb-2">Connect Your Wallet</h3>
@@ -751,7 +734,7 @@ const DashboardScreen = () => {
           {activeTab === 'wallet' && <WalletView />}
           {activeTab === 'overview' && <OverviewView />}
           {activeTab === 'activity' && (
-            <div className="bg-gradient-to-br from-[var(--card-background)] to-[var(--card-background-dark)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+            <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
               <h3 className="text-xl font-semibold text-[var(--foreground)] mb-5 flex items-center">
                 <History className="mr-2 text-[var(--primary-color)]" />
                 Transaction History
