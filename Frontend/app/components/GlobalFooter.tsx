@@ -128,70 +128,6 @@ const BrandHeader = styled.div`
   }
 `;
 
-const QRCodeSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1.5rem;
-`;
-
-const QRCode = styled.div`
-  width: 140px;
-  height: 140px;
-  background: linear-gradient(145deg, #ffffff, #f0f0f0);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #333;
-  font-size: 0.75rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-  }
-`;
-
-const AppStores = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  width: 100%;
-  max-width: 200px;
-`;
-
-const AppStoreButton = styled.button`
-  background: var(--card-background);
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  padding: 0.75rem 1rem;
-  color: var(--text-color);
-  font-size: 0.9375rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  width: 100%;
-
-  &:hover {
-    background: var(--input-background);
-    border-color: var(--primary-color);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-  }
-
-  svg {
-    transition: transform 0.2s ease;
-  }
-
-  &:hover svg {
-    transform: translateY(-1px);
-  }
-`;
-
 const FooterBottom = styled.div`
   border-top: 1px solid var(--border-color);
   padding-top: 1.5rem;
@@ -329,17 +265,6 @@ const GlobalFooter = () => {
           </FooterSection>
 
           <FooterSection>
-            <h3>Products</h3>
-            <ul>
-              <li><a href="/lending">Lending</a></li>
-              <li><a href="/borrowing">Borrowing</a></li>
-              <li><a href="/staking">Staking</a></li>
-              <li><a href="/swap">Swap</a></li>
-              <li><a href="/wallet">Wallet</a></li>
-            </ul>
-          </FooterSection>
-
-          <FooterSection>
             <h3>Resources</h3>
             <ul>
               <li><a href="/help">Help Center</a></li>
@@ -350,22 +275,7 @@ const GlobalFooter = () => {
             </ul>
           </FooterSection>
 
-          <QRCodeSection>
-            <h3>Download App</h3>
-            <QRCode>
-              <div>Scan to Download</div>
-            </QRCode>
-            <AppStores>
-              <AppStoreButton>
-                <Download size={18} />
-                Google Play
-              </AppStoreButton>
-              <AppStoreButton>
-                <Download size={18} />
-                App Store
-              </AppStoreButton>
-            </AppStores>
-          </QRCodeSection>
+
         </FooterGrid>
 
         <FooterBottom>

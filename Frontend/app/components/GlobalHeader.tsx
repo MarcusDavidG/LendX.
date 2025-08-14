@@ -170,10 +170,8 @@ const GlobalHeader = () => {
   const navigationItems = [
     { name: 'Dashboard', href: '/dashboard' },
     { name: 'Loans', href: '/loan' },
-    { name: 'Treasury', href: '/treasury' },
-    { name: 'Collateral', href: '/collateral' },
-    { name: 'Repay', href: '/repay' },
     { name: 'Swap', href: '/swap' },
+    { name: 'Treasury', href: '/treasury' },
   ];
 
   return (

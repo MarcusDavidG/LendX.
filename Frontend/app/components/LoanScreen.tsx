@@ -102,7 +102,7 @@ const EnhancedLoanScreen = () => {
 
   return (
     <div className="max-w-lg  max-h-full bg-[var(--background)] rounded-2xl shadow-xl border border-[var(--border-color)]">
-      <div className="flex flex-col items-center mb-6">
+      <div className="flex flex-col items-center ">
         <div className="flex items-center justify-center">
           <h2 className="text-3xl font-bold text-[var(--primary-color)]">
             Request A Loan
@@ -258,7 +258,7 @@ const EnhancedLoanScreen = () => {
             
             <form onSubmit={handleRequestLoan} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
+                <label className=" text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
                   <ArrowRight className="mr-1 text-[var(--primary-color)]" size={16} />
                   Loan Amount (USDC)
                 </label>
@@ -273,7 +273,7 @@ const EnhancedLoanScreen = () => {
               </div>
               
               <div>
-                <label className="block text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
+                <label className=" text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
                   <Clock className="mr-1 text-[var(--primary-color)]" size={16} />
                   Duration (days)
                 </label>

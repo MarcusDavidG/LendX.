@@ -252,19 +252,12 @@ const DashboardScreen = () => {
             Balances
           </h3>
           <div className="flex items-center space-x-2">
-            <button
-              onClick={fetchWalletBalances}
-              disabled={loading}
-              className={`text-sm font-medium transition-all duration-200 ${
-                loading ? 'opacity-50 cursor-not-allowed' : ''
-              }`}
-            >
-              {loading ? (
-                <Loader2 className="animate-spin h-4 w-4" />
-              ) : (
-                <RefreshCw size={16} />
-              )}
+ 
+            <button onClick={fetchWalletBalances} disabled={loading} className={`text-sm font-medium transition-all duration-200 text-[var(--primary-color)] ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}>
+              {loading ? <Loader2 className="animate-spin h-4 w-4 " /> : <RefreshCw size={16} />}
             </button>
+
+           
             <ConnectWalletButton size="small" variant="outline" />
           </div>
         </div>
@@ -327,7 +320,7 @@ const DashboardScreen = () => {
           
           <form onSubmit={handleSendTokens} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
+              <label className=" text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
                 <ArrowRight className="mr-2 text-[var(--primary-color)]" size={16} />
                 Token to Send
               </label>
@@ -342,7 +335,7 @@ const DashboardScreen = () => {
             </div>
             
             <div>
-              <label className="block text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
+              <label className=" text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
                 <CreditCard className="mr-2 text-[var(--primary-color)]" size={16} />
                 Amount
               </label>
@@ -360,7 +353,7 @@ const DashboardScreen = () => {
             </div>
             
             <div>
-              <label className="block text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
+              <label className=" text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
                 <Wallet className="mr-2 text-[var(--primary-color)]" size={16} />
                 Recipient Address
               </label>
@@ -409,7 +402,7 @@ const DashboardScreen = () => {
           
           <form onSubmit={handleMpesaDeposit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
+              <label className=" text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
                 <Smartphone className="mr-2 text-[var(--primary-color)]" size={16} />
                 M-Pesa Number
               </label>
@@ -423,7 +416,7 @@ const DashboardScreen = () => {
             </div>
             
             <div>
-              <label className="block text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
+              <label className=" text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
                 <Banknote className="mr-2 text-[var(--primary-color)]" size={16} />
                 Amount (NGN)
               </label>

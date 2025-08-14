@@ -228,7 +228,7 @@ const EnhancedSwapScreen = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-[var(--background)] rounded-2xl shadow-xl border border-[var(--border-color)]">
+    <div className="max-w-md mx-auto min-h-screen p-6 bg-[var(--background)] rounded-2xl shadow-xl border border-[var(--border-color)]">
       <div className="flex flex-col items-center mb-6">
         <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm text-white">
           <div className="flex items-center">
@@ -267,7 +267,7 @@ const EnhancedSwapScreen = () => {
           <div className="space-y-4">
             <div className="bg-[var(--input-background)] rounded-xl p-4 border border-[var(--border-color)] hover:border-emerald-500 transition-all">
               <div className="flex justify-between items-center mb-2">
-                <label className="block text-sm font-medium text-[var(--foreground)] flex items-center">
+                <label className=" text-sm font-medium text-[var(--foreground)] flex items-center">
                   <Shield className="mr-2 text-[var(--primary-color)]" size={16} />
                   From
                 </label>
@@ -324,7 +324,7 @@ const EnhancedSwapScreen = () => {
 
             <div className="bg-[var(--input-background)] rounded-xl p-4 border border-[var(--border-color)] hover:border-emerald-500 transition-all">
               <div className="flex justify-between items-center mb-2">
-                <label className="block text-sm font-medium text-[var(--foreground)] flex items-center">
+                <label className=" text-sm font-medium text-[var(--foreground)] flex items-center">
                   <Shield className="mr-2 text-[var(--primary-color)]" size={16} />
                   To
                 </label>
