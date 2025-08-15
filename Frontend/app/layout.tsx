@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from 'react-hot-toast';
 import { WalletProvider } from './contexts/WalletContext';
+import StyledComponentsRegistry from './libs/registry';
 import "./globals.css";
 import GlobalHeader from './components/GlobalHeader';
 import GlobalFooter from './components/GlobalFooter';
@@ -31,10 +32,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <WalletProvider>
-          {children}
-          <Toaster position="top-right" />
-        </WalletProvider>
+        <StyledComponentsRegistry>
+          <WalletProvider>
+            {children}
+            <Toaster position="top-right" />
+          </WalletProvider>
+        </StyledComponentsRegistry>
       </body>
     </html>
   );

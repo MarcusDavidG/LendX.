@@ -90,7 +90,7 @@ const CollateralScreen = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-[var(--background)] rounded-2xl shadow-xl border border-[var(--border-color)]">
+    <div className="max-w-lg  mx-auto p-6 bg-[var(--background)] rounded-2xl shadow-xl border border-[var(--border-color)]">
       <div className="flex flex-col items-center mb-6">
         <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm text-white">
           <div className="flex items-center">

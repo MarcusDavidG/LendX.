@@ -509,20 +509,20 @@ const DashboardScreen = () => {
                     <div className="flex items-center mb-2">
                       <div className="p-2 bg-emerald-500/10 rounded-lg mr-3 group-hover:bg-emerald-500/20 transition-colors">
                         {token.symbol === 'S' ? (
-                          <Gem className="text-emerald-400" />
+                          <Gem className="text-[var(--primary-color)]" />
                         ) : (
-                          <Banknote className="text-blue-400" />
+                          <Banknote className="text-[var(--primary-color)]" />
                         )}
                       </div>
                       <h4 className="font-semibold text-lg text-[var(--foreground)]">{token.symbol}</h4>
                     </div>
                     <div className="flex items-center mt-1">
-                      <p className="text-xs text-[var(--text-secondary)] mr-2">
+                      <p className="text-xs text-[var(--primary-color)] mr-2">
                         {token.address.substring(0, 6)}...{token.address.substring(38)}
                       </p>
                       <button 
                         onClick={() => copyAddress(token.address)}
-                        className="text-[var(--text-secondary)] hover:text-[var(--primary-color)]"
+                        className="text-[var(--primary-color)] hover:text-[var(--primary-color)]"
                       >
                         <Copy size={14} />
                       </button>
