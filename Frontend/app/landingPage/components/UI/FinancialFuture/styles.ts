@@ -22,6 +22,7 @@ export const Header = styled.header`
   h1 {
     font-size: 4.75rem;
     font-weight: 400;
+    color: var(--text-color)
   }
 
   p {

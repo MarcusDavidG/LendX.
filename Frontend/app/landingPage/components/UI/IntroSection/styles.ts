@@ -28,7 +28,7 @@ export const Header = styled.header`
   margin: 0 auto 7.38rem;
 
   h3 {
-    color: var(--emerald);
+    color: white;
     font-size: 1.125rem;
     font-weight: 500;
     text-transform: uppercase;
@@ -38,6 +38,7 @@ export const Header = styled.header`
   h1 {
     font-size: 4.75rem;
     font-weight: 400;
+    color: var(--text-color)
   }
 
   p {
