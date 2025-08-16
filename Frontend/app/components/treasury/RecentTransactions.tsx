@@ -18,11 +18,11 @@ const RecentTransactions = ({ transactions }: RecentTransactionsProps) => {
   const getTransactionIcon = (type: string) => {
     switch (type) {
       case "deposit":
-        return <TrendingUp size={16} className="text-[var(--primary-color)]" />;
+        return <TrendingUp size={16} className="text-[var(--foreground)]" />;
       case "loan":
-        return <Banknote size={16} className="text-[var(--primary-color)]" />;
+        return <Banknote size={16} className="text-[var(--foreground)]" />;
       case "send":
-        return <ArrowRight size={16} className="text-[var(--primary-color)]" />;
+        return <ArrowRight size={16} className="text-[var(--foreground)]" />;
       default:
         return <RefreshCw size={16} className="text-[var(--foreground)]" />;
     }
@@ -42,7 +42,7 @@ const RecentTransactions = ({ transactions }: RecentTransactionsProps) => {
               key={tx.hash}
               className="p-3 bg-[var(--input-background)] rounded-lg hover:bg-gray-700 transition-colors"
             >
-              <div className="flex items-start">
+              <div className="flex items-start text-[var(--foreground)]">
                 <div className="mt-1 mr-3">{getTransactionIcon(tx.type)}</div>
                 <div className="flex-1">
                   <div className="flex justify-between items-start">
@@ -66,7 +66,7 @@ const RecentTransactions = ({ transactions }: RecentTransactionsProps) => {
                   )}
                   <div className="mt-2 flex items-center text-xs text-gray-400">
                     <a
-                      href={`https://explorer.soniclabs.com/tx/${tx.hash}`}
+                      href={`https://testnet.soniclabs.com/tx/${tx.hash}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center hover:text-[var(--primary-color)]"

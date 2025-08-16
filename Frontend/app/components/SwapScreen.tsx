@@ -246,7 +246,7 @@ const EnhancedSwapScreen = () => {
         <div className="max-w-md mx-auto bg-[var(--card-background)] rounded-2xl shadow-xl border border-[var(--border-color)] p-6">
             <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold text-[var(--primary-color)]">Swap Tokens</h2>
-                <button onClick={() => setShowSettings(true)} className="text-gray-400 hover:text-white">
+                <button onClick={() => setShowSettings(true)} className="text-[var(--foreground)] hover:text-[var(--primary-color)]">
                     <Settings size={20} />
                 </button>
             </div>
@@ -260,22 +260,22 @@ const EnhancedSwapScreen = () => {
 
             {!isConnected ? (
                 <div className="text-center py-12">
-                    <Wallet className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                    <Wallet className="w-12 h-12 text-[var(--foreground)] mx-auto mb-4" />
                     <h3 className="text-xl font-semibold text-[var(--foreground)] mb-2">Connect Your Wallet</h3>
-                    <p className="text-gray-400 mb-6">Connect your wallet to swap tokens</p>
+                    <p className="text-[var(--foreground)] mb-6">Connect your wallet to swap tokens</p>
                     <ConnectWalletButton size="large" variant="primary" />
                 </div>
             ) : (
                 <form onSubmit={handleSwap} className="space-y-4">
                     <div className="bg-[var(--input-background)] rounded-xl p-4 border border-[var(--border-color)]">
                         <div className="flex justify-between items-center mb-2">
-                            <label className="text-sm font-medium text-gray-400">From</label>
-                            <div className="text-xs text-gray-400">
+                            <label className="text-sm font-medium text-[var(--foreground)]">From</label>
+                            <div className="text-xs text-[var(--foreground)]">
                                 <span>Balance: {formatBalance(balances[fromToken.symbol])}</span>
                                 <button
                                     type="button"
                                     onClick={() => setAmount(balances[fromToken.symbol] || "0")}
-                                    className="ml-2 text-[var(--primary-color)] hover:text-emerald-600 text-xs font-bold"
+                                    className="ml-2 text-[var(--primary-color)] hover:text-[var(--foreground)] text-xs font-bold"
                                 >
                                     MAX
                                 </button>
@@ -292,7 +292,7 @@ const EnhancedSwapScreen = () => {
                             />
                             <button type="button" onClick={() => setShowTokenModal('from')} className="flex items-center gap-2 bg-gray-800 p-2 rounded-lg">
                                 <img src={fromToken.icon} alt={fromToken.symbol} className="w-6 h-6" />
-                                <span className="font-semibold">{fromToken.symbol}</span>
+                                <span className="font-semibold text-[var(--primary-color)]">{fromToken.symbol}</span>
                             </button>
                         </div>
                     </div>
@@ -309,8 +309,8 @@ const EnhancedSwapScreen = () => {
 
                     <div className="bg-[var(--input-background)] rounded-xl p-4 border border-[var(--border-color)]">
                         <div className="flex justify-between items-center mb-2">
-                            <label className="text-sm font-medium text-gray-400">To</label>
-                            <div className="text-xs text-gray-400">
+                            <label className="text-sm font-medium text-[var(--foreground)]">To</label>
+                            <div className="text-xs text-[var(--foreground)]">
                                 <span>Balance: {formatBalance(balances[toToken.symbol])}</span>
                             </div>
                         </div>
@@ -319,16 +319,16 @@ const EnhancedSwapScreen = () => {
                                 type="text"
                                 value={estimatedOutput || "0.0"}
                                 readOnly
-                                className="w-full text-2xl bg-transparent border-0 focus:ring-0 focus:outline-none text-gray-400"
+                                className="w-full text-2xl bg-transparent border-0 focus:ring-0 focus:outline-none text-[var(--foreground)]"
                             />
                             <button type="button" onClick={() => setShowTokenModal('to')} className="flex items-center gap-2 bg-gray-800 p-2 rounded-lg">
                                 <img src={toToken.icon} alt={toToken.symbol} className="w-6 h-6" />
-                                <span className="font-semibold">{toToken.symbol}</span>
+                                <span className="font-semibold text-[var(--primary-color)]">{toToken.symbol}</span>
                             </button>
                         </div>
                     </div>
 
-                    <div className="text-sm text-gray-400 text-center">
+                    <div className="text-sm text-[var(--foreground)] text-center">
                         1 {fromToken.symbol} ≈ {priceImpact} {toToken.symbol}
                     </div>
 
@@ -338,7 +338,7 @@ const EnhancedSwapScreen = () => {
                         className={`w-full flex items-center justify-center space-x-2 font-bold py-4 px-4 rounded-lg transition-all duration-200 ${
                             isProcessing || !amount || !estimatedOutput
                             ? "bg-gray-600 cursor-not-allowed"
-                            : "bg-[var(--primary-color)] hover:bg-emerald-600 text-white shadow-md hover:shadow-lg"
+                            : "bg-[var(--primary-color)] hover:bg-emerald-600 text-[var(--foreground)] shadow-md hover:shadow-lg"
                         }`}
                     >
                         {isProcessing ? (
@@ -358,20 +358,20 @@ const EnhancedSwapScreen = () => {
         </div>
 
         {showSettings && (
-            <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+            <div className="fixed inset-0 bg-black/70 flex items-center justify-center text-[var(--primary-color)] z-50">
                 <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-xl border border-[var(--border-color)] w-full max-w-sm">
                     <div className="flex justify-between items-center mb-4">
                         <h3 className="text-lg font-semibold">Settings</h3>
-                        <button onClick={() => setShowSettings(false)} className="text-gray-400 hover:text-white">
+                        <button onClick={() => setShowSettings(false)} className="text-[var(--foreground)] hover:text-[var(--primary-color)]">
                             <X size={20} />
                         </button>
                     </div>
                     <div className="space-y-4">
                         <div>
-                            <label className="block text-sm font-medium mb-1">Slippage Tolerance</label>
+                            <label className="block text-sm font-medium mb-1 text-[var(--foreground)]">Slippage Tolerance</label>
                             <div className="flex gap-2">
                                 {[0.1, 0.5, 1].map(val => (
-                                    <button key={val} onClick={() => setSlippageTolerance(val)} className={`px-4 py-2 rounded-lg ${slippageTolerance === val ? 'bg-[var(--primary-color)] text-white' : 'bg-gray-700'}`}>
+                                    <button key={val} onClick={() => setSlippageTolerance(val)} className={`px-4 py-2 rounded-lg ${slippageTolerance === val ? 'bg-[var(--primary-color)] text-[var(--foreground)]' : 'bg-gray-700'}`}>
                                         {val}%
                                     </button>
                                 ))}
@@ -379,7 +379,7 @@ const EnhancedSwapScreen = () => {
                                     type="number"
                                     value={slippageTolerance}
                                     onChange={(e) => setSlippageTolerance(parseFloat(e.target.value))}
-                                    className="w-full px-3 py-2 border rounded-md bg-gray-800 border-gray-700"
+                                    className="w-full px-3 py-2 border rounded-md bg-gray-800 border-gray-700 text-[var(--foreground)]"
                                 />
                             </div>
                         </div>
@@ -393,7 +393,7 @@ const EnhancedSwapScreen = () => {
                 <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-xl border border-[var(--border-color)] w-full max-w-sm">
                     <div className="flex justify-between items-center mb-4">
                         <h3 className="text-lg font-semibold">Select a token</h3>
-                        <button onClick={() => setShowTokenModal(null)} className="text-gray-400 hover:text-white">
+                        <button onClick={() => setShowTokenModal(null)} className="text-[var(--foreground)] hover:text-[var(--primary-color)]">
                             <X size={20} />
                         </button>
                     </div>
@@ -404,7 +404,7 @@ const EnhancedSwapScreen = () => {
                                     <img src={token.icon} alt={token.symbol} className="w-8 h-8" />
                                     <div>
                                         <p className="font-semibold">{token.name}</p>
-                                        <p className="text-sm text-gray-400">{token.symbol}</p>
+                                        <p className="text-sm text-[var(--foreground)]">{token.symbol}</p>
                                     </div>
                                 </div>
                                 <span className="font-mono">{formatBalance(balances[token.symbol])}</span>

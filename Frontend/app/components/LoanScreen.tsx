@@ -170,12 +170,12 @@ const EnhancedLoanScreen = () => {
                     <Unlock className="mr-2 text-yellow-400" />
                     No Collateral Locked
                   </h4>
-                  <p className="text-sm text-gray-400 mb-4">
+                  <p className="text-sm text-[var(--primary-color)] mb-4">
                     You need to lock an NFT as collateral before you can request a loan.
                   </p>
                   <button
                     onClick={() => router.push('/collateral')}
-                    className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-all duration-300"
+                    className="w-full bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-all duration-300"
                   >
                     Select Collateral
                   </button>

@@ -203,7 +203,7 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT: initialS
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
             <div>
               <h1 className="text-2xl md:text-3xl font-bold text-[var(--foreground)] mb-2">NFT Collateral</h1>
-              <p className="text-[var(--text-secondary)] text-sm md:text-base">
+              <p className="text-[var(--primary-color)] mb-6 text-sm md:text-base">
                 Select NFTs from your collection to use as collateral
               </p>
             </div>
@@ -283,12 +283,13 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT: initialS
 
           <div className="flex flex-col sm:flex-row gap-4 mb-6">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-secondary)]" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--foreground)]" />
               <input
                 type="text"
                 placeholder="Search NFTs by name or collection..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                style={{ paddingLeft: 'calc(1.5rem + 0.75rem)' }}
                 className="w-full pl-10 pr-4 py-2 border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] bg-[var(--card-background)] text-[var(--foreground)] text-sm md:text-base"
                 aria-label="Search NFTs"
               />
@@ -297,6 +298,7 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT: initialS
               <select
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
+                style={{ paddingLeft: 'calc(1.5rem + 0.75rem)' }}
                 className="appearance-none w-full sm:w-48 px-4 py-2 border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] bg-[var(--card-background)] text-[var(--foreground)] text-sm md:text-base pr-10"
                 aria-label="Filter NFTs"
               >
@@ -304,12 +306,13 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT: initialS
                 <option value="high-value">High Value ($1000+)</option>
                 <option value="collections">By Collection</option>
               </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-secondary)]" />
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--foreground)]" />
             </div>
             <div className="relative">
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
+                style={{ paddingLeft: 'calc(1.5rem + 0.75rem)' }}
                 className="appearance-none w-full sm:w-48 px-4 py-2 border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] bg-[var(--card-background)] text-[var(--foreground)] text-sm md:text-base pr-10"
                 aria-label="Sort NFTs"
               >
@@ -317,7 +320,7 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT: initialS
                 <option value="name">Sort by Name</option>
                 <option value="collection">Sort by Collection</option>
               </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-secondary)]" />
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--foreground)]" />
             </div>
           </div>
 
@@ -526,7 +529,7 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT: initialS
               )}
               {showDetailsModal.attributes && showDetailsModal.attributes.length > 0 && (
                 <div className="mt-4">
-                  <h4 className="text-sm font-medium text-[var(--foreground)] mb-2">Attributes</h4>
+                  <h4 className="text-sm font-medium text-[var(--secondary)] mb-2">Attributes</h4>
                   <div className="grid grid-cols-2 gap-2 text-sm text-[var(--text-secondary)]">
                     {showDetailsModal.attributes.map((attr) => (
                       <div key={attr.trait_type} className="bg-[var(--input-background)] p-2 rounded-md">
@@ -551,26 +554,26 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT: initialS
           <h3 className="text-lg md:text-xl font-semibold text-[var(--foreground)] mb-4">
             NFT Collateral Information
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+          <div className="grid grid-cols-3 sm:grid-cols gap-4 text-sm m-auto">
             <div>
-              <h4 className="font-medium text-[var(--foreground)] mb-2">How it works</h4>
-              <ul className="text-[var(--text-secondary)] space-y-1">
+              <h4 className="font-medium text-[var(--primary-color)] mb-2">How it works</h4>
+              <ul className="text-[var(--foreground)] space-y-1">
                 <li>• Select NFTs from your collection</li>
                 <li>• Get instant valuation estimates</li>
                 <li>• Use as collateral for loans</li>
               </ul>
             </div>
             <div>
-              <h4 className="font-medium text-[var(--foreground)] mb-2">Requirements</h4>
-              <ul className="text-[var(--text-secondary)] space-y-1">
+              <h4 className="font-medium text-[var(--primary-color)] mb-2">Requirements</h4>
+              <ul className="text-[var(--foreground)] space-y-1">
                 <li>• NFT must be ERC-721 or ERC-1155</li>
                 <li>• Minimum value: $50</li>
                 <li>• Verified collections preferred</li>
               </ul>
             </div>
             <div>
-              <h4 className="font-medium text-[var(--foreground)] mb-2">Risk Notice</h4>
-              <ul className="text-[var(--text-secondary)] space-y-1">
+              <h4 className="font-medium text-[var(--primary-color)] mb-2">Risk Notice</h4>
+              <ul className="text-[var(--foreground)] space-y-1">
                 <li>• NFT values are estimates only</li>
                 <li>• Market volatility affects value</li>
                 <li>• Liquidation risk if value drops</li>
