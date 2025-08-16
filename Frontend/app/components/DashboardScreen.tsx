@@ -28,7 +28,7 @@ const DashboardScreen = () => {
   const { transactions, trackTransaction } = useTransactionTracker();
   const [activeTab, setActiveTab] = useState<'wallet' | 'overview' | 'activity'>('wallet');
   const [balances, setBalances] = useState<TokenBalance[]>([]);
-  const [walletBalance, setWalletBalance] = useState({ S: '0', USDC: '0' });
+  const [walletBalance, setWalletBalance] = useState({ STK: '0', USDC: '0' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [gasFee, setGasFee] = useState('~$0.001');
@@ -44,7 +44,7 @@ const DashboardScreen = () => {
   const [showAllTransactions, setShowAllTransactions] = useState(false);
 
   const tokens = [
-    { symbol: 'S', address: TOKEN_ADDRESSES['S'], decimals: TOKEN_DECIMALS['S'] },
+    { symbol: 'STK', address: TOKEN_ADDRESSES['STK'], decimals: TOKEN_DECIMALS['S'] },
     { symbol: 'USDC', address: TOKEN_ADDRESSES['USDC'], decimals: TOKEN_DECIMALS['USDC'] }
   ];
 
@@ -52,9 +52,9 @@ const DashboardScreen = () => {
   const fetchWalletBalances = useCallback(async () => {
     if (!isConnected || !userAddress) return;
     try {
-      const sBalance = await getBalance('S');
+      const sBalance = await getBalance('STK');
       const usdcBalance = await getBalance('USDC');
-      setWalletBalance({ S: sBalance, USDC: usdcBalance });
+      setWalletBalance({ STK: sBalance, USDC: usdcBalance });
       setLastUpdateTime(Date.now());
     } catch (error: any) {
       console.error('Error fetching wallet balances:', error);
@@ -270,13 +270,13 @@ const DashboardScreen = () => {
                   <Gem className="text-[var(--primary-color)]" />
                 </div>
                 <div>
-                  <span className="font-medium text-[var(--foreground)]">S Token</span>
+                  <span className="font-medium text-[var(--foreground)]">STK</span>
                   <p className="text-xs text-[var(--primary-color)]">Native Token</p>
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-xl font-bold text-[var(--foreground)]">{walletBalance.S}</p>
-                <p className="text-xs text-[var(--primary-color)]">≈ ${(parseFloat(walletBalance.S) * 1.30).toFixed(2)}</p>
+                <p className="text-xl font-bold text-[var(--foreground)]">{walletBalance.STK}</p>
+                <p className="text-xs text-[var(--primary-color)]">≈ ${(parseFloat(walletBalance.STK) * 1.30).toFixed(2)}</p>
               </div>
             </div>
           </div>
@@ -329,7 +329,7 @@ const DashboardScreen = () => {
                 onChange={(e) => setSendToken(e.target.value)}
                 className="w-full p-3 bg-[var(--input-background)] border border-[var(--border-color)] rounded-lg text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all"
               >
-                <option value="S">S Token</option>
+                <option value="S">STK</option>
                 <option value="USDC">USDC</option>
               </select>
             </div>

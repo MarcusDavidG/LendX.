@@ -12,13 +12,13 @@ const SONIC_CHAIN_ID = 57054;
 
 // Token addresses
 export const TOKEN_ADDRESSES: Record<string, string> = {
-  'S': '0x90b88C638A233EF78d8f54e60e0e27352C03F59e',
+  'STK': '0x90b88C638A233EF78d8f54e60e0e27352C03F59e',
   'USDC': '0x97a15306364e1025e07010a7f79B9664638598AE'
 };
 
 // Token decimals
 export const TOKEN_DECIMALS: Record<string, number> = {
-  'S': 18,
+  'STK': 18,
   'USDC': 6
 };
 
@@ -150,7 +150,7 @@ const switchToSonicNetwork = async (ethereum: any): Promise<void> => {
           chainId: `0x${SONIC_CHAIN_ID.toString(16)}`,
           chainName: 'Sonic',
           rpcUrls: [SONIC_RPC_URL],
-          nativeCurrency: { name: 'Sonic', symbol: 'S', decimals: 18 },
+          nativeCurrency: { name: 'Sonic', symbol: '', decimals: 18 },
           blockExplorerUrls: ['https://explorer.soniclabs.com/']
         }]
       });
@@ -187,7 +187,7 @@ export class MockUniswapV3Service {
   }
 
   async getExchangeRate(tokenIn: string, tokenOut: string): Promise<string> {
-    return tokenIn === 'S' && tokenOut === 'USDC' ? '0.5' : '2'; // 1 S = 0.5 USDC, 1 USDC = 2 S
+    return tokenIn === '' && tokenOut === 'USDC' ? '0.5' : '2'; // 1 S = 0.5 USDC, 1 USDC = 2 S
   }
 
   async calculateExactSwapAmounts(tokenIn: string, tokenOut: string, amountIn: string, slippageTolerance: number) {

@@ -32,7 +32,7 @@ const EnhancedLoanScreen = () => {
   const fetchLoanDetails = useCallback(async () => {
     if (!isConnected || !userAddress) return;
     try {
-      const sBal = await getBalance('S');
+      const sBal = await getBalance('STK');
       setSBalance(sBal);
       const collateral = await getCollateralInfo(userAddress);
       setCollateralInfo(collateral);
@@ -164,9 +164,9 @@ const EnhancedLoanScreen = () => {
                 <div className="flex justify-between items-center">
                   <div className="flex items-center">
                     <Gem className="text-[var(--primary-color)] mr-2" />
-                    <span className="font-medium text-[var(--foreground)]">S Token Balance</span>
+                    <span className="font-medium text-[var(--foreground)]">STK Balance</span>
                   </div>
-                  <span className="font-mono text-lg font-bold text-[var(--foreground)]">{sBalance} S</span>
+                  <span className="font-mono text-lg font-bold text-[var(--foreground)]">{sBalance} STK</span>
                 </div>
               </div>
 
