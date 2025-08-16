@@ -493,7 +493,7 @@ const DashboardScreen = () => {
                 Net Worth
             </h3>
             <p className="text-4xl font-bold text-white">${netWorth.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-            <p className="text-sm text-gray-400">Total value of your tokens and NFTs.</p>
+            <p className="text-sm text-[var(--primary-color)]">Total value of your tokens and NFTs.</p>
         </div>
         {loanInfo && (
             <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
