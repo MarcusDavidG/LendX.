@@ -124,6 +124,10 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     localStorage.removeItem('walletAddress');
     localStorage.removeItem('walletConnected');
     localStorage.removeItem('walletConnectionTimestamp');
+    
+    // Clear cookie for middleware
+    document.cookie = 'wallet-connected=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    
     setIsConnected(false);
     setUserAddress(null);
     setBalance({ STK: '0', USDC: '0' });
@@ -144,6 +148,9 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
         localStorage.setItem('walletAddress', address);
         localStorage.setItem('walletConnected', 'true');
         localStorage.setItem('walletConnectionTimestamp', Date.now().toString());
+        
+        // Set cookie for middleware
+        document.cookie = 'wallet-connected=true; path=/; max-age=86400'; // 24 hours
         
         await refreshBalance();
       }
