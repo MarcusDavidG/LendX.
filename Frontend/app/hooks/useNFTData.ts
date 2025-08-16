@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import { ethers } from 'ethers';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import { mockNFTs } from '../utils/mockNFTs';
 
 // Define NFT interface to match NFTCollateralScreen
 export interface NFT {
@@ -67,71 +68,14 @@ export function useNFTData(provider?: ethers.BrowserProvider): UseNFTDataReturn 
 
   const getUserNFTs = useCallback(
     async (address: string) => {
-      if (!provider || !ethers.isAddress(address)) {
-        setError('Invalid address or no provider');
-        toast.error('Invalid wallet address or provider not available', {
-          style: { background: '#1a1a1a', color: '#ffffff' },
-        });
-        return;
-      }
-
       setLoading(true);
       setError(null);
-
-      try {
-        // Fetch NFTs using Alchemy API
-        const response = await axios.get(`${ALCHEMY_API_URL}/getNFTs`, {
-          params: {
-            owner: address,
-            withMetadata: true,
-            pageSize: 100,
-          },
-        });
-
-        const ownedNfts = response.data.ownedNfts || [];
-        const nftsWithMetadata: NFT[] = await Promise.all(
-          ownedNfts.map(async (nft: any) => {
-            const contractAddress = nft.contract.address;
-            const tokenId = nft.id.tokenId;
-            const metadata = nft.metadata || {};
-
-            // Fetch contract name if metadata lacks collection name
-            let collectionName = metadata.collection?.name || metadata.name || 'Unknown Collection';
-            try {
-              const contract = new ethers.Contract(contractAddress, ERC721_ABI, provider);
-              collectionName = (await contract.name()) || collectionName;
-            } catch (err) {
-              console.warn(`Failed to fetch contract name for ${contractAddress}:`, err);
-            }
-
-            // Calculate rarity
-            const attributes = metadata.attributes || [];
-            const rarity = calculateRarity(attributes);
-
-            return {
-              id: `${contractAddress}-${tokenId}`,
-              name: metadata.name || `NFT #${tokenId}`,
-              image: metadata.image || metadata.image_url || '/placeholder-nft.png',
-              collection: collectionName,
-              estimatedValue: await getMockPrice(tokenId),
-              tokenId,
-              contractAddress,
-              rarity,
-              attributes,
-            };
-          })
-        );
-
-        setNfts(nftsWithMetadata);
-      } catch (err: any) {
-        const errorMessage = err.response?.data?.message || err.message || 'Failed to fetch NFTs';
-        setError(errorMessage);
-        toast.error(errorMessage, { style: { background: '#1a1a1a', color: '#ffffff' } });
-      } finally {
-        setLoading(false);
-      }
+      // Simulate a network request
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      setNfts(mockNFTs);
+      setLoading(false);
     },
-    [provider]
+    []
   );
 
   const getNFTEstimatedValue = useCallback(

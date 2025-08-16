@@ -257,6 +257,10 @@ export const mockGetCollateralInfo = async (userAddress: string): Promise<Collat
 export const mockRepayLoan = async (amount: string, tokenIn: string): Promise<boolean> => {
   try {
     console.log(`Mock repay loan of ${amount} ${tokenIn}`);
+    const userAddress = await getUserAddress();
+    if (userAddress) {
+      localStorage.removeItem(`loan_${userAddress}`);
+    }
     await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate 2s delay
     return true;
   } catch (error: any) {
@@ -469,7 +473,17 @@ export const repayLoan = mockRepayLoan;
 export const lockCollateral = mockLockCollateral;
 export const getCollateralInfo = mockGetCollateralInfo;
 export const releaseCollateral = mockReleaseCollateral;
-export const depositFunds = mockDepositFunds;
+export const depositFunds = async (amount: string): Promise<boolean> => {
+  console.log(`Depositing ${amount} USDC...`);
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  return true;
+};
+
+export const withdrawFunds = async (amount: string): Promise<boolean> => {
+  console.log(`Withdrawing ${amount} USDC...`);
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  return true;
+};
 export const getTreasuryBalance = mockGetTreasuryBalance;
 export const getFeeMRewards = mockGetFeeMRewards;
 

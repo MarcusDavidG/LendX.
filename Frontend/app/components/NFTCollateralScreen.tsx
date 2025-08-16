@@ -5,8 +5,10 @@ import { useWallet } from '@/app/contexts/WalletContext';
 import { useNFTData } from '@/app/hooks/useNFTData';
 import { ethers } from 'ethers';
 import { toast } from 'react-hot-toast';
-import { Check, ChevronDown, Search, X, Loader2 } from 'lucide-react';
+import { Check, ChevronDown, Search, X, Loader2, Lock } from 'lucide-react';
 import { useDebounce } from 'use-debounce';
+import { useRouter } from 'next/navigation';
+import ConnectWalletButton from './ConnectWalletButton';
 
 interface NFT {
   id: string;
@@ -25,7 +27,7 @@ interface NFTCollateralScreenProps {
   selectedNFT?: NFT | null;
 }
 
-export default function NFTCollateralScreen({ onNFTSelect, selectedNFT }: NFTCollateralScreenProps) {
+export default function NFTCollateralScreen({ onNFTSelect, selectedNFT: initialSelectedNFT }: NFTCollateralScreenProps) {
   const { isConnected, userAddress } = useWallet();
   const { nfts: userNFTs, loading: nftsLoading, getUserNFTs, getNFTEstimatedValue, importNFT } = useNFTData();
   const [loading, setLoading] = useState(false);
@@ -43,6 +45,14 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT }: NFTCol
   const [showDetailsModal, setShowDetailsModal] = useState<NFT | null>(null);
   const [page, setPage] = useState(1);
   const itemsPerPage = 12;
+  const router = useRouter();
+
+
+  const [selectedNFT, setSelectedNFT] = useState<NFT | null>(initialSelectedNFT || null);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
+  const [isLocking, setIsLocking] = useState(false);
+  const [isLocked, setIsLocked] = useState(false);
 
   useEffect(() => {
     if (userAddress) {
@@ -61,6 +71,38 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT }: NFTCol
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSelectNFT = (nft: NFT) => {
+    setSelectedNFT(nft);
+    setIsVerified(false);
+    setIsLocked(false);
+    if (onNFTSelect) {
+      onNFTSelect(nft);
+    }
+  };
+
+  const handleVerify = async () => {
+    setIsVerifying(true);
+    toast.loading('Verifying with Chainlink CCIP...', { id: 'verify-toast', style: { background: '#1a1a1a', color: '#ffffff' } });
+    await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate verification
+    setIsVerifying(false);
+    setIsVerified(true);
+    toast.success('NFT Verified Successfully!', { id: 'verify-toast', style: { background: '#1a1a1a', color: '#ffffff' } });
+  };
+
+  const handleLock = async () => {
+    setIsLocking(true);
+    toast.loading('Locking NFT as collateral...', { id: 'lock-toast', style: { background: '#1a1a1a', color: '#ffffff' } });
+    await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate locking
+    setIsLocking(false);
+    setIsLocked(true);
+    localStorage.setItem('lockedNFT', JSON.stringify(selectedNFT));
+    toast.success('NFT Locked! You can now proceed to get a loan.', { id: 'lock-toast', style: { background: '#1a1a1a', color: '#ffffff' } });
+  };
+  
+  const handleProceedToLoan = () => {
+    router.push('/loan');
   };
 
   const handleImportNFT = async () => {
@@ -148,12 +190,7 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT }: NFTCol
           <p className="text-[var(--text-secondary)] mb-6 text-sm md:text-base">
             Please connect your wallet to view your NFTs
           </p>
-          <button
-            className="bg-[var(--primary-color)] text-[var(--foreground)] px-6 py-2 rounded-lg hover:bg-emerald-600 transition-all duration-300 hover:scale-105"
-            onClick={() => toast.error('Please use the Connect Wallet button', { style: { background: '#1a1a1a', color: '#ffffff' } })}
-          >
-            Connect Wallet
-          </button>
+                    <ConnectWalletButton />
         </div>
       </div>
     );
@@ -327,18 +364,18 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT }: NFTCol
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
               {paginatedNFTs.map((nft) => (
                 <div
                   key={`${nft.contractAddress}-${nft.tokenId}`}
                   className={`relative bg-[var(--card-background)] border border-white/10 rounded-lg overflow-hidden cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-emerald-700/50 ${
                     selectedNFT?.id === nft.id ? 'ring-4 ring-[var(--primary-color)]' : ''
                   } animate-in fade-in duration-200`}
-                  onClick={() => onNFTSelect?.(nft)}
+                  onClick={() => handleSelectNFT(nft)}
                   role="button"
                   tabIndex={0}
                   aria-label={`Select ${nft.name}`}
-                  onKeyDown={(e) => e.key === 'Enter' && onNFTSelect?.(nft)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSelectNFT(nft)}
                 >
                   <div className="aspect-square relative">
                     <img
@@ -425,6 +462,38 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT }: NFTCol
           )}
         </div>
 
+        {selectedNFT && (
+          <div className="bg-[var(--card-background)] rounded-lg shadow-lg p-6 mt-6 border border-white/10">
+            <h3 className="text-lg md:text-xl font-semibold text-[var(--foreground)] mb-4">
+              Collateral Actions for {selectedNFT.name}
+            </h3>
+            {!isVerified ? (
+              <button
+                onClick={handleVerify}
+                disabled={isVerifying}
+                className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-all duration-300 flex items-center justify-center gap-2"
+              >
+                {isVerifying ? <><Loader2 className="animate-spin h-5 w-5" /> Verifying...</> : 'Verify with Chainlink CCIP'}
+              </button>
+            ) : !isLocked ? (
+              <button
+                onClick={handleLock}
+                disabled={isLocking}
+                className="w-full bg-yellow-500 text-black px-6 py-3 rounded-lg hover:bg-yellow-600 transition-all duration-300 flex items-center justify-center gap-2"
+              >
+                {isLocking ? <><Loader2 className="animate-spin h-5 w-5" /> Locking...</> : <><Lock className="h-5 w-5" /> Lock Collateral</>}
+              </button>
+            ) : (
+              <button
+                onClick={handleProceedToLoan}
+                className="w-full bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-all duration-300"
+              >
+                Proceed to Loan
+              </button>
+            )}
+          </div>
+        )}
+
         {showDetailsModal && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div className="bg-[var(--card-background)] rounded-lg p-6 max-w-lg w-full mx-4 max-h-[80vh] overflow-y-auto border border-white/10 animate-in zoom-in-95 duration-200">
@@ -478,7 +547,7 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT }: NFTCol
           </div>
         )}
 
-        <div className="bg-[var(--card-background)] rounded-lg shadow-lg p-6 border border-white/10">
+        <div className="bg-[var(--card-background)] rounded-lg shadow-lg p-6 mt-6 border border-white/10">
           <h3 className="text-lg md:text-xl font-semibold text-[var(--foreground)] mb-4">
             NFT Collateral Information
           </h3>

@@ -4,7 +4,7 @@ import AppLayout from '../components/AppLayout';
 export default function LoanPage() {
   return (
     <AppLayout>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen">
         <LoanScreen />
       </div>
     </AppLayout>
