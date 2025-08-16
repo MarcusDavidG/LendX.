@@ -8,11 +8,13 @@ import { useTransactionTracker } from '../hooks/useTransactionTracker';
 import ConnectWalletButton from './ConnectWalletButton';
 import toast from 'react-hot-toast';
 import { ethers } from 'ethers';
+import { usePersistentLoan } from '../hooks/usePersistentLoan';
+import { NFT } from '../hooks/useNFTData';
 import { 
   ArrowRight, Banknote, Clock, Copy, CreditCard, ExternalLink, 
   Gem, Home, Loader2, RefreshCw, Send, Shield, Smartphone, 
   Sparkles, TrendingUp, Wallet, Zap, ChevronRight, History, 
-  ArrowLeftRight, Plus, Minus, AlertCircle, CheckCircle
+  ArrowLeftRight, Plus, Minus, AlertCircle, CheckCircle, Lock
 } from 'lucide-react';
 
 interface TokenBalance {
@@ -42,9 +44,18 @@ const DashboardScreen = () => {
   const [isMpesaProcessing, setIsMpesaProcessing] = useState(false);
   const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
   const [showAllTransactions, setShowAllTransactions] = useState(false);
+  const { loanInfo } = usePersistentLoan();
+  const [lockedNFT, setLockedNFT] = useState<NFT | null>(null);
+
+  useEffect(() => {
+    const storedNFT = localStorage.getItem('lockedNFT');
+    if (storedNFT) {
+      setLockedNFT(JSON.parse(storedNFT));
+    }
+  }, []);
 
   const tokens = [
-    { symbol: 'STK', address: TOKEN_ADDRESSES['STK'], decimals: TOKEN_DECIMALS['S'] },
+    { symbol: 'STK', address: TOKEN_ADDRESSES['STK'], decimals: TOKEN_DECIMALS['STK'] },
     { symbol: 'USDC', address: TOKEN_ADDRESSES['USDC'], decimals: TOKEN_DECIMALS['USDC'] }
   ];
 
@@ -466,8 +477,55 @@ const DashboardScreen = () => {
   );
 
   // Overview View Component
-  const OverviewView = () => (
+  const OverviewView = () => {
+    const totalTokenValue = balances.reduce((acc, token) => {
+      const value = parseFloat(token.formattedBalance) * (token.symbol === 'S' ? 1.30 : 1);
+      return acc + value;
+    }, 0);
+    const netWorth = totalTokenValue + (lockedNFT ? lockedNFT.estimatedValue : 0);
+
+    return (
     <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+            <h3 className="text-xl font-semibold text-[var(--foreground)] mb-4 flex items-center">
+                <Sparkles className="mr-2 text-[var(--primary-color)]" />
+                Net Worth
+            </h3>
+            <p className="text-4xl font-bold text-white">${netWorth.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+            <p className="text-sm text-gray-400">Total value of your tokens and NFTs.</p>
+        </div>
+        {loanInfo && (
+            <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+                <h3 className="text-xl font-semibold text-[var(--foreground)] mb-4 flex items-center">
+                    <Banknote className="mr-2 text-[var(--primary-color)]" />
+                    Loan Summary
+                </h3>
+                <div className="space-y-2">
+                    <div className="flex justify-between"><span className="text-gray-400">Loan Amount:</span> <span className="font-mono">{loanInfo.amount} USDC</span></div>
+                    <div className="flex justify-between"><span className="text-gray-400">Interest:</span> <span className="font-mono">{loanInfo.interest} USDC</span></div>
+                    <div className="flex justify-between"><span className="text-gray-400">Due Date:</span> <span className="font-mono">{loanInfo.dueDate}</span></div>
+                </div>
+            </div>
+        )}
+        {lockedNFT && (
+            <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+                <h3 className="text-xl font-semibold text-[var(--foreground)] mb-4 flex items-center">
+                    <Lock className="mr-2 text-purple-400" />
+                    Locked Collateral
+                </h3>
+                <div className="flex items-center gap-4">
+                    <img src={lockedNFT.image} alt={lockedNFT.name} className="w-20 h-20 rounded-lg object-cover border-2 border-purple-400" />
+                    <div>
+                        <p className="font-bold text-lg text-[var(--foreground)]">{lockedNFT.name}</p>
+                        <p className="text-sm text-gray-400">{lockedNFT.collection}</p>
+                        <p className="text-sm text-[var(--primary-color)]">Value: ${lockedNFT.estimatedValue.toLocaleString()}</p>
+                    </div>
+                </div>
+            </div>
+        )}
+      </div>
+
       <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-xl font-semibold text-[var(--foreground)] flex items-center">
@@ -659,7 +717,7 @@ const DashboardScreen = () => {
         </div>
       </div>
     </div>
-  );
+  )};
 
   return (
     <div className="max-w-6xl mx-auto ">

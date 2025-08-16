@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useWallet } from '../contexts/WalletContext';
-import { getBalance, mockRequestLoan, getCollateralInfo, getUserLoan } from '../utils/web3';
+import { getBalance, mockRequestLoan } from '../utils/web3';
 import { useTransactionTracker } from '../hooks/useTransactionTracker';
 import { usePersistentLoan } from '../hooks/usePersistentLoan';
 import ConnectWalletButton from './ConnectWalletButton';
@@ -12,6 +12,8 @@ import {
   Gem, HandCoins, Loader2, Lock, Shield, 
   Unlock, Wallet, Zap, RefreshCw 
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { NFT } from '../hooks/useNFTData'; // Import NFT type
 
 const EnhancedLoanScreen = () => {
   const { isConnected, userAddress } = useWallet();
@@ -21,21 +23,33 @@ const EnhancedLoanScreen = () => {
   const [sBalance, setSBalance] = useState('0');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [collateralInfo, setCollateralInfo] = useState<{
-    isLocked: boolean;
-    value: string;
-    asset: string;
-    tokenId: string;
-  } | null>(null);
+  const [lockedNFT, setLockedNFT] = useState<NFT | null>(null);
   const { loanInfo, refreshLoan, hasActiveLoan } = usePersistentLoan();
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkLockedNFT = () => {
+      const storedNFT = localStorage.getItem('lockedNFT');
+      if (storedNFT) {
+        setLockedNFT(JSON.parse(storedNFT));
+      } else {
+        setLockedNFT(null);
+      }
+    };
+
+    checkLockedNFT();
+
+    window.addEventListener('focus', checkLockedNFT);
+    return () => {
+      window.removeEventListener('focus', checkLockedNFT);
+    };
+  }, []);
 
   const fetchLoanDetails = useCallback(async () => {
     if (!isConnected || !userAddress) return;
     try {
       const sBal = await getBalance('STK');
       setSBalance(sBal);
-      const collateral = await getCollateralInfo(userAddress);
-      setCollateralInfo(collateral);
       refreshLoan();
     } catch (error: any) {
       setErrorMessage(`Error fetching loan details: ${error.message}`);
@@ -48,16 +62,6 @@ const EnhancedLoanScreen = () => {
     }
   }, [isConnected, userAddress, fetchLoanDetails]);
 
-  useEffect(() => {
-    if (!isConnected || !userAddress) return;
-    
-    const interval = setInterval(() => {
-      fetchLoanDetails();
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [isConnected, userAddress, fetchLoanDetails]);
-
   const handleRequestLoan = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isConnected || !userAddress) {
@@ -68,7 +72,7 @@ const EnhancedLoanScreen = () => {
       toast.error('Invalid loan amount');
       return;
     }
-    if (!collateralInfo?.isLocked) {
+    if (!lockedNFT) {
       toast.error('Collateral not locked');
       return;
     }
@@ -101,7 +105,7 @@ const EnhancedLoanScreen = () => {
   };
 
   return (
-    <div className="max-w-lg  max-h-full bg-[var(--background)] rounded-2xl shadow-xl border border-[var(--border-color)]">
+    <div className="w-full min-h-screen bg-[var(--background)] rounded-2xl shadow-xl border border-[var(--border-color)]">
       <div className="flex flex-col items-center ">
         <div className="flex items-center justify-center">
           <h2 className="text-3xl font-bold text-[var(--primary-color)]">
@@ -160,15 +164,40 @@ const EnhancedLoanScreen = () => {
             </div>
 
             <div className="space-y-4">
-              <div className="bg-[var(--input-background)] rounded-xl p-4 border border-[var(--border-color)] hover:border-emerald-500 transition-all">
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center">
-                    <Gem className="text-[var(--primary-color)] mr-2" />
-                    <span className="font-medium text-[var(--foreground)]">STK Balance</span>
-                  </div>
-                  <span className="font-mono text-lg font-bold text-[var(--foreground)]">{sBalance} STK</span>
+              {!lockedNFT && (
+                <div className="bg-[var(--input-background)] rounded-xl p-4 border border-[var(--border-color)] text-center">
+                  <h4 className="font-semibold text-[var(--foreground)] mb-2 flex items-center justify-center">
+                    <Unlock className="mr-2 text-yellow-400" />
+                    No Collateral Locked
+                  </h4>
+                  <p className="text-sm text-gray-400 mb-4">
+                    You need to lock an NFT as collateral before you can request a loan.
+                  </p>
+                  <button
+                    onClick={() => router.push('/collateral')}
+                    className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-all duration-300"
+                  >
+                    Select Collateral
+                  </button>
                 </div>
-              </div>
+              )}
+
+              {lockedNFT && (
+                <div className="bg-[var(--input-background)] rounded-xl p-4 border border-[var(--border-color)] hover:border-emerald-500 transition-all">
+                  <h4 className="font-semibold text-[var(--foreground)] mb-2 flex items-center">
+                    <Lock className="mr-2 text-purple-400" />
+                    Collateral Locked
+                  </h4>
+                  <div className="flex items-center gap-4">
+                    <img src={lockedNFT.image} alt={lockedNFT.name} className="w-24 h-24 rounded-lg object-cover border-2 border-purple-400" />
+                    <div>
+                      <p className="font-bold text-lg text-[var(--foreground)]">{lockedNFT.name}</p>
+                      <p className="text-sm text-gray-400">{lockedNFT.collection}</p>
+                      <p className="text-sm text-[var(--primary-color)]">Value: ${lockedNFT.estimatedValue.toLocaleString()}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {loanInfo && (
                 <div className="bg-[var(--input-background)] rounded-xl p-4 border border-[var(--border-color)] hover:border-emerald-500 transition-all">
@@ -205,48 +234,6 @@ const EnhancedLoanScreen = () => {
                   </button>
                 </div>
               )}
-
-              {collateralInfo && (
-                <div className="bg-[var(--input-background)] rounded-xl p-4 border border-[var(--border-color)] hover:border-emerald-500 transition-all">
-                  <h4 className="font-semibold text-[var(--foreground)] mb-2 flex items-center">
-                    {collateralInfo.isLocked ? (
-                      <Lock className="mr-2 text-purple-400" />
-                    ) : (
-                      <Unlock className="mr-2 text-green-50 " />
-                    )}
-                    Collateral
-                  </h4>
-                  <div className="grid grid-cols-2 gap-2 text-sm">
-                    <div>
-                      <span className="text-[var(--primary-color)]">Status:</span>
-                      <p className="font-medium text-[var(--foreground)]">
-                        {collateralInfo.isLocked ? (
-                          <span className="text-emerald-400">Locked</span>
-                        ) : (
-                          <span className="text-green-50 ">Unlocked</span>
-                        )}
-                      </p>
-                    </div>
-                    <div>
-                      <span className="text-[var(--primary-color)]">Asset:</span>
-                      <p className="font-medium text-[var(--foreground)]">
-                        {collateralInfo.asset} #{collateralInfo.tokenId}
-                      </p>
-                    </div>
-                    <div>
-                      <span className="text-[var(--primary-color)]">Value:</span>
-                      <p className="font-medium text-[var(--foreground)]">{collateralInfo.value} USDC</p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => window.location.href = '/collateral'}
-                    className="mt-3 w-full bg-[var(--primary-color)] hover:bg-emerald-600 text-[var(--foreground)] font-medium py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center shadow-md hover:shadow-lg"
-                  >
-                    <span className="mr-2">🔗</span>
-                    Lock Collateral
-                  </button>
-                </div>
-              )}
             </div>
           </div>
 
@@ -258,9 +245,20 @@ const EnhancedLoanScreen = () => {
             
             <form onSubmit={handleRequestLoan} className="space-y-4">
               <div>
-                <label className=" text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
-                  <ArrowRight className="mr-1 text-[var(--primary-color)]" size={16} />
-                  Loan Amount (USDC)
+                <label className=" text-sm font-medium mb-2 text-[var(--foreground)] flex items-center justify-between">
+                  <div className="flex items-center">
+                    <ArrowRight className="mr-1 text-[var(--primary-color)]" size={16} />
+                    Loan Amount (USDC)
+                  </div>
+                  {lockedNFT && (
+                    <button 
+                      type="button"
+                      onClick={() => setLoanAmount((lockedNFT.estimatedValue * 0.5).toString())}
+                      className="text-xs bg-gray-700 hover:bg-gray-600 text-white px-2 py-1 rounded-md"
+                    >
+                      Max (50% LTV)
+                    </button>
+                  )}
                 </label>
                 <input
                   type="text"
@@ -304,20 +302,20 @@ const EnhancedLoanScreen = () => {
                   </div>
                   <div>
                     <span className="text-[var(--primary-color)]">Collateral:</span>
-                    <p className="text-[var(--foreground)]">Mock NFT</p>
+                    <p className="text-[var(--foreground)]">{lockedNFT ? lockedNFT.name : 'None'}</p>
                   </div>
                   <div>
                     <span className="text-[var(--primary-color)]">Status:</span>
-                    <p className="text-[var(--foreground)]">{collateralInfo?.isLocked ? 'Locked' : 'Unlocked'}</p>
+                    <p className="text-[var(--foreground)]">{lockedNFT ? 'Locked' : 'Unlocked'}</p>
                   </div>
                 </div>
               </div>
 
               <button
                 type="submit"
-                disabled={isLoading || !collateralInfo?.isLocked || !loanAmount || !duration || parseFloat(loanAmount) <= 0 || isNaN(parseFloat(loanAmount))}
+                disabled={isLoading || !lockedNFT || !loanAmount || !duration || parseFloat(loanAmount) <= 0 || isNaN(parseFloat(loanAmount))}
                 className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all duration-200 ${
-                  isLoading || !collateralInfo?.isLocked || !loanAmount || !duration || parseFloat(loanAmount) <= 0 || isNaN(parseFloat(loanAmount))
+                  isLoading || !lockedNFT || !loanAmount || !duration || parseFloat(loanAmount) <= 0 || isNaN(parseFloat(loanAmount))
                     ? 'bg-gray-600 cursor-not-allowed'
                     : 'bg-[var(--primary-color)] hover:bg-emerald-600 text-[var(--foreground)] shadow-md hover:shadow-lg'
                 }`}
@@ -327,7 +325,7 @@ const EnhancedLoanScreen = () => {
                     <Loader2 className="animate-spin h-5 w-5" />
                     <span>Processing...</span>
                   </>
-                ) : !collateralInfo?.isLocked ? (
+                ) : !lockedNFT ? (
                   <>
                     <Lock size={18} />
                     <span>Lock Collateral First</span>

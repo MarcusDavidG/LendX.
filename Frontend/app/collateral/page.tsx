@@ -1,14 +1,14 @@
 "use client";
 
 import React from 'react';
-import CollateralScreen from '../components/CollateralScreen';
+import NFTCollateralScreen from '../components/NFTCollateralScreen';
 import AppLayout from '../components/AppLayout';
 
 export default function CollateralPage() {
   return (
     <AppLayout>
       <div className="min-h-screen bg-gray-50">
-        <CollateralScreen />
+        <NFTCollateralScreen />
       </div>
     </AppLayout>
   );
