@@ -6,7 +6,7 @@ import { connectWallet, getBalance, getUserAddress } from '../utils/web3';
 interface WalletContextType {
   isConnected: boolean;
   userAddress: string | null;
-  balance: { S: string; USDC: string };
+  balance: { STK: string; USDC: string };
   isConnecting: boolean;
   error: string | null;
   connectWallet: () => Promise<void>;
@@ -31,7 +31,7 @@ interface WalletProviderProps {
 export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   const [isConnected, setIsConnected] = useState(false);
   const [userAddress, setUserAddress] = useState<string | null>(null);
-  const [balance, setBalance] = useState({ S: '0', USDC: '0' });
+  const [balance, setBalance] = useState({ STK: '0', USDC: '0' });
   const [isConnecting, setIsConnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -126,7 +126,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     localStorage.removeItem('walletConnectionTimestamp');
     setIsConnected(false);
     setUserAddress(null);
-    setBalance({ S: '0', USDC: '0' });
+    setBalance({ STK: '0', USDC: '0' });
   };
 
   const connectWalletHandler = async () => {
@@ -194,11 +194,11 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     if (isConnected && userAddress) {
       try {
         const [sBalance, usdcBalance] = await Promise.all([
-          getBalance('S'),
+          getBalance('STK'),
           getBalance('USDC')
         ]);
         
-        setBalance({ S: sBalance, USDC: usdcBalance });
+        setBalance({ STK: sBalance, USDC: usdcBalance });
       } catch (error) {
         console.error('Failed to refresh balance:', error);
       }
