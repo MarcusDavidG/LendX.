@@ -16,6 +16,7 @@
     "@uniswap/sdk-core": "^7.7.2",
     "@uniswap/v3-periphery": "^1.4.4",
     "@uniswap/v3-sdk": "^3.8.3",
+    "axios": "^1.11.0",
     "chart.js": "^4.5.0",
     "ethers": "^6.15.0",
     "framer-motion": "^11.0.0",
@@ -26,7 +27,8 @@
     "react-chartjs-2": "^5.3.0",
     "react-dom": "18.3.1",
     "react-hot-toast": "^2.5.2",
-    "styled-components": "^6.1.0"
+    "styled-components": "^6.1.0",
+    "use-debounce": "^10.0.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
