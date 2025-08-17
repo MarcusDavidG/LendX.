@@ -152,7 +152,7 @@ const TreasuryScreen = () => {
   return (
     <div className="max-w-full mx-auto p-6 bg-[var(--background)] rounded-2xl shadow-xl border border-[var(--border-color)]">
       <div className="flex flex-col items-center mb-6">
-        <div className="flex items-center justify-">
+        <div className="flex items-center justify-center">
           <h2 className="text-3xl font-bold text-[var(--primary-color)]">LendX Treasury</h2>
         </div>
         <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm text-white">
@@ -210,10 +210,9 @@ const TreasuryScreen = () => {
             withdrawAmount={withdrawAmount}
             setWithdrawAmount={setWithdrawAmount}
           />
-          <TreasuryInfo treasuryContractAddress={TREASURY_CONTRACT_ADDRESS} />
-          {transactions.filter((tx) => tx.type === "deposit" || tx.type === "withdraw").length > 0 && (
-            <RecentTransactions transactions={transactions} />
-          )}
+          <div className="mb-6">
+            <TreasuryInfo treasuryContractAddress={TREASURY_CONTRACT_ADDRESS} />
+          </div>
         </div>
       )}
     </div>

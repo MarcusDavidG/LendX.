@@ -7,7 +7,7 @@ interface TransactionInfo {
   hash: string;
   status: TransactionStatus;
   timestamp: number;
-  type: 'send' | 'deposit' | 'loan' | 'swap';
+  type: 'send' | 'deposit' | 'loan' | 'swap' | 'withdraw' | 'repay';
   amount?: string;
   token?: string;
 }
