@@ -33,8 +33,8 @@ interface LoanInfo {
 
 interface Transaction {
   hash: string;
-  type: 'send' | 'deposit' | 'withdraw' | 'swap' | 'loan';
-  status: 'success' | 'failed' | 'pending';
+  type: 'send' | 'deposit' | 'withdraw' | 'swap' | 'loan' | 'repay';
+  status: 'success' | 'failed' | 'pending' | 'unknown';
   amount?: string;
   token?: string;
 }
