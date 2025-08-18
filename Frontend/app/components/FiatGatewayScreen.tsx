@@ -32,7 +32,20 @@ const FiatGatewayScreen = () => {
   const [usdcAmount, setUsdcAmount] = useState("");
   const [isDepositing, setIsDepositing] = useState(false);
 
-  const [transactions, setTransactions] = useState([]);
+  type Transaction = {
+    id: string;
+    type: 'Deposit' | 'Withdrawal';
+    nairaAmount: string;
+    usdcAmount?: string;
+    token?: string;
+    amount?: string;
+    bankName?: string;
+    accountNumber?: string;
+    status: 'Success' | 'Failed';
+    date: string;
+  };
+
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   useEffect(() => {
     if (isConnected && userAddress) {
@@ -43,7 +56,7 @@ const FiatGatewayScreen = () => {
 
   useEffect(() => {
     if (gatewayType === 'withdraw') {
-      const rate = MOCK_EXCHANGE_RATES[token];
+      const rate = MOCK_EXCHANGE_RATES[token as keyof typeof MOCK_EXCHANGE_RATES];
       const numericAmount = parseFloat(withdrawAmount);
       if (rate && numericAmount > 0) {
         setNairaAmount((numericAmount * rate).toFixed(2));
@@ -60,6 +73,10 @@ const FiatGatewayScreen = () => {
       }
     }
   }, [withdrawAmount, token, depositAmount, gatewayType]);
+
+  useEffect(() => {
+    setNairaAmount("");
+  }, [token]);
 
   const fetchBalance = async () => {
     try {
@@ -78,13 +95,13 @@ const FiatGatewayScreen = () => {
     }
   };
 
-  const saveTransaction = (newTx) => {
+  const saveTransaction = (newTx: Transaction) => {
     const newTransactions = [newTx, ...transactions].slice(0, 5);
     setTransactions(newTransactions);
     localStorage.setItem("fiatGatewayTransactions", JSON.stringify(newTransactions));
   };
 
-  const handleOnramp = async (e) => {
+  const handleOnramp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (parseFloat(depositAmount) <= 0) {
       return toast.error("Invalid deposit amount.");
@@ -100,7 +117,7 @@ const FiatGatewayScreen = () => {
     if (success) {
       toast.success("Deposit successful!", { id: toastId });
       const txId = `TXN${Date.now()}`;
-      const newTx = {
+      const newTx: Transaction = {
         id: txId,
         type: 'Deposit',
         nairaAmount: depositAmount,
@@ -115,7 +132,7 @@ const FiatGatewayScreen = () => {
     } else {
       toast.error("Deposit failed. Please try again.", { id: toastId });
       const txId = `TXN${Date.now()}`;
-      const newTx = {
+      const newTx: Transaction = {
         id: txId,
         type: 'Deposit',
         nairaAmount: depositAmount,
@@ -129,7 +146,7 @@ const FiatGatewayScreen = () => {
     setIsDepositing(false);
   };
 
-  const handleOfframp = async (e) => {
+  const handleOfframp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (parseFloat(withdrawAmount) > parseFloat(balance)) {
       return toast.error("Insufficient balance.");
@@ -148,7 +165,7 @@ const FiatGatewayScreen = () => {
     if (success) {
       toast.success("Withdrawal successful!", { id: toastId });
       const txId = `TXN${Date.now()}`;
-      const newTx = {
+      const newTx: Transaction = {
         id: txId,
         type: 'Withdrawal',
         token,
@@ -168,7 +185,7 @@ const FiatGatewayScreen = () => {
     } else {
       toast.error("Withdrawal failed. Please try again.", { id: toastId });
       const txId = `TXN${Date.now()}`;
-      const newTx = {
+      const newTx: Transaction = {
         id: txId,
         type: 'Withdrawal',
         token,
