@@ -10,6 +10,7 @@ import toast from 'react-hot-toast';
 import { ethers } from 'ethers';
 import { usePersistentLoan } from '../hooks/usePersistentLoan';
 import { NFT } from '../hooks/useNFTData';
+import FiatGatewayScreen from './FiatGatewayScreen';
 import {
   ArrowRight, Banknote, Copy, CreditCard, ExternalLink,
   Gem, Home, Loader2, RefreshCw, Send, Shield, Smartphone,
@@ -54,13 +55,9 @@ interface WalletViewProps {
   recipient: string;
   setRecipient: (recipient: string) => void;
   isSending: boolean;
-  handleMpesaDeposit: (e: React.FormEvent) => Promise<void>;
-  mpesaPhone: string;
-  setMpesaPhone: (phone: string) => void;
-  mpesaAmount: string;
-  setMpesaAmount: (amount: string) => void;
-  isMpesaProcessing: boolean;
 }
+
+
 
 const WalletView: React.FC<WalletViewProps> = ({
   fetchWalletBalances,
@@ -77,12 +74,6 @@ const WalletView: React.FC<WalletViewProps> = ({
   recipient,
   setRecipient,
   isSending,
-  handleMpesaDeposit,
-  mpesaPhone,
-  setMpesaPhone,
-  mpesaAmount,
-  setMpesaAmount,
-  isMpesaProcessing,
 }) => (
   <div className="space-y-6">
     <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
@@ -256,75 +247,7 @@ const WalletView: React.FC<WalletViewProps> = ({
           </button>
         </form>
       </div>
-      <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
-        <h3 className="text-xl font-semibold text-[var(--foreground)] mb-4 flex items-center">
-          <Smartphone className="mr-2 text-[var(--primary-color)]" />
-          Fiat To Crypto Deposit (Mock)
-        </h3>
-        <p className="text-sm text-[var(--foreground)] mb-4">
-          Deposit NGN to receive USDC (1 USDC = 1550 NGN). This is a mock integration.
-        </p>
-        <form onSubmit={handleMpesaDeposit} className="space-y-4">
-          <div>
-            <label className="text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
-              <Smartphone className="mr-2 text-[var(--primary-color)]" size={16} />
-              M-Pesa Number
-            </label>
-            <input
-              type="text"
-              value={mpesaPhone}
-              onChange={(e) => setMpesaPhone(e.target.value)}
-              placeholder="2547XXXXXXXX"
-              className="w-full p-3 bg-[var(--input-background)] border border-[var(--border-color)] rounded-lg text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all"
-              aria-label="M-Pesa phone number"
-            />
-          </div>
-          <div>
-            <label className="text-sm font-medium mb-2 text-[var(--foreground)] flex items-center">
-              <Banknote className="mr-2 text-[var(--primary-color)]" size={16} />
-              Amount (NGN)
-            </label>
-            <input
-              type="text"
-              value={mpesaAmount}
-              onChange={(e) => setMpesaAmount(e.target.value.replace(/[^0-9.]/g, ''))}
-              placeholder="1000"
-              className="w-full p-3 bg-[var(--input-background)] border border-[var(--border-color)] rounded-lg text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all"
-              aria-label="Deposit amount in NGN"
-            />
-            {mpesaAmount && (
-              <div className="text-xs text-[var(--text-secondary)] mt-1">
-                You'll receive: {(parseFloat(mpesaAmount) / 1550).toFixed(2)} USDC
-              </div>
-            )}
-          </div>
-          <button
-            type="submit"
-            disabled={isMpesaProcessing}
-            className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 ${
-              isMpesaProcessing
-                ? 'bg-gray-600 cursor-not-allowed'
-                : 'bg-[var(--primary-color)] hover:bg-emerald-600 text-white shadow-md hover:shadow-lg'
-            }`}
-            aria-label="Deposit via M-Pesa"
-          >
-            {isMpesaProcessing ? (
-              <>
-                <Loader2 className="animate-spin h-5 w-5" />
-                <span>Processing...</span>
-              </>
-            ) : (
-              <>
-                <Smartphone size={18} />
-                <span>Deposit via M-Pesa</span>
-              </>
-            )}
-          </button>
-        </form>
-        <p className="text-xs text-[var(--primary-color)] mt-4">
-          Mock implementation. Real M-Pesa API would be used in production.
-        </p>
-      </div>
+      <FiatGatewayScreen />
     </div>
   </div>
 );
@@ -383,15 +306,15 @@ const OverviewView: React.FC<OverviewViewProps> = ({
             </h3>
             <div className="space-y-2">
               <div className="flex justify-between">
-                <span className="text-[var(--text-secondary)]">Loan Amount:</span>
+                <span className="text-[var(--foreground)]">Loan Amount:</span>
                 <span className="font-mono text-[var(--foreground)]">{loanInfo.amount} USDC</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[var(--text-secondary)]">Interest:</span>
+                <span className="text-[var(--foreground)]">Interest:</span>
                 <span className="font-mono text-[var(--foreground)]">{loanInfo.interest} USDC</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[var(--text-secondary)]">Due Date:</span>
+                <span className="text-[var(--foreground)]">Due Date:</span>
                 <span className="font-mono text-[var(--foreground)]">{loanInfo.dueDate}</span>
               </div>
             </div>
@@ -412,7 +335,7 @@ const OverviewView: React.FC<OverviewViewProps> = ({
               />
               <div>
                 <p className="font-bold text-lg text-[var(--foreground)]">{lockedNFT.name}</p>
-                <p className="text-sm text-[var(--text-secondary)]">{lockedNFT.collection}</p>
+                <p className="text-sm text-[var(--foreground)]">{lockedNFT.collection}</p>
                 <p className="text-sm text-[var(--primary-color)]">
                   Value: ${lockedNFT.estimatedValue.toLocaleString()}
                 </p>
@@ -530,7 +453,7 @@ const OverviewView: React.FC<OverviewViewProps> = ({
                 </div>
                 <span>Swap Tokens</span>
               </div>
-              <ChevronRight className="text-[var(--text-secondary)] group-hover:text-[var(--primary-color)]" />
+              <ChevronRight className="text-[var(--foreground)] group-hover:text-[var(--primary-color)]" />
             </Link>
             <Link
               href="/treasury"
@@ -543,7 +466,7 @@ const OverviewView: React.FC<OverviewViewProps> = ({
                 </div>
                 <span>View Treasury</span>
               </div>
-              <ChevronRight className="text-[var(--text-secondary)] group-hover:text-[var(--primary-color)]" />
+              <ChevronRight className="text-[var(--foreground)] group-hover:text-[var(--primary-color)]" />
             </Link>
             <Link
               href="/loan"
@@ -556,7 +479,7 @@ const OverviewView: React.FC<OverviewViewProps> = ({
                 </div>
                 <span>Manage Loans</span>
               </div>
-              <ChevronRight className="text-[var(--text-secondary)] group-hover:text-[var(--primary-color)]" />
+              <ChevronRight className="text-[var(--foreground)] group-hover:text-[var(--primary-color)]" />
             </Link>
             <Link
               href="/collateral"
@@ -569,7 +492,7 @@ const OverviewView: React.FC<OverviewViewProps> = ({
                 </div>
                 <span>Manage Collateral</span>
               </div>
-              <ChevronRight className="text-[var(--text-secondary)] group-hover:text-[var(--primary-color)]" />
+              <ChevronRight className="text-[var(--foreground)] group-hover:text-[var(--primary-color)]" />
             </Link>
           </div>
         </div>
@@ -608,7 +531,7 @@ const OverviewView: React.FC<OverviewViewProps> = ({
                           </span>
                         )}
                       </div>
-                      <div className="mt-1 flex items-center text-xs text-[var(--text-secondary)]">
+                      <div className="mt-1 flex items-center text-xs text-[var(--foreground)]">
                         <a
                           href={`https://explorer.soniclabs.com/tx/${tx.hash}`}
                           target="_blank"
@@ -649,9 +572,6 @@ const DashboardScreen: React.FC = () => {
   const [sendToken, setSendToken] = useState('STK');
   const [recipient, setRecipient] = useState('');
   const [isSending, setIsSending] = useState(false);
-  const [mpesaPhone, setMpesaPhone] = useState('');
-  const [mpesaAmount, setMpesaAmount] = useState('');
-  const [isMpesaProcessing, setIsMpesaProcessing] = useState(false);
   const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
   const [showAllTransactions, setShowAllTransactions] = useState(false);
   const { loanInfo } = usePersistentLoan();
@@ -726,43 +646,7 @@ const DashboardScreen: React.FC = () => {
     [isConnected, userAddress, walletBalance, sendToken, sendAmount, recipient, trackTransaction, fetchWalletBalances]
   );
 
-  const handleMpesaDeposit = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
-      if (!mpesaPhone.match(/^2547\d{8}$/)) {
-        toast.error('Invalid M-Pesa phone number (e.g., 2547XXXXXXXX)', {
-          style: { background: '#1a1a1a', color: '#ffffff' },
-        });
-        return;
-      }
-      if (parseFloat(mpesaAmount) <= 0 || isNaN(parseFloat(mpesaAmount))) {
-        toast.error('Invalid NGN amount', { style: { background: '#1a1a1a', color: '#ffffff' } });
-        return;
-      }
-      setIsMpesaProcessing(true);
-      const toastId = toast.loading('Processing M-Pesa deposit...', { style: { background: '#1a1a1a', color: '#ffffff' } });
-      try {
-        // Mock M-Pesa API call
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        toast.success('Enter PIN for M-Pesa deposit', { id: toastId, duration: 2000, style: { background: '#1a1a1a', color: '#ffffff' } });
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        const usdcAmount = (parseFloat(mpesaAmount) / 1550).toFixed(2);
-        setWalletBalance((prev) => ({
-          ...prev,
-          USDC: (parseFloat(prev.USDC) + parseFloat(usdcAmount)).toFixed(2),
-        }));
-        trackTransaction(ethers.hexlify(ethers.randomBytes(32)), 'deposit', usdcAmount, 'USDC');
-        toast.success(`Deposited ${usdcAmount} USDC via M-Pesa!`, { id: toastId, style: { background: '#1a1a1a', color: '#ffffff' } });
-        setMpesaPhone('');
-        setMpesaAmount('');
-      } catch (error: any) {
-        toast.error(`Error: ${error.message}`, { id: toastId, style: { background: '#1a1a1a', color: '#ffffff' } });
-      } finally {
-        setIsMpesaProcessing(false);
-      }
-    },
-    [mpesaPhone, mpesaAmount, trackTransaction]
-  );
+  
 
   const loadRealBalances = useCallback(async () => {
     if (!isConnected || !userAddress) return;
@@ -872,7 +756,7 @@ const DashboardScreen: React.FC = () => {
             className={`whitespace-nowrap py-2 px-4 border-b-2 font-medium text-sm flex items-center transition-colors duration-200 ${
               activeTab === 'wallet'
                 ? 'border-[var(--primary-color)] text-[var(--primary-color)]'
-                : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--primary-color)] hover:border-gray-500'
+                : 'border-transparent text-[var(--foreground)] hover:text-[var(--primary-color)] hover:border-gray-500'
             }`}
             aria-label="View wallet tab"
           >
@@ -884,7 +768,7 @@ const DashboardScreen: React.FC = () => {
             className={`whitespace-nowrap py-2 px-4 border-b-2 font-medium text-sm flex items-center transition-colors duration-200 ${
               activeTab === 'overview'
                 ? 'border-[var(--primary-color)] text-[var(--primary-color)]'
-                : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--primary-color)] hover:border-gray-500'
+                : 'border-transparent text-[var(--foreground)] hover:text-[var(--primary-color)] hover:border-gray-500'
             }`}
             aria-label="View overview tab"
           >
@@ -896,7 +780,7 @@ const DashboardScreen: React.FC = () => {
             className={`whitespace-nowrap py-2 px-4 border-b-2 font-medium text-sm flex items-center transition-colors duration-200 ${
               activeTab === 'activity'
                 ? 'border-[var(--primary-color)] text-[var(--primary-color)]'
-                : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--primary-color)] hover:border-gray-500'
+                : 'border-transparent text-[var(--foreground)] hover:text-[var(--primary-color)] hover:border-gray-500'
             }`}
             aria-label="View activity tab"
           >
@@ -916,7 +800,7 @@ const DashboardScreen: React.FC = () => {
           <div className="max-w-md mx-auto">
             <Wallet className="w-12 h-12 text-[var(--primary-color)] mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-[var(--foreground)] mb-2">Connect Your Wallet</h3>
-            <p className="text-[var(--text-secondary)] mb-6">Connect your wallet to access all features</p>
+            <p className="text-[var(--foreground)] mb-6">Connect your wallet to access all features</p>
             <ConnectWalletButton size="large" variant="primary" />
           </div>
         </div>
@@ -938,12 +822,6 @@ const DashboardScreen: React.FC = () => {
               recipient={recipient}
               setRecipient={setRecipient}
               isSending={isSending}
-              handleMpesaDeposit={handleMpesaDeposit}
-              mpesaPhone={mpesaPhone}
-              setMpesaPhone={setMpesaPhone}
-              mpesaAmount={mpesaAmount}
-              setMpesaAmount={setMpesaAmount}
-              isMpesaProcessing={isMpesaProcessing}
             />
           )}
           {activeTab === 'overview' && (
@@ -982,7 +860,7 @@ const DashboardScreen: React.FC = () => {
                               <span className="capitalize font-medium text-[var(--foreground)]">{tx.type}</span>
                               <div className="flex items-center mt-1">
                                 {getTransactionStatusIcon(tx.status)}
-                                <span className="text-xs text-[var(--text-secondary)] ml-1 capitalize">{tx.status}</span>
+                                <span className="text-xs text-[var(--foreground)] ml-1 capitalize">{tx.status}</span>
                               </div>
                             </div>
                             {tx.amount && tx.token && (
@@ -992,7 +870,7 @@ const DashboardScreen: React.FC = () => {
                               </span>
                             )}
                           </div>
-                          <div className="mt-2 flex items-center text-xs text-[var(--text-secondary)]">
+                          <div className="mt-2 flex items-center text-xs text-[var(--foreground)]">
                             <a
                               href={`https://blaze.soniclabs.com/tx/${tx.hash}`}
                               target="_blank"

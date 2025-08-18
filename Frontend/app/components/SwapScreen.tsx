@@ -32,14 +32,15 @@ const EnhancedSwapScreen = () => {
     name: "S Token",
     address: TOKEN_ADDRESSES["STK"],
     decimals: TOKEN_DECIMALS["STK"],
-    icon: "/s-token-icon.png",
+    icon: "/tokensimage/stkimage.png",
   });
+
   const [toToken, setToToken] = useState<Token>({
     symbol: "USDC",
     name: "USDC",
     address: TOKEN_ADDRESSES["USDC"],
     decimals: TOKEN_DECIMALS["USDC"],
-    icon: "/usdc-icon.png",
+    icon: "/tokensimage/usdcimage.png",
   });
   const [amount, setAmount] = useState("");
   const [estimatedOutput, setEstimatedOutput] = useState("");
@@ -61,14 +62,14 @@ const EnhancedSwapScreen = () => {
       name: "S Token",
       address: TOKEN_ADDRESSES["STK"],
       decimals: TOKEN_DECIMALS["STK"],
-      icon: "/s-token-icon.png",
+      icon: "/tokensimage/stkimage.png",
     },
     {
       symbol: "USDC",
       name: "USDC",
       address: TOKEN_ADDRESSES["USDC"],
       decimals: TOKEN_DECIMALS["USDC"],
-      icon: "/usdc-icon.png",
+      icon: "/tokensimage/usdcimage.png",
     },
   ];
 
@@ -322,7 +323,7 @@ const EnhancedSwapScreen = () => {
                                 className="w-full text-2xl bg-transparent border-0 focus:ring-0 focus:outline-none text-[var(--foreground)]"
                             />
                             <button type="button" onClick={() => setShowTokenModal('to')} className="flex items-center gap-2 bg-gray-800 p-2 rounded-lg">
-                                <img src={toToken.icon} alt={toToken.symbol} className="w-6 h-6" />
+                                <img src={toToken.icon} alt={toToken.symbol} className="w-[25px] h-[25px]" loading="lazy" />
                                 <span className="font-semibold text-[var(--primary-color)]">{toToken.symbol}</span>
                             </button>
                         </div>
