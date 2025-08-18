@@ -962,7 +962,7 @@ const DashboardScreen: React.FC = () => {
             />
           )}
           {activeTab === 'activity' && (
-            <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
+            <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg text-[var(--foreground)] border border-[var(--border-color)]">
               <h3 className="text-xl font-semibold text-[var(--foreground)] mb-5 flex items-center">
                 <History className="mr-2 text-[var(--primary-color)]" />
                 Transaction History
@@ -977,7 +977,7 @@ const DashboardScreen: React.FC = () => {
                       <div className="flex items-start">
                         <div className="mt-1 mr-3">{getTransactionIcon(tx.type)}</div>
                         <div className="flex-1">
-                          <div className="flex justify-between items-start">
+                          <div className="flex justify-between items-start text-[var(--primary-color)]">
                             <div>
                               <span className="capitalize font-medium text-[var(--foreground)]">{tx.type}</span>
                               <div className="flex items-center mt-1">
@@ -994,7 +994,7 @@ const DashboardScreen: React.FC = () => {
                           </div>
                           <div className="mt-2 flex items-center text-xs text-[var(--text-secondary)]">
                             <a
-                              href={`https://explorer.soniclabs.com/tx/${tx.hash}`}
+                              href={`https://blaze.soniclabs.com/tx/${tx.hash}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="flex items-center hover:text-[var(--primary-color)]"

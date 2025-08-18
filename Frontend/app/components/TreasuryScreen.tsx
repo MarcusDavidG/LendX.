@@ -12,7 +12,6 @@ import TreasuryStats from "./treasury/TreasuryStats";
 import TreasuryChart from "./treasury/TreasuryChart";
 import TreasuryActions from "./treasury/TreasuryActions";
 import TreasuryInfo from "./treasury/TreasuryInfo";
-import RecentTransactions from "./treasury/RecentTransactions";
 import KeyMetrics from "./treasury/KeyMetrics";
 import HistoricalPerformanceChart from "./treasury/HistoricalPerformanceChart";
 
@@ -141,7 +140,7 @@ const TreasuryScreen = () => {
         setWithdrawAmount("");
       } else {
         toast.error("Failed to withdraw funds", { id: toastId });
-      }
+      } 
     } catch (error: any) {
       toast.error(`Error: ${error.message}`, { id: toastId });
     } finally {
@@ -189,8 +188,10 @@ const TreasuryScreen = () => {
         </div>
       ) : (
         <div className="space-y-6">
-          <TreasuryStats loading={loading} treasuryData={treasuryData} />
-          <KeyMetrics />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <TreasuryStats loading={loading} treasuryData={treasuryData} />
+            <KeyMetrics />
+          </div>
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
             <div className="lg:col-span-3">
               <HistoricalPerformanceChart loading={loading} />
