@@ -66,7 +66,7 @@ const RecentTransactions = ({ transactions }: RecentTransactionsProps) => {
                   )}
                   <div className="mt-2 flex items-center text-xs text-gray-400">
                     <a
-                      href={`https://testnet.soniclabs.com/tx/${tx.hash}`}
+                      href={`https://blaze.soniclabs.com/tx/${tx.hash}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center hover:text-[var(--primary-color)]"

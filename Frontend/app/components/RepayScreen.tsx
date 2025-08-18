@@ -99,7 +99,7 @@ const EnhancedRepayScreen = () => {
           <h2 className="text-3xl font-bold text-[var(--primary-color)] mb-2">
             {isRepaid ? 'Loan Repaid Successfully' : 'Repay Your Loan'}
           </h2>
-          <p className="text-gray-400">
+          <p className="text-[var(--foreground)]">
             {isRepaid ? 'Your collateral is now unlocked.' : 'Settle your outstanding loan to unlock your NFT collateral.'}
           </p>
         </div>
@@ -114,16 +114,16 @@ const EnhancedRepayScreen = () => {
         {!isConnected ? (
           <div className="text-center py-12 bg-[var(--card-background)] rounded-2xl shadow-lg p-6 border border-[var(--border-color)]">
             <div className="max-w-md mx-auto">
-              <Wallet className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <Wallet className="w-12 h-12 text-[var(--foreground)] mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-[var(--foreground)] mb-2">Connect Your Wallet</h3>
-              <p className="text-gray-400 mb-6">Connect your wallet to repay loans</p>
+              <p className="text-[var(--foreground)] mb-6">Connect your wallet to repay loans</p>
               <ConnectWalletButton size="large" variant="primary" />
             </div>
           </div>
         ) : isRepaid ? (
           <div className="text-center py-12 bg-[var(--card-background)] rounded-2xl shadow-lg p-6 border border-[var(--border-color)]">
               <h3 className="text-xl font-semibold text-[var(--foreground)] mb-2">Loan Cleared</h3>
-              <p className="text-gray-400 mb-6">Your loan has been successfully repaid and your collateral is unlocked.</p>
+              <p className="text-[var(--foreground)] mb-6">Your loan has been successfully repaid and your collateral is unlocked.</p>
               <button
                   onClick={() => router.push('/loan')}
                   className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-all duration-300 flex items-center justify-center gap-2"
@@ -135,7 +135,7 @@ const EnhancedRepayScreen = () => {
         ) : !loanInfo ? (
           <div className="text-center py-12 bg-[var(--card-background)] rounded-2xl shadow-lg p-6 border border-[var(--border-color)]">
               <h3 className="text-xl font-semibold text-[var(--foreground)] mb-2">No Active Loan</h3>
-              <p className="text-gray-400 mb-6">You do not have any active loans to repay.</p>
+              <p className="text-[var(--foreground)] mb-6">You do not have any active loans to repay.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -145,11 +145,11 @@ const EnhancedRepayScreen = () => {
                   Loan Details
               </h3>
               <div className="space-y-2">
-                  <div className="flex justify-between"><span className="text-gray-400">Principal:</span> <span className="font-mono">{loanInfo.amount} USDC</span></div>
-                  <div className="flex justify-between"><span className="text-gray-400">Interest:</span> <span className="font-mono">{loanInfo.interest} USDC</span></div>
-                  <div className="flex justify-between"><span className="text-gray-400">Due Date:</span> <span className="font-mono">{loanInfo.dueDate}</span></div>
+                  <div className="flex justify-between"><span className="text-[var(--primary-color)]">Principal:</span> <span className="font-mono text-[var(--foreground)]">{loanInfo.amount} USDC</span></div>
+                  <div className="flex justify-between"><span className="text-[var(--primary-color)]">Interest:</span> <span className="font-mono text-[var(--foreground)]">{loanInfo.interest} USDC</span></div>
+                  <div className="flex justify-between"><span className="text-[var(--primary-color)]">Due Date:</span> <span className="font-mono text-[var(--foreground)]">{loanInfo.dueDate}</span></div>
                   <div className="border-t border-gray-700 my-2"></div>
-                  <div className="flex justify-between text-lg font-bold"><span className="text-[var(--primary-color)]">Total Due:</span> <span className="font-mono">{(parseFloat(loanInfo.amount) + parseFloat(loanInfo.interest)).toFixed(2)} USDC</span></div>
+                  <div className="flex justify-between text-lg font-bold"><span className="text-[var(--primary-color)]">Total Due:</span> <span className="font-mono text-[var(--foreground)]">{(parseFloat(loanInfo.amount) + parseFloat(loanInfo.interest)).toFixed(2)} USDC</span></div>
               </div>
               {lockedNFT && (
                   <div className="pt-4">
@@ -161,7 +161,7 @@ const EnhancedRepayScreen = () => {
                           <img src={lockedNFT.image} alt={lockedNFT.name} className="w-20 h-20 rounded-lg object-cover border-2 border-purple-400" />
                           <div>
                               <p className="font-bold text-lg text-[var(--foreground)]">{lockedNFT.name}</p>
-                              <p className="text-sm text-gray-400">{lockedNFT.collection}</p>
+                              <p className="text-sm text-[var(--foreground)]">{lockedNFT.collection}</p>
                               <p className="text-sm text-[var(--primary-color)]">Value: ${lockedNFT.estimatedValue.toLocaleString()}</p>
                           </div>
                       </div>
@@ -175,7 +175,7 @@ const EnhancedRepayScreen = () => {
               </h3>
               <form onSubmit={handleRepay} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium mb-1 text-[var(--foreground)] flex justify-between items-center">
+                  <label className="text-sm font-medium mb-1 text-[var(--foreground)] flex justify-between items-center">
                       <span>Repay Amount (USDC)</span>
                       <button 
                           type="button"
