@@ -3,7 +3,7 @@ import { trackTransaction as web3TrackTransaction } from '../utils/web3';
 
 export type TransactionStatus = 'pending' | 'success' | 'failed' | 'unknown';
 
-interface TransactionInfo {
+export interface TransactionInfo {
   hash: string;
   status: TransactionStatus;
   timestamp: number;

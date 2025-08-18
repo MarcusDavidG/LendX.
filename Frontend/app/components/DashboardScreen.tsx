@@ -306,15 +306,15 @@ const OverviewView: React.FC<OverviewViewProps> = ({
             </h3>
             <div className="space-y-2">
               <div className="flex justify-between">
-                <span className="text-[var(--text-secondary)]">Loan Amount:</span>
+                <span className="text-[var(--foreground)]">Loan Amount:</span>
                 <span className="font-mono text-[var(--foreground)]">{loanInfo.amount} USDC</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[var(--text-secondary)]">Interest:</span>
+                <span className="text-[var(--foreground)]">Interest:</span>
                 <span className="font-mono text-[var(--foreground)]">{loanInfo.interest} USDC</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[var(--text-secondary)]">Due Date:</span>
+                <span className="text-[var(--foreground)]">Due Date:</span>
                 <span className="font-mono text-[var(--foreground)]">{loanInfo.dueDate}</span>
               </div>
             </div>
@@ -335,7 +335,7 @@ const OverviewView: React.FC<OverviewViewProps> = ({
               />
               <div>
                 <p className="font-bold text-lg text-[var(--foreground)]">{lockedNFT.name}</p>
-                <p className="text-sm text-[var(--text-secondary)]">{lockedNFT.collection}</p>
+                <p className="text-sm text-[var(--foreground)]">{lockedNFT.collection}</p>
                 <p className="text-sm text-[var(--primary-color)]">
                   Value: ${lockedNFT.estimatedValue.toLocaleString()}
                 </p>
@@ -453,7 +453,7 @@ const OverviewView: React.FC<OverviewViewProps> = ({
                 </div>
                 <span>Swap Tokens</span>
               </div>
-              <ChevronRight className="text-[var(--text-secondary)] group-hover:text-[var(--primary-color)]" />
+              <ChevronRight className="text-[var(--foreground)] group-hover:text-[var(--primary-color)]" />
             </Link>
             <Link
               href="/treasury"
@@ -466,7 +466,7 @@ const OverviewView: React.FC<OverviewViewProps> = ({
                 </div>
                 <span>View Treasury</span>
               </div>
-              <ChevronRight className="text-[var(--text-secondary)] group-hover:text-[var(--primary-color)]" />
+              <ChevronRight className="text-[var(--foreground)] group-hover:text-[var(--primary-color)]" />
             </Link>
             <Link
               href="/loan"
@@ -479,7 +479,7 @@ const OverviewView: React.FC<OverviewViewProps> = ({
                 </div>
                 <span>Manage Loans</span>
               </div>
-              <ChevronRight className="text-[var(--text-secondary)] group-hover:text-[var(--primary-color)]" />
+              <ChevronRight className="text-[var(--foreground)] group-hover:text-[var(--primary-color)]" />
             </Link>
             <Link
               href="/collateral"
@@ -492,7 +492,7 @@ const OverviewView: React.FC<OverviewViewProps> = ({
                 </div>
                 <span>Manage Collateral</span>
               </div>
-              <ChevronRight className="text-[var(--text-secondary)] group-hover:text-[var(--primary-color)]" />
+              <ChevronRight className="text-[var(--foreground)] group-hover:text-[var(--primary-color)]" />
             </Link>
           </div>
         </div>
@@ -531,7 +531,7 @@ const OverviewView: React.FC<OverviewViewProps> = ({
                           </span>
                         )}
                       </div>
-                      <div className="mt-1 flex items-center text-xs text-[var(--text-secondary)]">
+                      <div className="mt-1 flex items-center text-xs text-[var(--foreground)]">
                         <a
                           href={`https://explorer.soniclabs.com/tx/${tx.hash}`}
                           target="_blank"
@@ -756,7 +756,7 @@ const DashboardScreen: React.FC = () => {
             className={`whitespace-nowrap py-2 px-4 border-b-2 font-medium text-sm flex items-center transition-colors duration-200 ${
               activeTab === 'wallet'
                 ? 'border-[var(--primary-color)] text-[var(--primary-color)]'
-                : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--primary-color)] hover:border-gray-500'
+                : 'border-transparent text-[var(--foreground)] hover:text-[var(--primary-color)] hover:border-gray-500'
             }`}
             aria-label="View wallet tab"
           >
@@ -768,7 +768,7 @@ const DashboardScreen: React.FC = () => {
             className={`whitespace-nowrap py-2 px-4 border-b-2 font-medium text-sm flex items-center transition-colors duration-200 ${
               activeTab === 'overview'
                 ? 'border-[var(--primary-color)] text-[var(--primary-color)]'
-                : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--primary-color)] hover:border-gray-500'
+                : 'border-transparent text-[var(--foreground)] hover:text-[var(--primary-color)] hover:border-gray-500'
             }`}
             aria-label="View overview tab"
           >
@@ -780,7 +780,7 @@ const DashboardScreen: React.FC = () => {
             className={`whitespace-nowrap py-2 px-4 border-b-2 font-medium text-sm flex items-center transition-colors duration-200 ${
               activeTab === 'activity'
                 ? 'border-[var(--primary-color)] text-[var(--primary-color)]'
-                : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--primary-color)] hover:border-gray-500'
+                : 'border-transparent text-[var(--foreground)] hover:text-[var(--primary-color)] hover:border-gray-500'
             }`}
             aria-label="View activity tab"
           >
@@ -800,7 +800,7 @@ const DashboardScreen: React.FC = () => {
           <div className="max-w-md mx-auto">
             <Wallet className="w-12 h-12 text-[var(--primary-color)] mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-[var(--foreground)] mb-2">Connect Your Wallet</h3>
-            <p className="text-[var(--text-secondary)] mb-6">Connect your wallet to access all features</p>
+            <p className="text-[var(--foreground)] mb-6">Connect your wallet to access all features</p>
             <ConnectWalletButton size="large" variant="primary" />
           </div>
         </div>
@@ -860,7 +860,7 @@ const DashboardScreen: React.FC = () => {
                               <span className="capitalize font-medium text-[var(--foreground)]">{tx.type}</span>
                               <div className="flex items-center mt-1">
                                 {getTransactionStatusIcon(tx.status)}
-                                <span className="text-xs text-[var(--text-secondary)] ml-1 capitalize">{tx.status}</span>
+                                <span className="text-xs text-[var(--foreground)] ml-1 capitalize">{tx.status}</span>
                               </div>
                             </div>
                             {tx.amount && tx.token && (
@@ -870,7 +870,7 @@ const DashboardScreen: React.FC = () => {
                               </span>
                             )}
                           </div>
-                          <div className="mt-2 flex items-center text-xs text-[var(--text-secondary)]">
+                          <div className="mt-2 flex items-center text-xs text-[var(--foreground)]">
                             <a
                               href={`https://blaze.soniclabs.com/tx/${tx.hash}`}
                               target="_blank"

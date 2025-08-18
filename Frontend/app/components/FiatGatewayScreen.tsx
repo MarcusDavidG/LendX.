@@ -242,7 +242,7 @@ const FiatGatewayScreen = () => {
               required
             />
             {usdcAmount && (
-              <div className="text-xs text-[var(--text-secondary)] mt-1">
+              <div className="text-xs text-[var(--foreground)] mt-1">
                 You'll receive: {usdcAmount} USDC
               </div>
             )}
@@ -297,7 +297,7 @@ const FiatGatewayScreen = () => {
               required
             />
             {nairaAmount && (
-              <div className="text-xs text-[var(--text-secondary)] mt-1">
+              <div className="text-xs text-[var(--foreground)] mt-1">
                 You'll receive: ₦{nairaAmount}
               </div>
             )}
@@ -363,18 +363,18 @@ const FiatGatewayScreen = () => {
                         : `${tx.amount} ${tx.token} → ₦${tx.nairaAmount}`}
                     </p>
                     {tx.type === 'Withdrawal' && (
-                        <p className="text-xs text-[var(--text-secondary)]">{tx.bankName} - {tx.accountNumber}</p>
+                        <p className="text-xs text-[var(--foreground)]">{tx.bankName} - {tx.accountNumber}</p>
                     )}
                   </div>
                   <div className={`font-bold ${tx.status === 'Success' ? 'text-green-400' : 'text-red-400'}`}>
                     {tx.status}
                   </div>
                 </div>
-                <p className="text-xs text-[var(--text-secondary)] mt-1">{tx.date}</p>
+                <p className="text-xs text-[var(--foreground)] mt-1">{tx.date}</p>
               </div>
             ))
           ) : (
-            <p className="text-sm text-[var(--text-secondary)]">No recent transactions.</p>
+            <p className="text-sm text-[var(--foreground)]">No recent transactions.</p>
           )}
         </div>
       </div>

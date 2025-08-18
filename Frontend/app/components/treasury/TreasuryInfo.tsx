@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { Banknote, Copy } from "lucide-react";
-import toast from "react-hot-toast";
+import { Banknote, Copy } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 interface TreasuryInfoProps {
   treasuryContractAddress: string;
 }
 
-const TreasuryInfo = ({ treasuryContractAddress }: TreasuryInfoProps) => {
+const TreasuryInfo: React.FC<TreasuryInfoProps> = ({ treasuryContractAddress }) => {
   const copyAddress = () => {
     navigator.clipboard.writeText(treasuryContractAddress);
-    toast.success("Contract address copied to clipboard");
+    toast.success('Contract address copied to clipboard', { style: { background: '#1a1a1a', color: '#ffffff' } });
   };
 
   return (
@@ -20,7 +20,7 @@ const TreasuryInfo = ({ treasuryContractAddress }: TreasuryInfoProps) => {
           <Banknote className="mr-2 text-[var(--primary-color)]" size={20} />
           About the Treasury
         </h3>
-        <p className="text-sm text-white">
+        <p className="text-sm text-[var(--foreground)]">
           Your deposits to the SonicFi Treasury are lent to users as micro-loans, enabling financial access for the unbanked. As a depositor, you earn the majority of the profits from loan interest, supporting a sustainable lending ecosystem powered by Sonic’s fast and low-cost transactions.
         </p>
       </div>
@@ -38,7 +38,8 @@ const TreasuryInfo = ({ treasuryContractAddress }: TreasuryInfoProps) => {
               </span>
               <button
                 onClick={copyAddress}
-                className="ml-2 text-[var(--primary-color)] hover:text-[var(--primary-color)]"
+                className="ml-2 text-[var(--primary-color)] hover:text-emerald-400 transition-colors"
+                aria-label="Copy treasury contract address"
               >
                 <Copy size={14} />
               </button>

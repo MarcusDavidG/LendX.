@@ -187,7 +187,7 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT: initialS
       <div className="flex flex-col items-center justify-center min-h-screen bg-[var(--background)] p-4 sm:p-8">
         <div className="text-center">
           <h2 className="text-2xl md:text-3xl font-bold text-[var(--foreground)] mb-4">Connect Your Wallet</h2>
-          <p className="text-[var(--text-secondary)] mb-6 text-sm md:text-base">
+          <p className="text-[var(--foreground)] mb-6 text-sm md:text-base">
             Please connect your wallet to view your NFTs
           </p>
                     <ConnectWalletButton />
@@ -221,7 +221,7 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT: initialS
               <h3 className="text-lg font-semibold text-[var(--foreground)] mb-3">Import NFT</h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">
+                  <label className="block text-sm font-medium text-[var(--foreground)] mb-1">
                     Contract Address *
                   </label>
                   <input
@@ -239,7 +239,7 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT: initialS
                   )}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">
+                  <label className="block text-sm font-medium text-[var(--foreground)] mb-1">
                     Token ID *
                   </label>
                   <input
@@ -251,7 +251,7 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT: initialS
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">
+                  <label className="block text-sm font-medium text-[var(--foreground)] mb-1">
                     Collection Name
                   </label>
                   <input
@@ -340,7 +340,7 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT: initialS
           ) : filteredNFTs.length === 0 ? (
             <div className="text-center py-12">
               <svg
-                className="w-16 h-16 mx-auto mb-4 text-[var(--text-secondary)]"
+                className="w-16 h-16 mx-auto mb-4 text-[var(--foreground)]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -353,7 +353,7 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT: initialS
                 />
               </svg>
               <h3 className="text-xl font-semibold text-[var(--foreground)] mb-2">No NFTs Found</h3>
-              <p className="text-[var(--text-secondary)] mb-4 text-sm md:text-base">
+              <p className="text-[var(--foreground)] mb-4 text-sm md:text-base">
                 {debouncedSearchTerm
                   ? 'No NFTs match your search criteria'
                   : "You don't have any NFTs in your wallet. Import one or purchase NFTs to use as collateral."}
@@ -408,14 +408,14 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT: initialS
                     <h4 className="font-semibold text-[var(--foreground)] truncate text-sm md:text-base">
                       {nft.name}
                     </h4>
-                    <p className="text-sm text-[var(--text-secondary)] truncate">{nft.collection}</p>
+                    <p className="text-sm text-[var(--foreground)] truncate">{nft.collection}</p>
                     <div className="mt-2">
                       <span className="text-lg font-bold text-[var(--primary-color)]">
                         {formatValue(nft.estimatedValue)}
                       </span>
                     </div>
                     {nft.attributes && nft.attributes.length > 0 && (
-                      <div className="mt-2 text-xs text-[var(--text-secondary)]">
+                      <div className="mt-2 text-xs text-[var(--foreground)]">
                         {nft.attributes.slice(0, 2).map((attr) => (
                           <span key={attr.trait_type} className="mr-2">
                             {attr.trait_type}: {attr.value}
@@ -504,7 +504,7 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT: initialS
                 <h3 className="text-lg font-semibold text-[var(--foreground)]">{showDetailsModal.name}</h3>
                 <button
                   onClick={() => setShowDetailsModal(null)}
-                  className="text-[var(--text-secondary)] hover:text-[var(--foreground)]"
+                  className="text-[var(--foreground)] hover:text-[var(--foreground)]"
                   aria-label="Close modal"
                 >
                   <X className="h-5 w-5" />
@@ -515,14 +515,14 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT: initialS
                 alt={showDetailsModal.name}
                 className="w-full h-64 object-cover rounded-lg mb-4"
               />
-              <p className="text-sm text-[var(--text-secondary)] mb-2">
+              <p className="text-sm text-[var(--foreground)] mb-2">
                 <strong>Collection:</strong> {showDetailsModal.collection}
               </p>
-              <p className="text-sm text-[var(--text-secondary)] mb-2">
+              <p className="text-sm text-[var(--foreground)] mb-2">
                 <strong>Value:</strong> {formatValue(showDetailsModal.estimatedValue)}
               </p>
               {showDetailsModal.rarity && (
-                <p className="text-sm text-[var(--text-secondary)] mb-2">
+                <p className="text-sm text-[var(--foreground)] mb-2">
                   <strong>Rarity:</strong>{' '}
                   <span className={getRarityColor(showDetailsModal.rarity)}>{showDetailsModal.rarity}</span>
                 </p>
@@ -530,7 +530,7 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT: initialS
               {showDetailsModal.attributes && showDetailsModal.attributes.length > 0 && (
                 <div className="mt-4">
                   <h4 className="text-sm font-medium text-[var(--secondary)] mb-2">Attributes</h4>
-                  <div className="grid grid-cols-2 gap-2 text-sm text-[var(--text-secondary)]">
+                  <div className="grid grid-cols-2 gap-2 text-sm text-[var(--foreground)]">
                     {showDetailsModal.attributes.map((attr) => (
                       <div key={attr.trait_type} className="bg-[var(--input-background)] p-2 rounded-md">
                         <strong>{attr.trait_type}:</strong> {attr.value}
