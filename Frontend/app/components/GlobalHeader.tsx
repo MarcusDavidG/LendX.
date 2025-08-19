@@ -2,28 +2,28 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Coins, Menu, X } from 'lucide-react';
 import styled, { css } from 'styled-components';
 import ConnectWalletButton from './ConnectWalletButton';
 
 const HeaderContainer = styled.header`
-  background: var(--card-background);
-  border-bottom: 1px solid var(--border-color);
+  background-color: #0D1117;
+  border-bottom: 1px solid #30363D;
   position: sticky;
   top: 0;
-  z-index: 100;
-  transition: all 0.3s ease;
+  z-index: 50;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 `;
 
 const HeaderContent = styled.div`
-  max-width: 1440px;
+  max-width: 1280px;
   margin: 0 auto;
   padding: 0 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 80px;
+  height: 70px;
 `;
 
 const LogoSection = styled(Link)`
@@ -31,141 +31,128 @@ const LogoSection = styled(Link)`
   align-items: center;
   gap: 0.75rem;
   text-decoration: none;
-  color: var(--text-color);
-  font-weight: 700;
-  font-size: 1.5rem;
-  transition: transform 0.2s ease;
-
-  &:hover {
-    transform: translateY(-1px);
-  }
+  color: #C9D1D9;
+  font-weight: 600;
+  font-size: 1.25rem;
 `;
 
 const LogoIcon = styled(Coins)`
-  color: var(--primary-color);
-  transition: transform 0.3s ease;
+
+
+color: #238636;
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 
   ${LogoSection}:hover & {
-    transform: rotate(-15deg);
+    transform: rotate(180deg);
   }
 `;
 
 const Navigation = styled.nav`
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 2.5rem;
 
-  @media (max-width: 768px) {
+  @media (max-width: 992px) {
     display: none;
   }
 `;
 
-const activeLinkStyles = css`
-  color: var(--primary-color);
-  border-bottom: 2px solid var(--primary-color);
-  transform: translateY(-1px);
-`;
-
 const NavLink = styled(Link)<{ $isActive: boolean }>`
-  color: var(--text-color);
+  color: #8B949E;
   text-decoration: none;
   font-weight: 500;
-  font-size: 0.9rem;
-  transition: all 0.2s ease;
-  padding: 0.5rem 0;
-  border-bottom: 2px solid transparent;
+  font-size: 0.95rem;
+  padding: 0.25rem 0;
   position: relative;
-  
-  &:hover {
-    color: var(--primary-color);
-    transform: translateY(-1px);
-  }
-
-  ${props => props.$isActive && activeLinkStyles}
+  transition: color 0.2s ease-in-out;
 
   &::after {
     content: '';
     position: absolute;
-    bottom: -2px;
-    left: 0;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
     width: 0;
     height: 2px;
-    background: var(--primary-color);
+    background-color: #238636;
     transition: width 0.3s ease;
   }
 
-  &:hover::after {
-    width: 100%;
+  &:hover {
+    color: #C9D1D9;
   }
+
+  ${props => props.$isActive && css`
+    color: #C9D1D9;
+    &::after {
+      width: 20px;
+    }
+  `}
 `;
 
 const ActionButtons = styled.div`
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  gap: 1rem;
 `;
 
 const MobileMenuButton = styled.button`
   display: none;
-  background: none;
+  background: transparent;
   border: none;
-  color: var(--text-color);
+  color: #C9D1D9;
   cursor: pointer;
   padding: 0.5rem;
-  transition: transform 0.2s ease;
   z-index: 101;
 
-  &:hover {
-    transform: scale(1.1);
-  }
-
-  @media (max-width: 768px) {
+  @media (max-width: 992px) {
     display: block;
   }
 `;
 
-const MobileMenu = styled.div<{ $isOpen: boolean }>`
-  display: none;
+const MobileMenuContainer = styled.div<{ $isOpen: boolean }>`
   position: fixed;
-  top: 80px;
+  top: 0;
   left: 0;
-  right: 0;
-  background: var(--card-background);
-  border-top: 1px solid var(--border-color);
-  padding: 1rem 2rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  transform: ${props => props.$isOpen ? 'translateY(0)' : 'translateY(-100%)'};
-  opacity: ${props => props.$isOpen ? '1' : '0'};
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 99;
-
-  @media (max-width: 768px) {
-    display: block;
-  }
+  width: 100%;
+  height: 100%;
+  background-color: rgba(13, 17, 23, 0.95);
+  backdrop-filter: blur(10px);
+  z-index: 100;
+  opacity: ${props => props.$isOpen ? 1 : 0};
+  visibility: ${props => props.$isOpen ? 'visible' : 'hidden'};
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
 `;
 
 const MobileNavLink = styled(Link)<{ $isActive: boolean }>`
-  display: block;
-  color: ${props => props.$isActive ? 'var(--primary-color)' : 'var(--text-color)'};
+  color: ${props => props.$isActive ? '#238636' : '#C9D1D9'};
   text-decoration: none;
-  padding: 1rem 0;
-  font-size: 1rem;
-  border-bottom: 1px solid var(--border-color);
-  transition: all 0.2s ease;
-  
+  font-size: 1.75rem;
+  font-weight: 500;
+  transition: color 0.2s ease, transform 0.2s ease;
+
   &:hover {
-    color: var(--primary-color);
-    padding-left: 0.5rem;
-  }
-  
-  &:last-child {
-    border-bottom: none;
+    color: #238636;
+    transform: scale(1.05);
   }
 `;
 
 const GlobalHeader = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+  }, [isMobileMenuOpen]);
 
   const navigationItems = [
     { name: 'Dashboard', href: '/dashboard' },
@@ -175,55 +162,54 @@ const GlobalHeader = () => {
   ];
 
   return (
-    <HeaderContainer>
-      <HeaderContent>
-        <LogoSection href="/">
-          <LogoIcon size={28} />
-          <span>LendX</span>
-        </LogoSection>
+    <>
+      <HeaderContainer>
+        <HeaderContent>
+          <LogoSection href="/">
+            <LogoIcon size={26} />
+            <span>LendX</span>
+          </LogoSection>
 
-        <Navigation>
-          {navigationItems.map((item) => (
-            <NavLink
-              key={item.name}
-              href={item.href}
-              $isActive={pathname === item.href}
-            >
-              {item.name}
-            </NavLink>
-          ))}
-        </Navigation>
+          <Navigation>
+            {navigationItems.map((item) => (
+              <NavLink
+                key={item.name}
+                href={item.href}
+                $isActive={pathname.startsWith(item.href)}
+              >
+                {item.name}
+              </NavLink>
+            ))}
+          </Navigation>
 
-        <ActionButtons>
-          <ConnectWalletButton 
-            size="medium" 
-            variant="primary"
-            redirectOnConnect={true}
-            redirectTo="/dashboard"
-          />
-          
-          <MobileMenuButton
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle mobile menu"
-          >
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </MobileMenuButton>
-        </ActionButtons>
-      </HeaderContent>
+          <ActionButtons>
+            <ConnectWalletButton size="medium" variant="primary" />
+            <MobileMenuButton onClick={() => setIsMobileMenuOpen(true)}>
+              <Menu size={24} />
+            </MobileMenuButton>
+          </ActionButtons>
+        </HeaderContent>
+      </HeaderContainer>
 
-      <MobileMenu $isOpen={isMobileMenuOpen}>
+      <MobileMenuContainer $isOpen={isMobileMenuOpen}>
+        <MobileMenuButton 
+          onClick={() => setIsMobileMenuOpen(false)}
+          style={{ position: 'absolute', top: '2rem', right: '2rem' }}
+        >
+          <X size={30} />
+        </MobileMenuButton>
         {navigationItems.map((item) => (
           <MobileNavLink
             key={item.name}
             href={item.href}
-            $isActive={pathname === item.href}
+            $isActive={pathname.startsWith(item.href)}
             onClick={() => setIsMobileMenuOpen(false)}
           >
             {item.name}
           </MobileNavLink>
         ))}
-      </MobileMenu>
-    </HeaderContainer>
+      </MobileMenuContainer>
+    </>
   );
 };
 
