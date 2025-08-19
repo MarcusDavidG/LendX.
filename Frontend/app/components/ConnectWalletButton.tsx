@@ -92,11 +92,12 @@ const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
     if (isConnecting) return;
     const toastId = toast.loading('Connecting wallet...');
     try {
-      await connectWallet();
-      toast.success('Wallet connected successfully!', { id: toastId });
-      
-      if (redirectOnConnect) {
-        router.push(redirectTo);
+      const address = await connectWallet();
+      if (address) {
+        toast.success('Wallet connected successfully!', { id: toastId });
+        if (redirectOnConnect) {
+          router.push(redirectTo);
+        }
       }
     } catch (error: any) {
       toast.error(`Connection failed: ${error.message}`, { id: toastId });

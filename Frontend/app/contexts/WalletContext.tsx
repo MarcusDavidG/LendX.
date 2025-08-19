@@ -9,7 +9,7 @@ interface WalletContextType {
   balance: { STK: string; USDC: string };
   isConnecting: boolean;
   error: string | null;
-  connectWallet: () => Promise<void>;
+  connectWallet: () => Promise<string | null>;
   disconnectWallet: () => Promise<void>;
   refreshBalance: () => Promise<void>;
 }
@@ -153,11 +153,15 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
         document.cookie = 'wallet-connected=true; path=/; max-age=86400'; // 24 hours
         
         await refreshBalance();
+        return address;
+      } else {
+        throw new Error('No wallet address found');
       }
     } catch (error: any) {
       console.error('Failed to connect wallet:', error);
       setError(error.message || 'Failed to connect wallet');
       await disconnectWallet();
+      throw error;
     } finally {
       setIsConnecting(false);
     }
