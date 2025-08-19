@@ -122,68 +122,92 @@ const EnhancedRepayScreen = () => {
           </div>
         ) : isRepaid ? (
           <div className="text-center py-12 bg-[var(--card-background)] rounded-2xl shadow-lg p-6 border border-[var(--border-color)]">
-              <h3 className="text-xl font-semibold text-[var(--foreground)] mb-2">Loan Cleared</h3>
-              <p className="text-[var(--foreground)] mb-6">Your loan has been successfully repaid and your collateral is unlocked.</p>
-              <button
-                  onClick={() => router.push('/loan')}
-                  className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-all duration-300 flex items-center justify-center gap-2"
-              >
-                  <ArrowLeft />
-                  Go back to Loan Screen
-              </button>
+            <h3 className="text-xl font-semibold text-[var(--foreground)] mb-2">Loan Cleared</h3>
+            <p className="text-[var(--foreground)] mb-6">Your loan has been successfully repaid and your collateral is unlocked.</p>
+            <button
+              onClick={() => router.push('/loan')}
+              className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-all duration-300 flex items-center justify-center gap-2"
+            >
+              <ArrowLeft />
+              Go back to Loan Screen
+            </button>
           </div>
         ) : !loanInfo ? (
           <div className="text-center py-12 bg-[var(--card-background)] rounded-2xl shadow-lg p-6 border border-[var(--border-color)]">
-              <h3 className="text-xl font-semibold text-[var(--foreground)] mb-2">No Active Loan</h3>
-              <p className="text-[var(--foreground)] mb-6">You do not have any active loans to repay.</p>
+            <h3 className="text-xl font-semibold text-[var(--foreground)] mb-2">No Active Loan</h3>
+            <p className="text-[var(--foreground)] mb-6">You do not have any active loans to repay.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)] space-y-4">
               <h3 className="text-xl font-semibold text-[var(--foreground)] flex items-center">
-                  <Banknote className="mr-2 text-[var(--primary-color)]" />
-                  Loan Details
+                <Banknote className="mr-2 text-[var(--primary-color)]" />
+                Loan Details
               </h3>
               <div className="space-y-2">
-                  <div className="flex justify-between"><span className="text-[var(--primary-color)]">Principal:</span> <span className="font-mono text-[var(--foreground)]">{loanInfo.amount} USDC</span></div>
-                  <div className="flex justify-between"><span className="text-[var(--primary-color)]">Interest:</span> <span className="font-mono text-[var(--foreground)]">{loanInfo.interest} USDC</span></div>
-                  <div className="flex justify-between"><span className="text-[var(--primary-color)]">Due Date:</span> <span className="font-mono text-[var(--foreground)]">{loanInfo.dueDate}</span></div>
-                  <div className="border-t border-gray-700 my-2"></div>
-                  <div className="flex justify-between text-lg font-bold"><span className="text-[var(--primary-color)]">Total Due:</span> <span className="font-mono text-[var(--foreground)]">{(parseFloat(loanInfo.amount) + parseFloat(loanInfo.interest)).toFixed(2)} USDC</span></div>
+                <div className="flex justify-between">
+                  <span className="text-[var(--primary-color)]">Principal:</span>
+                  <span className="font-mono text-[var(--foreground)]">{loanInfo.amount} USDC</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-[var(--primary-color)]">Interest:</span>
+                  <span className="font-mono text-[var(--foreground)]">{loanInfo.interest} USDC</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-[var(--primary-color)]">Due Date:</span>
+                  <span className="font-mono text-[var(--foreground)]">{loanInfo.dueDate}</span>
+                </div>
+                <div className="border-t border-gray-700 my-2"></div>
+                <div className="flex justify-between text-lg font-bold">
+                  <span className="text-[var(--primary-color)]">Total Due:</span>
+                  <span className="font-mono text-[var(--foreground)]">{(parseFloat(loanInfo.amount) + parseFloat(loanInfo.interest)).toFixed(2)} USDC</span>
+                </div>
               </div>
               {lockedNFT && (
-                  <div className="pt-4">
-                      <h3 className="text-xl font-semibold text-[var(--foreground)] flex items-center mb-2">
-                          <Lock className="mr-2 text-purple-400" />
-                          Locked Collateral
-                      </h3>
-                      <div className="flex items-center gap-4 bg-[var(--input-background)] p-3 rounded-lg">
-                          <img src={lockedNFT.image} alt={lockedNFT.name} className="w-20 h-20 rounded-lg object-cover border-2 border-purple-400" />
-                          <div>
-                              <p className="font-bold text-lg text-[var(--foreground)]">{lockedNFT.name}</p>
-                              <p className="text-sm text-[var(--foreground)]">{lockedNFT.collection}</p>
-                              <p className="text-sm text-[var(--primary-color)]">Value: ${lockedNFT.estimatedValue.toLocaleString()}</p>
-                          </div>
-                      </div>
+                <div className="pt-4" aria-label="Locked NFT collateral">
+                  <h3 className="text-xl font-semibold text-[var(--foreground)] flex items-center mb-2">
+                    <Lock className="mr-2 text-[var(--primary-color)]" />
+                    Locked Collateral
+                  </h3>
+                  <div className="flex items-center gap-4 bg-[var(--input-background)] p-3 rounded-lg w-full">
+                    <div className="max-w-[80px] md:max-w-[96px]">
+                      <img
+                        src={lockedNFT.image}
+                        alt={lockedNFT.name}
+                        className="w-full h-auto rounded-lg object-cover aspect-square border-2 border-[var(--primary-color)]"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-base md:text-lg text-[var(--foreground)] truncate" title={lockedNFT.name}>
+                        {lockedNFT.name}
+                      </p>
+                      <p className="text-sm text-[var(--foreground)] truncate" title={lockedNFT.collection}>
+                        {lockedNFT.collection}
+                      </p>
+                      <p className="text-sm text-[var(--primary-color)] whitespace-nowrap">
+                        Value: ${lockedNFT.estimatedValue.toLocaleString()}
+                      </p>
+                    </div>
                   </div>
+                </div>
               )}
             </div>
             <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)] space-y-4">
               <h3 className="text-xl font-semibold text-[var(--foreground)] flex items-center">
-                  <HandCoins className="mr-2 text-[var(--primary-color)]" />
-                  Repayment
+                <HandCoins className="mr-2 text-[var(--primary-color)]" />
+                Repayment
               </h3>
               <form onSubmit={handleRepay} className="space-y-4">
                 <div>
                   <label className="text-sm font-medium mb-1 text-[var(--foreground)] flex justify-between items-center">
-                      <span>Repay Amount (USDC)</span>
-                      <button 
-                          type="button"
-                          onClick={() => setRepayAmount((parseFloat(loanInfo.amount) + parseFloat(loanInfo.interest)).toFixed(2))}
-                          className="text-xs bg-gray-700 hover:bg-gray-600 text-white px-2 py-1 rounded-md"
-                      >
-                          Max
-                      </button>
+                    <span>Repay Amount (USDC)</span>
+                    <button
+                      type="button"
+                      onClick={() => setRepayAmount((parseFloat(loanInfo.amount) + parseFloat(loanInfo.interest)).toFixed(2))}
+                      className="text-xs bg-gray-700 hover:bg-gray-600 text-white px-2 py-1 rounded-md"
+                    >
+                      Max
+                    </button>
                   </label>
                   <input
                     type="text"

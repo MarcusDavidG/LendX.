@@ -53,16 +53,18 @@ const TreasuryChart: React.FC<TreasuryChartProps> = ({ loading, treasuryData }) 
       legend: {
         position: 'bottom' as const,
         labels: {
-          color: 'var(--text-secondary)', // #9ca3af
+          color: '#f3f4f6', // light gray for legend text
           font: {
             size: 12,
           },
         },
       },
       tooltip: {
-        backgroundColor: 'var(--card-background)', // #1a1a1a
-        titleColor: 'var(--foreground)', // #ffffff
-        bodyColor: 'var(--foreground)', // #ffffff
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        titleColor: '#1a1a1a',
+        bodyColor: '#1a1a1a',
+        borderColor: '#e5e7eb',
+        borderWidth: 1,
         callbacks: {
           label: function (context: any) {
             return `${context.label}: $${context.parsed.toFixed(2)}`;

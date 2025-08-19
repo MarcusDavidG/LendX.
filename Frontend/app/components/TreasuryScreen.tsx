@@ -339,7 +339,7 @@ const TreasuryScreen: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isDepositing || loading}
-                  className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 ${
+                  className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all duration-200 hover:scale-101 active:scale-95 ${
                     isDepositing || loading
                       ? 'bg-gray-600 cursor-not-allowed'
                       : 'bg-[var(--primary-color)] hover:bg-emerald-600 text-[var(--foreground)] shadow-md hover:shadow-lg'
@@ -394,7 +394,7 @@ const TreasuryScreen: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isWithdrawing || loading}
-                  className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 ${
+                  className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all duration-200 hover:scale-101 active:scale-95 ${
                     isWithdrawing || loading
                       ? 'bg-gray-600 cursor-not-allowed'
                       : 'bg-[var(--primary-color)] hover:bg-emerald-600 text-[var(--foreground)] shadow-md hover:shadow-lg'
@@ -431,7 +431,8 @@ const TreasuryScreen: React.FC = () => {
               aria-label={isChartsOpen ? 'Collapse charts' : 'Expand charts'}
             >
               <span className="flex items-center">
-                View Charts
+                <Zap className="mr-2 text-[var(--primary-color)]" size={20} />
+                Charts
               </span>
               {isChartsOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
             </button>

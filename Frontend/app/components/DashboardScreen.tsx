@@ -86,7 +86,7 @@ const WalletView: React.FC<WalletViewProps> = ({
           <button
             onClick={fetchWalletBalances}
             disabled={loading}
-            className={`text-sm font-medium transition-all duration-200 text-[var(--primary-color)] hover:scale-105 ${
+            className={`text-sm font-medium transition-all duration-200 text-[var(--primary-color)] hover:scale-101 ${
               loading ? 'opacity-50 cursor-not-allowed' : ''
             }`}
             aria-label="Refresh balances"
@@ -352,7 +352,7 @@ const OverviewView: React.FC<OverviewViewProps> = ({
           </h3>
           <button
             onClick={handleRefresh}
-            className={`flex items-center space-x-1 bg-[var(--primary-color)] hover:bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105 active:scale-95 ${
+            className={`flex items-center space-x-1 bg-[var(--primary-color)] hover:bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:scale-101 active:scale-95 ${
               loading ? 'opacity-50 cursor-not-allowed' : ''
             }`}
             disabled={loading}
