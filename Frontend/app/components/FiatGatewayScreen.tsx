@@ -204,7 +204,7 @@ const FiatGatewayScreen = () => {
 
   return (
     <div className="bg-[var(--card-background)] rounded-2xl p-6 shadow-lg border border-[var(--border-color)]">
-      <div className="flex border-b border-[var(--border-color)] mb-4">
+      <div className="flex border-b border-[var(--border-color)] text-[var(--foreground)] mb-4">
         <button
           className={`px-4 py-2 text-lg font-semibold transition-colors ${
             gatewayType === 'deposit'
@@ -250,7 +250,7 @@ const FiatGatewayScreen = () => {
           <button
             type="submit"
             disabled={isDepositing || !isConnected}
-            className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 ${
+            className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all duration-200 hover:scale-101 active:scale-95 ${
               isDepositing || !isConnected
                 ? "bg-gray-600 cursor-not-allowed"
                 : "bg-[var(--primary-color)] hover:bg-emerald-600 text-white shadow-md hover:shadow-lg"
@@ -331,7 +331,7 @@ const FiatGatewayScreen = () => {
           <button
             type="submit"
             disabled={isWithdrawing || !isConnected}
-            className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 ${
+            className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all duration-200 hover:scale-101 active:scale-95 ${
               isWithdrawing || !isConnected
                 ? "bg-gray-600 cursor-not-allowed"
                 : "bg-[var(--primary-color)] hover:bg-emerald-600 text-white shadow-md hover:shadow-lg"
@@ -357,7 +357,7 @@ const FiatGatewayScreen = () => {
               <div key={tx.id} className="bg-[var(--input-background)] p-3 rounded-lg text-sm">
                 <div className="flex justify-between">
                   <div>
-                    <p className="font-bold">
+                    <p className="font-bold text-[var(--primary-color)]">
                       {tx.type === 'Deposit'
                         ? `₦${tx.nairaAmount} → ${tx.usdcAmount} USDC`
                         : `${tx.amount} ${tx.token} → ₦${tx.nairaAmount}`}

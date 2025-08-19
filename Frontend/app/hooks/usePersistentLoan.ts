@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useWallet } from '../contexts/WalletContext';
 import { getUserLoan } from '../utils/web3';
 
-interface LoanInfo {
+export interface LoanInfo {
   amount: string;
   interest: string;
   dueDate: string;
