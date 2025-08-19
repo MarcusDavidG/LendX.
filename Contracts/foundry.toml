@@ -1,0 +1,19 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+remappings = [
+  "forge-std/=lib/forge-std/src/",
+  "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+  "@uniswap/v3-core/=lib/v3-core/",
+  "@uniswap/v3-periphery/=lib/v3-periphery/",
+  "@chainlink/contracts/=lib/chainlink/contracts/",
+  "@chainlink/contracts-ccip/=lib/chainlink-ccip/"
+]
+
+# Sonic Testnet configuration
+[profile.sonic]
+sonic_rpc_url = "https://rpc.blaze.soniclabs.com/"
+chain_id = 57054
+
+# See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
