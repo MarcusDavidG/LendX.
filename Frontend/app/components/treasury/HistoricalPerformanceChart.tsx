@@ -52,8 +52,8 @@ const HistoricalPerformanceChart: React.FC<HistoricalPerformanceChartProps> = ({
           label: 'Treasury Value ($)',
           data,
           fill: true,
-          backgroundColor: 'rgba(255, 255, 255, 0.1)', // Light white with opacity
-          borderColor: 'var(--text-color)', // White/light color for visibility
+          backgroundColor: 'rgba(34, 197, 94, 0.2)',
+          borderColor: 'rgba(34, 197, 94, 1)',
           tension: 0.4,
         },
       ],
@@ -67,18 +67,18 @@ const HistoricalPerformanceChart: React.FC<HistoricalPerformanceChartProps> = ({
       legend: {
         position: 'bottom',
         labels: {
-          color: 'var(--text-color)',
+          color: '#FFFFFF',
         },
       },
       tooltip: {
-        backgroundColor: 'var(--card-background)',
-        titleColor: 'var(--foreground)',
-        bodyColor: 'var(--foreground)',
-        borderColor: 'var(--border-color)',
+        backgroundColor: 'green',
+        titleColor: 'white',
+        bodyColor: 'white',
+        borderColor: 'white',
         borderWidth: 1,
         callbacks: {
           label: function (context) {
-            return `${context.dataset.label}: $${context.parsed.y.toFixed(2)}`;
+            return `${context.dataset.label}: ${context.parsed.y.toFixed(2)}`;
           },
         },
       },
@@ -93,20 +93,20 @@ const HistoricalPerformanceChart: React.FC<HistoricalPerformanceChartProps> = ({
           display: false,
         },
         ticks: {
-          color: 'var(--text-color)',
+          color: '#FFFFFF',
         },
         title: {
           display: true,
           text: 'Date',
-          color: 'var(--text-color)',
+          color: '#FFFFFF',
         },
       },
       y: {
         grid: {
-          color: 'var(--border-color)',
+          color: 'rgba(255, 255, 255, 0.2)',
         },
         ticks: {
-          color: 'var(--text-color)',
+          color: '#FFFFFF',
           callback: function (value) {
             return '$' + (Number(value) / 1000) + 'k';
           },
@@ -114,7 +114,7 @@ const HistoricalPerformanceChart: React.FC<HistoricalPerformanceChartProps> = ({
         title: {
           display: true,
           text: 'Value ($)',
-          color: 'var(--text-color)',
+          color: '#FFFFFF',
         },
       },
     },
@@ -130,9 +130,9 @@ const HistoricalPerformanceChart: React.FC<HistoricalPerformanceChartProps> = ({
         <div className="flex space-x-2">
           <button
             onClick={() => setTimeRange('7D')}
-            className={`px-3 py-1 text-sm rounded-md transition-all hover:scale-105 ${
+            className={`px-3 py-1 text-sm rounded-md transition-all hover:scale-101 ${
               timeRange === '7D'
-                ? 'bg-[var(--primary-color)] text-[var(--foreground)]'
+                ? 'text-[var(--primary-color)]'
                 : 'bg-[var(--input-background)] text-[var(--foreground)] hover:bg-[var(--input-background-hover)]'
             }`}
             aria-label="Show last 7 days"
@@ -141,9 +141,9 @@ const HistoricalPerformanceChart: React.FC<HistoricalPerformanceChartProps> = ({
           </button>
           <button
             onClick={() => setTimeRange('30D')}
-            className={`px-3 py-1 text-sm rounded-md transition-all hover:scale-105 ${
+            className={`px-3 py-1 text-sm rounded-md transition-all hover:scale-101 ${
               timeRange === '30D'
-                ? 'bg-[var(--primary-color)] text-[var(--foreground)]'
+                ? 'text-[var(--primary-color)]'
                 : 'bg-[var(--input-background)] text-[var(--foreground)] hover:bg-[var(--input-background-hover)]'
             }`}
             aria-label="Show last 30 days"
@@ -152,9 +152,9 @@ const HistoricalPerformanceChart: React.FC<HistoricalPerformanceChartProps> = ({
           </button>
           <button
             onClick={() => setTimeRange('90D')}
-            className={`px-3 py-1 text-sm rounded-md transition-all hover:scale-105 ${
+            className={`px-3 py-1 text-sm rounded-md transition-all hover:scale-101 ${
               timeRange === '90D'
-                ? 'bg-[var(--primary-color)] text-[var(--foreground)]'
+                ? 'text-[var(--primary-color)]'
                 : 'bg-[var(--input-background)] text-[var(--foreground)] hover:bg-[var(--input-background-hover)]'
             }`}
             aria-label="Show last 90 days"
@@ -163,9 +163,9 @@ const HistoricalPerformanceChart: React.FC<HistoricalPerformanceChartProps> = ({
           </button>
           <button
             onClick={() => setTimeRange('All')}
-            className={`px-3 py-1 text-sm rounded-md transition-all hover:scale-105 ${
+            className={`px-3 py-1 text-sm rounded-md transition-all hover:scale-101 ${
               timeRange === 'All'
-                ? 'bg-[var(--primary-color)] text-[var(--foreground)]'
+                ? 'text-[var(--primary-color)]'
                 : 'bg-[var(--input-background)] text-[var(--foreground)] hover:bg-[var(--input-background-hover)]'
             }`}
             aria-label="Show all time"

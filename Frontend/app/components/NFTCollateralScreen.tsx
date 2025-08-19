@@ -219,7 +219,7 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT: initialS
             </div>
             <button
               onClick={() => setImportMode(!importMode)}
-              className="mt-4 md:mt-0 bg-[var(--primary-color)] text-[var(--foreground)] px-6 py-2 rounded-lg hover:bg-emerald-600 transition-all duration-300 hover:scale-105 active:scale-95"
+              className="mt-4 md:mt-0 bg-[var(--primary-color)] text-[var(--foreground)] px-6 py-2 rounded-lg hover:bg-emerald-600 transition-all duration-300 hover:scale-101 active:scale-95"
               aria-label={importMode ? 'Cancel NFT import' : 'Import NFT'}
             >
               {importMode ? 'Cancel Import' : 'Import NFT'}
@@ -276,7 +276,7 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT: initialS
               <button
                 onClick={handleImportNFT}
                 disabled={importLoading || !isValidAddress || !importForm.tokenId}
-                className="mt-4 bg-[var(--primary-color)] text-[var(--foreground)] px-6 py-2 rounded-md hover:bg-emerald-600 disabled:opacity-50 transition-all duration-300 hover:scale-105 active:scale-95 flex items-center gap-2"
+                className="mt-4 bg-[var(--primary-color)] text-[var(--foreground)] px-6 py-2 rounded-md hover:bg-emerald-600 disabled:opacity-50 transition-all duration-300 hover:scale-101 active:scale-95 flex items-center gap-2"
                 aria-label="Import NFT"
               >
                 {importLoading ? (
@@ -370,7 +370,7 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT: initialS
               </p>
               <button
                 onClick={() => setImportMode(true)}
-                className="bg-[var(--primary-color)] text-[var(--foreground)] px-6 py-2 rounded-lg hover:bg-emerald-600 transition-all duration-300 hover:scale-105 active:scale-95"
+                className="bg-[var(--primary-color)] text-[var(--foreground)] px-6 py-2 rounded-lg hover:bg-emerald-600 transition-all duration-300 hover:scale-101 active:scale-95"
                 aria-label="Import NFT"
               >
                 Import NFT
@@ -381,7 +381,7 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT: initialS
               {paginatedNFTs.map((nft) => (
                 <div
                   key={`${nft.contractAddress}-${nft.tokenId}`}
-                  className={`relative bg-[var(--card-background)] border border-white/10 rounded-lg overflow-hidden cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-emerald-700/50 ${
+                  className={`relative bg-[var(--card-background)] border border-white/10 rounded-lg overflow-hidden cursor-pointer transition-all duration-300 hover:scale-101 hover:shadow-lg hover:shadow-emerald-700/50 ${
                     selectedNFT?.id === nft.id ? 'ring-4 ring-[var(--primary-color)]' : ''
                   } animate-in fade-in duration-200`}
                   onClick={() => handleSelectNFT(nft)}
@@ -553,7 +553,7 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT: initialS
               )}
               <button
                 onClick={() => setShowDetailsModal(null)}
-                className="mt-4 w-full bg-[var(--primary-color)] text-[var(--foreground)] px-4 py-2 rounded-md hover:bg-emerald-600 transition-all duration-300 hover:scale-105 active:scale-95"
+                className="mt-4 w-full bg-[var(--primary-color)] text-[var(--foreground)] px-4 py-2 rounded-md hover:bg-emerald-600 transition-all duration-300 hover:scale-101 active:scale-95"
                 aria-label="Close modal"
               >
                 Close
