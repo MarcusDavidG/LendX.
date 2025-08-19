@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { NFT } from '../hooks/useNFTData'; // Import NFT type
+import NFTLiquidationStatusDisplay from './NFTLiquidationStatusDisplay';
 
 const EnhancedLoanScreen = () => {
   const { isConnected, userAddress } = useWallet();
@@ -194,6 +195,8 @@ const EnhancedLoanScreen = () => {
                       <p className="font-bold text-lg text-[var(--foreground)]">{lockedNFT.name}</p>
                       <p className="text-sm text-gray-400">{lockedNFT.collection}</p>
                       <p className="text-sm text-[var(--primary-color)]">Value: ${lockedNFT.estimatedValue.toLocaleString()}</p>
+                      {/* NFT Liquidation Status Display */}
+                      {loanInfo && <NFTLiquidationStatusDisplay nft={lockedNFT} loan={loanInfo} />}
                     </div>
                   </div>
                 </div>

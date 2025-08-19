@@ -226,7 +226,7 @@ const WalletView: React.FC<WalletViewProps> = ({
           <button
             type="submit"
             disabled={isSending || loading}
-            className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 ${
+            className={`w-full flex items-center justify-center space-x-2 font-bold py-3 px-4 rounded-lg transition-all duration-200 hover:scale-101 active:scale-95 ${
               isSending || loading
                 ? 'bg-gray-600 cursor-not-allowed'
                 : 'bg-[var(--primary-color)] hover:bg-emerald-600 text-white shadow-md hover:shadow-lg'

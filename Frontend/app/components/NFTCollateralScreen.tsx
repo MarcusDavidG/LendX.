@@ -9,6 +9,8 @@ import { Check, ChevronDown, Search, X, Loader2, Lock } from 'lucide-react';
 import { useDebounce } from 'use-debounce';
 import { useRouter } from 'next/navigation';
 import ConnectWalletButton from './ConnectWalletButton';
+import NFTLiquidationStatusDisplay from './NFTLiquidationStatusDisplay';
+import { usePersistentLoan, LoanInfo } from '@/app/hooks/usePersistentLoan'; // Assuming Loan type is defined here
 
 interface NFT {
   id: string;
@@ -46,6 +48,14 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT: initialS
   const [page, setPage] = useState(1);
   const itemsPerPage = 12;
   const router = useRouter();
+
+  // Mock Loan Object for demonstration purposes
+  // In a real application, this would come from a context or fetched data
+   const mockLoan: LoanInfo = {                                                                                                                                                                
+      interest: "50", // Mock interest                                                                                                                                                          
+      dueDate: "2025-12-31", // Mock due date                                                                                                                                                   
+      amount: "1000", // Mock loan amount                                                                                                                                                      
+      };
 
 
   const [selectedNFT, setSelectedNFT] = useState<NFT | null>(initialSelectedNFT || null);
@@ -414,6 +424,8 @@ export default function NFTCollateralScreen({ onNFTSelect, selectedNFT: initialS
                         {formatValue(nft.estimatedValue)}
                       </span>
                     </div>
+                    {/* NFT Liquidation Status Display */}
+                    <NFTLiquidationStatusDisplay nft={nft} loan={mockLoan} />
                     {nft.attributes && nft.attributes.length > 0 && (
                       <div className="mt-2 text-xs text-[var(--foreground)]">
                         {nft.attributes.slice(0, 2).map((attr) => (
