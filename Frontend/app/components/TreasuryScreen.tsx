@@ -431,8 +431,7 @@ const TreasuryScreen: React.FC = () => {
               aria-label={isChartsOpen ? 'Collapse charts' : 'Expand charts'}
             >
               <span className="flex items-center">
-                <Zap className="mr-2 text-[var(--primary-color)]" size={20} />
-                Charts
+                View Charts
               </span>
               {isChartsOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
             </button>

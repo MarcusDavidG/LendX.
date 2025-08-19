@@ -52,8 +52,8 @@ const HistoricalPerformanceChart: React.FC<HistoricalPerformanceChartProps> = ({
           label: 'Treasury Value ($)',
           data,
           fill: true,
-          backgroundColor: 'rgba(16, 185, 129, 0.2)', // --primary-color with opacity
-          borderColor: 'var(--primary-color)', // #10b981
+          backgroundColor: 'rgba(255, 255, 255, 0.1)', // Light white with opacity
+          borderColor: 'var(--text-color)', // White/light color for visibility
           tension: 0.4,
         },
       ],
@@ -67,13 +67,15 @@ const HistoricalPerformanceChart: React.FC<HistoricalPerformanceChartProps> = ({
       legend: {
         position: 'bottom',
         labels: {
-          color: 'var(--text-secondary)',
+          color: 'var(--text-color)',
         },
       },
       tooltip: {
         backgroundColor: 'var(--card-background)',
         titleColor: 'var(--foreground)',
         bodyColor: 'var(--foreground)',
+        borderColor: 'var(--border-color)',
+        borderWidth: 1,
         callbacks: {
           label: function (context) {
             return `${context.dataset.label}: $${context.parsed.y.toFixed(2)}`;
@@ -91,20 +93,20 @@ const HistoricalPerformanceChart: React.FC<HistoricalPerformanceChartProps> = ({
           display: false,
         },
         ticks: {
-          color: 'var(--text-secondary)',
+          color: 'var(--text-color)',
         },
         title: {
           display: true,
           text: 'Date',
-          color: 'var(--text-secondary)',
+          color: 'var(--text-color)',
         },
       },
       y: {
         grid: {
-          color: 'rgba(156, 163, 175, 0.1)',
+          color: 'var(--border-color)',
         },
         ticks: {
-          color: 'var(--text-secondary)',
+          color: 'var(--text-color)',
           callback: function (value) {
             return '$' + (Number(value) / 1000) + 'k';
           },
@@ -112,7 +114,7 @@ const HistoricalPerformanceChart: React.FC<HistoricalPerformanceChartProps> = ({
         title: {
           display: true,
           text: 'Value ($)',
-          color: 'var(--text-secondary)',
+          color: 'var(--text-color)',
         },
       },
     },
