@@ -756,7 +756,7 @@ const DashboardScreen: React.FC = () => {
             className={`whitespace-nowrap py-2 px-4 border-b-2 font-medium text-sm flex items-center transition-colors duration-200 ${
               activeTab === 'wallet'
                 ? 'border-[var(--primary-color)] text-[var(--primary-color)]'
-                : 'border-transparent text-[var(--foreground)] hover:text-[var(--primary-color)] hover:border-gray-500'
+                : 'border-transparent text-[var(--background)] hover:text-[var(--primary-color)] hover:border-gray-500'
             }`}
             aria-label="View wallet tab"
           >
@@ -768,7 +768,7 @@ const DashboardScreen: React.FC = () => {
             className={`whitespace-nowrap py-2 px-4 border-b-2 font-medium text-sm flex items-center transition-colors duration-200 ${
               activeTab === 'overview'
                 ? 'border-[var(--primary-color)] text-[var(--primary-color)]'
-                : 'border-transparent text-[var(--foreground)] hover:text-[var(--primary-color)] hover:border-gray-500'
+                : 'border-transparent text-[var(--background)] hover:text-[var(--primary-color)] hover:border-gray-500'
             }`}
             aria-label="View overview tab"
           >
@@ -780,7 +780,7 @@ const DashboardScreen: React.FC = () => {
             className={`whitespace-nowrap py-2 px-4 border-b-2 font-medium text-sm flex items-center transition-colors duration-200 ${
               activeTab === 'activity'
                 ? 'border-[var(--primary-color)] text-[var(--primary-color)]'
-                : 'border-transparent text-[var(--foreground)] hover:text-[var(--primary-color)] hover:border-gray-500'
+                : 'border-transparent text-[var(--background)] hover:text-[var(--primary-color)] hover:border-gray-500'
             }`}
             aria-label="View activity tab"
           >

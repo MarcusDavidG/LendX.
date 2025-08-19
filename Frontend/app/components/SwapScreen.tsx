@@ -292,7 +292,7 @@ const EnhancedSwapScreen = () => {
                                 required
                             />
                             <button type="button" onClick={() => setShowTokenModal('from')} className="flex items-center gap-2 bg-gray-800 p-2 rounded-lg">
-                                <img src={fromToken.icon} alt={fromToken.symbol} className="w-6 h-6" />
+                                <img src={fromToken.icon} alt={fromToken.symbol} className="w-[28px] h-[28px]" loading="lazy" />
                                 <span className="font-semibold text-[var(--primary-color)]">{fromToken.symbol}</span>
                             </button>
                         </div>
@@ -402,7 +402,7 @@ const EnhancedSwapScreen = () => {
                         {tokens.map(token => (
                             <button key={token.symbol} onClick={() => handleSelectToken(token)} className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-gray-700">
                                 <div className="flex items-center gap-3">
-                                    <img src={token.icon} alt={token.symbol} className="w-8 h-8" />
+                                    <img src={toToken.icon} alt={toToken.symbol} className="w-[25px] h-[25px]" loading="lazy" />
                                     <div>
                                         <p className="font-semibold">{token.name}</p>
                                         <p className="text-sm text-[var(--foreground)]">{token.symbol}</p>
