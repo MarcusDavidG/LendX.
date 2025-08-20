@@ -55,7 +55,7 @@ const RecentTransactions: React.FC<RecentTransactionsProps> = ({ transactions })
                 <p className="font-semibold text-[var(--foreground)] capitalize">{tx.type}</p>
                 <p className="text-xs text-[var(--foreground)]">{new Date(tx.timestamp).toLocaleString()}</p>
                 <a
-                  href={`https://explorer.soniclabs.com/tx/${tx.hash}`}
+                  href={`https://blaze.soniclabs.com/tx/${tx.hash}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-xs text-[var(--primary-color)] hover:underline flex items-center mt-1"

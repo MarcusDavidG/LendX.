@@ -196,13 +196,13 @@ const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
                 <div className="px-3 py-3 border-b border-gray-700">
                   <div className="flex items-center gap-3">
                     <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-500/20 text-green-400">
-                      <User className="h-5 w-5" />
+                      <User className="h-5 w-5 text-white" />
                     </div>
                     <div>
                       <p className="font-semibold text-base text-white truncate">
                         My Wallet
                       </p>
-                      <p className="text-sm text-gray-400 truncate">
+                      <p className="text-sm text-white truncate">
                         {formatAddress(userAddress || '')}
                       </p>
                     </div>
