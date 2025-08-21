@@ -1,43 +1,87 @@
-# LendX - Decentralized Micro-Lending Platform
 
-## Overview
 
-LendX is a comprehensive decentralized finance (DeFi) micro-lending platform built on the Sonic network, designed to provide accessible financial services for underserved communities. The platform combines traditional lending functionality with advanced DeFi features including cross-chain NFT collateral, automated market making via Uniswap V3, and yield farming through treasury deposits.
+---
 
-## 🎯 Mission & Vision
+# LendX - Micro-Lending Platform
 
-**Mission**: Democratize access to financial services by providing a seamless, secure, and user-friendly micro-lending platform that bridges traditional finance with decentralized technologies.
+**LendX** is a decentralized micro-lending platform designed to make **fair, transparent, and accessible financial services** available to underserved communities worldwide.
 
-**Vision**: Create a world where anyone, regardless of their geographic location or economic status, can access fair and transparent financial services through blockchain technology.
+### 🌍 Problem
+- Over **1.4 billion people** globally lack access to fair credit systems.
+- Traditional microfinance is often **slow, costly, and exclusionary**.
+- Lack of transparent credit history keeps communities locked out of opportunities.
+
+### 💡 Solution
+LendX leverages blockchain technology to provide **instant, borderless, and trustless lending**.
+- Micro-loans backed by **cross-chain NFT collateral**
+- Automated interest rates and flexible repayment options
+- **Uniswap V3 integration** for in-platform swaps
+- **Treasury deposits** that allow lenders to earn yield
+
+### 🎯 Impact
+A global, decentralized platform where **anyone can access capital, build credit history, and participate in DeFi opportunities** — no matter their geographic or economic status.
+
+👉 **Demo Link**: [Insert live demo / video link here]  
+👉 **Pitch Deck**: [Insert pitch deck link here]
+
+---
+
+## 🚀 Key Features
+
+- **Micro-Lending** with dynamic interest rates & flexible repayment
+- **Cross-Chain NFT Collateral** powered by Chainlink CCIP
+- **Uniswap V3 Automated Market Making** for efficient swaps
+- **Treasury & Yield Farming** for passive income opportunities
+
+---
+
+## 🛠️ Quickstart (Judge-Friendly)
+
+```bash
+# Clone repo
+git clone https://github.com/MarcusDavidG/LendX..git
+cd LendX
+
+# Install dependencies
+cd Frontend && npm install
+
+# Start frontend
+npm run dev
+```
+
+---
 
 ## 🏗️ Architecture Overview
 
 ### System Architecture
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    Frontend Layer                            │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐        │
-│  │   Next.js   │  │  TypeScript │  │  Tailwind   │        │
-│  │   React     │  │   Web3.js   │  │    CSS      │        │
-│  └─────────────┘  └─────────────┘  └─────────────┘        │
+│                    Frontend Layer                          │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
+│  │   Next.js   │  │  TypeScript │  │  Tailwind   │         │
+│  │   React     │  │   Web3.js   │  │    CSS      │         │
+│  └─────────────┘  └─────────────┘  └─────────────┘         │
 └─────────────────────────────────────────────────────────────┘
                               │
 ┌─────────────────────────────────────────────────────────────┐
-│                 Blockchain Layer                             │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐        │
-│  │   Sonic     │  │  Uniswap    │  │  Chainlink  │        │
-│  │  Network    │  │    V3       │  │    CCIP     │        │
-│  └─────────────┘  └─────────────┘  └─────────────┘        │
+│                 Blockchain Layer                            │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
+│  │   Sonic     │  │  Uniswap    │  │  Chainlink  │         │
+│  │  Network    │  │    V3       │  │    CCIP     │         │
+│  └─────────────┘  └─────────────┘  └─────────────┘         │
 └─────────────────────────────────────────────────────────────┘
                               │
 ┌─────────────────────────────────────────────────────────────┐
-│                 Smart Contract Layer                         │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐        │
-│  │   Lending   │  │ Collateral  │  │  Treasury   │        │
-│  │  Contract   │  │  Contract   │  │  Contract   │        │
-│  └─────────────┘  └─────────────┘  └─────────────┘        │
+│                 Smart Contract Layer                        │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
+│  │   Lending   │  │ Collateral  │  │  Treasury   │         │
+│  │  Contract   │  │  Contract   │  │  Contract   │         │
+│  └─────────────┘  └─────────────┘  └─────────────┘         │
 └─────────────────────────────────────────────────────────────┘
 ```
+
+---
 
 ## 🚀 Features
 
@@ -82,9 +126,12 @@ LendX is a comprehensive decentralized finance (DeFi) micro-lending platform bui
 - **Emergency Pause**: Circuit breaker mechanisms
 - **Rate Limiting**: Protection against spam and attacks
 
+---
+
 ## 🛠️ Technology Stack
 
 ### Frontend
+
 - **Framework**: Next.js 14 with App Router
 - **Language**: TypeScript 5.x
 - **Styling**: Tailwind CSS with custom components
@@ -95,6 +142,7 @@ LendX is a comprehensive decentralized finance (DeFi) micro-lending platform bui
 - **Forms**: React Hook Form + Zod validation
 
 ### Smart Contracts
+
 - **Language**: Solidity 0.8.x
 - **Framework**: Foundry
 - **Testing**: Forge test with 90%+ coverage
@@ -102,11 +150,14 @@ LendX is a comprehensive decentralized finance (DeFi) micro-lending platform bui
 - **Upgradability**: Proxy pattern for future updates
 
 ### Infrastructure
+
 - **Network**: Sonic Blaze testnet (mainnet ready)
 - **RPC**: Public RPC endpoints with fallback
 - **IPFS**: Decentralized storage for metadata
 - **The Graph**: Subgraph for indexed data
 - **Chainlink**: Price feeds and CCIP
+
+---
 
 ## 📁 Project Structure
 
@@ -125,17 +176,19 @@ LendX/
 ├── Frontend/
 │   ├── app/
 │   │   ├── components/          # Reusable UI components
-│   │   ├── contexts/           # React contexts
-│   │   ├── hooks/              # Custom React hooks
-│   │   ├── services/           # API and blockchain services
-│   │   ├── utils/              # Utility functions
-│   │   ├── config/             # Configuration files
-│   │   └── landingPage/        # Marketing website
-│   ├── public/                 # Static assets
+│   │   ├── contexts/            # React contexts
+│   │   ├── hooks/               # Custom React hooks
+│   │   ├── services/            # API and blockchain services
+│   │   ├── utils/               # Utility functions
+│   │   ├── config/              # Configuration files
+│   │   └── landingPage/         # Marketing website
+│   ├── public/                  # Static assets
 │   └── package.json
 ├── README.md
 └── .gitignore
 ```
+
+---
 
 ## 🚦 Getting Started
 
@@ -150,91 +203,102 @@ LendX/
 ### Environment Setup
 
 1. **Clone the repository**:
-```bash
-git clone https://github.com/your-org/lendx.git
-cd lendx
-```
+    ```bash
+    git clone https://github.com/your-org/lendx.git
+    cd lendx
+    ```
 
 2. **Install dependencies**:
-```bash
-# Frontend dependencies
-cd Frontend
-npm install
+    ```bash
+    # Frontend dependencies
+    cd Frontend
+    npm install
 
-# Smart contract dependencies
-cd ../Contracts
-forge install
-```
+    # Smart contract dependencies
+    cd ../Contracts
+    forge install
+    ```
 
-3. **Environment variables**:
+3. **Environment variables**:  
 Create `.env.local` in the Frontend directory:
-```bash
-NEXT_PUBLIC_RPC_URL=https://rpc.blaze.soniclabs.com
-NEXT_PUBLIC_CHAIN_ID=64165
-NEXT_PUBLIC_LENDING_CONTRACT=0xYourLendingContractAddress
-NEXT_PUBLIC_COLLATERAL_CONTRACT=0xYourCollateralContractAddress
-NEXT_PUBLIC_TREASURY_CONTRACT=0xYourTreasuryContractAddress
-NEXT_PUBLIC_UNISWAP_ROUTER=0x086d426f8b653b88a2d6d03051c8b4ab8783be2b
-```
+    ```bash
+    NEXT_PUBLIC_RPC_URL=https://rpc.blaze.soniclabs.com
+    NEXT_PUBLIC_CHAIN_ID=64165
+    NEXT_PUBLIC_LENDING_CONTRACT=0xYourLendingContractAddress
+    NEXT_PUBLIC_COLLATERAL_CONTRACT=0xYourCollateralContractAddress
+    NEXT_PUBLIC_TREASURY_CONTRACT=0xYourTreasuryContractAddress
+    NEXT_PUBLIC_UNISWAP_ROUTER=0x086d426f8b653b88a2d6d03051c8b4ab8783be2b
+    ```
+
+---
 
 ### Smart Contract Development
 
 1. **Compile contracts**:
-```bash
-cd Contracts
-forge build
-```
+    ```bash
+    cd Contracts
+    forge build
+    ```
 
 2. **Run tests**:
-```bash
-forge test
-```
+    ```bash
+    forge test
+    ```
 
 3. **Deploy to testnet**:
-```bash
-forge script script/Deploy.s.sol --rpc-url $RPC_URL --private-key $PRIVATE_KEY --broadcast
-```
+    ```bash
+    forge script script/Deploy.s.sol --rpc-url $RPC_URL --private-key $PRIVATE_KEY --broadcast
+    ```
+
+---
 
 ### Frontend Development
 
 1. **Start development server**:
-```bash
-cd Frontend
-npm run dev
-```
+    ```bash
+    cd Frontend
+    npm run dev
+    ```
 
 2. **Build for production**:
-```bash
-npm run build
-```
+    ```bash
+    npm run build
+    ```
 
 3. **Run tests**:
-```bash
-npm test
-```
+    ```bash
+    npm test
+    ```
+
+---
 
 ## 🔗 Contract Addresses
 
 ### Sonic Blaze Testnet
-| Contract | Address |
-|----------|---------|
-| LendingContract | `0xD30e5677076cd736d0704D0B1A1E57D7766F3B6f` |
-| CollateralContract | `0x2cb425975626593A35D570C6E0bCEe53fca1eaFE` |
-| TreasuryContract | `0x793310d9254D801EF86f829264F04940139e9297` |
-| Uniswap V3 Router | `0x086d426f8b653b88a2d6d03051c8b4ab8783be2b` |
+
+| Contract            | Address                                         |
+|---------------------|------------------------------------------------|
+| LendingContract     | `0xD30e5677076cd736d0704D0B1A1E57D7766F3B6f`   |
+| CollateralContract  | `0x2cb425975626593A35D570C6E0bCEe53fca1eaFE`   |
+| TreasuryContract    | `0x793310d9254D801EF86f829264F04940139e9297`   |
+| Uniswap V3 Router   | `0x086d426f8b653b88a2d6d03051c8b4ab8783be2b`   |
 
 ### Sonic Mainnet
-| Contract | Address |
-|----------|---------|
-| LendingContract | `Coming Soon` |
-| CollateralContract | `Coming Soon` |
-| TreasuryContract | `Coming Soon` |
+
+| Contract            | Address        |
+|---------------------|---------------|
+| LendingContract     | Coming Soon   |
+| CollateralContract  | Coming Soon   |
+| TreasuryContract    | Coming Soon   |
+
+---
 
 ## 📊 API Documentation
 
 ### Smart Contract Methods
 
 #### Lending Contract
+
 ```solidity
 // Request a loan
 function requestLoan(
@@ -252,6 +316,7 @@ function getLoan(uint256 loanId) external view returns (Loan memory);
 ```
 
 #### Collateral Contract
+
 ```solidity
 // Lock NFT as collateral
 function lockCollateral(
@@ -265,6 +330,7 @@ function unlockCollateral(uint256 loanId) external;
 ```
 
 #### Treasury Contract
+
 ```solidity
 // Deposit to treasury
 function deposit(uint256 amount) external;
@@ -279,6 +345,7 @@ function getUserBalance(address user) external view returns (uint256);
 ### Frontend API
 
 #### Wallet Context
+
 ```typescript
 // Connect wallet
 const { connect } = useWallet();
@@ -291,6 +358,7 @@ const { sendTransaction } = useWallet();
 ```
 
 #### Loan Hooks
+
 ```typescript
 // Request loan
 const { requestLoan } = useLoan();
@@ -302,9 +370,12 @@ const { repayLoan } = useLoan();
 const { getLoanHistory } = useLoan();
 ```
 
+---
+
 ## 🧪 Testing
 
 ### Smart Contract Tests
+
 ```bash
 # Run all tests
 forge test
@@ -317,6 +388,7 @@ forge test --match-test testRequestLoan
 ```
 
 ### Frontend Tests
+
 ```bash
 # Run unit tests
 npm test
@@ -328,9 +400,12 @@ npm run test:e2e
 npm run test:coverage
 ```
 
+---
+
 ## 🔐 Security
 
 ### Smart Contract Security
+
 - **Reentrancy Protection**: All external calls use reentrancy guards
 - **Access Control**: Role-based access control for admin functions
 - **Input Validation**: Comprehensive input validation for all functions
@@ -338,15 +413,19 @@ npm run test:coverage
 - **Overflow Protection**: SafeMath library usage
 
 ### Frontend Security
+
 - **Content Security Policy**: Strict CSP headers
 - **HTTPS Only**: All communications encrypted
 - **Input Sanitization**: XSS protection
 - **Rate Limiting**: API rate limiting
 - **Wallet Security**: Secure key management
 
+---
+
 ## 📈 Performance
 
 ### Optimization Strategies
+
 - **Lazy Loading**: Components loaded on demand
 - **Code Splitting**: Optimized bundle sizes
 - **Caching**: Aggressive caching strategies
@@ -354,16 +433,20 @@ npm run test:coverage
 - **CDN**: Global content delivery
 
 ### Monitoring
+
 - **Analytics**: User behavior tracking
 - **Error Tracking**: Sentry integration
 - **Performance**: Web Vitals monitoring
 - **Uptime**: Status page monitoring
+
+---
 
 ## 🤝 Contributing
 
 We welcome contributions from the community! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
 ### Development Workflow
+
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
 3. Commit your changes (`git commit -m 'Add amazing feature'`)
@@ -371,10 +454,13 @@ We welcome contributions from the community! Please see our [Contributing Guide]
 5. Open a Pull Request
 
 ### Code Standards
+
 - **Solidity**: Follow Solidity style guide
 - **TypeScript**: Use TypeScript strict mode
 - **Testing**: Maintain 90%+ test coverage
 - **Documentation**: Document all public functions
+
+---
 
 ## 🗺️ Roadmap
 
@@ -402,21 +488,29 @@ We welcome contributions from the community! Please see our [Contributing Guide]
 - [ ] Ecosystem grants
 - [ ] Global expansion
 
+---
+
 ## 📞 Support
 
 ### Community
+
 - **Discord**: [Join our Discord](https://discord.gg/lendx)
 - **Twitter**: [@LendXDeFi](https://twitter.com/LendXDeFi)
 - **Telegram**: [LendX Community](https://t.me/lendx_community)
 
 ### Technical Support
+
 - **Documentation**: [docs.lendx.finance](https://docs.lendx.finance)
 - **GitHub Issues**: [Report bugs here](https://github.com/your-org/lendx/issues)
 - **Email**: support@lendx.finance
 
+---
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
 
 ## 🙏 Acknowledgments
 
@@ -429,3 +523,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **Built with ❤️ by the LendX Team**
+
+---
+
